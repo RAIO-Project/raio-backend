@@ -1,7 +1,10 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val auth: String by project
-val product: String by project
+val chat: String by project
+val donation: String by project
+val payment: String by project
+val stream: String by project
+val user: String by project
 
 version = "0.0.1-SNAPSHOT"
 
