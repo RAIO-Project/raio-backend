@@ -1,6 +1,6 @@
 package raio.snowflake.time;
 
-import club.time.MillisecondsSupplier;
+import raio.time.MillisecondsSupplier;
 
 public final class TestMilliseconds implements MillisecondsSupplier {
     public long currentMilliseconds;

@@ -2,8 +2,8 @@ package raio.snowflake.persistence.id;
 
 import raio.snowflake.properties.SnowflakeProperties;
 import raio.snowflake.validator.SnowflakeConstructingValidator;
-import club.time.MillisecondsSupplier;
-import club.time.SystemMilliseconds;
+import raio.time.MillisecondsSupplier;
+import raio.time.SystemMilliseconds;
 
 import static raio.snowflake.constants.SnowflakeConstants.NETTEE_EPOCH;
 import static raio.snowflake.constants.SnowflakeConstants.SnowflakeDefault.*;

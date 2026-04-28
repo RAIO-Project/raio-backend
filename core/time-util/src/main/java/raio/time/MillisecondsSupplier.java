@@ -1,4 +1,4 @@
-package club.time;
+package raio.time;
 
 import java.util.function.LongSupplier;
 

@@ -1,4 +1,4 @@
-package club.time;
+package raio.time;
 
 public final class SystemMilliseconds implements MillisecondsSupplier {
     @Override

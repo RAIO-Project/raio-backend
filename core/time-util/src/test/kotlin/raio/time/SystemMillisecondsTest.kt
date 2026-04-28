@@ -1,4 +1,4 @@
-package club.time
+package raio.time
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
