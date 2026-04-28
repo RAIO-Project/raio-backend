@@ -1,0 +1,9 @@
+product:
+  flyway:
+    locations: classpath:db/migration/v1/product
+    schema: product
+    create-schemas: false
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+    history-table: flyway_schema_history_product
