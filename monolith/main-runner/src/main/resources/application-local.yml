@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: ${BOARD_POSTGRESQL_URL:jdbc:postgresql://localhost:5433/club}
+    username: ${BOARD_POSTGRESQL_USERNAME:root}
+    password: ${BOARD_POSTGRESQL_PASSWORD:root}
+
+  data:
+    redis:
+      host: ${REDIS_URL:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+
+  flyway:
+    locations:
+      - db/migration/dummy
+
+logging:
+  level:
+    root: INFO
+    club: DEBUG  # 비즈니스 로직
+    org.springframework.web: WARN   # 프레임워크
+    org.hibernate.SQL: DEBUG         # 쿼리 (파라미터 제외)
+    org.hibernate.type.descriptor.sql: TRACE  # 파라미터 (필요시)
+    org.flywaydb: DEBUG
+
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId:-}]"

@@ -1,0 +1,6 @@
+app.redis:
+  use-cluster-mode: false
+  nodes:
+    - ${SPRING_DATA_REDIS_HOST:127.0.0.1}:${SPRING_DATA_REDIS_PORT:6379}
+  username: ${SPRING_DATA_REDIS_USERNAME:}
+  password: ${SPRING_DATA_REDIS_PASSWORD:}

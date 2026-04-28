@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: main
+
+  flyway:
+     enabled: false  # (중요) 기본 Flyway Auto-run 끄고, 우리가 만든 authFlyway만 실행
+
+  config:
+    import:
+      - properties/client/main.client.yml
+      - properties/jwt/club.jwt.filter.yml
+      - properties/jwt/main.jwt.yml
+      - properties/mail/main.mail.yml
+      - properties/persistence/main.snowflake.yml
+      - properties/upload/main.image.yml
+      - properties/web/main.cookie.yml
+      - properties/web/main.cors.yml
+      - optional:file:.env[.properties]
+      - properties/redis/main.redis.yml
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${BOARD_POSTGRESQL_URL}
+    username: ${BOARD_POSTGRESQL_USERNAME}
+    password: ${BOARD_POSTGRESQL_PASSWORD}
+
+  data:
+    redis:
+      host: ${REDIS_URL}
+      port: ${REDIS_PORT}
+
+#  flyway:
+#    baseline-on-migrate: true
+#    locations:
+#      - db/migration/v1
+
+  jackson:
+    default-property-inclusion: non_null
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha # 태그 알파벳순
+    operations-sorter: method # 엔드포인트: HTTP 메서드순 (GET/POST/…)
+
+server:
+  # 5000 포트를 사용하지 않기: macOS '제어 센터'가 5000, 7000 포트를 계속 사용함. (macOS Monterey 이후 AirPlay receiver 활성화 시)
+  port: 8080

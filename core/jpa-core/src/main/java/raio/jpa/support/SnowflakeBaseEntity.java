@@ -1,0 +1,20 @@
+package raio.jpa.support;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import raio.hibenate.annotation.SnowflakeGenerated;
+
+import java.io.Serializable;
+
+@SuperBuilder
+@NoArgsConstructor
+@Getter
+@MappedSuperclass
+public abstract class SnowflakeBaseEntity implements Serializable {
+    @Id
+    @SnowflakeGenerated
+    private Long id;
+}

@@ -1,0 +1,16 @@
+app.cors.endpoints:
+  - path: "/**"
+    allowed:
+      headers: "*"
+      methods: "*"
+      origins:
+        - http://localhost:3000
+        - http://127.0.0.1:3000
+        - https://localhost:3000
+        - https://127.0.0.1:3000
+        - https://ai-script-builder-three.vercel.app/
+        - https://coopang-ai-seller.vercel.app/
+      credentials: true
+    exposed:
+      headers: "*"
+    max-age: 3_600

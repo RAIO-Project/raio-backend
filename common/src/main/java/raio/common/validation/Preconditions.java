@@ -1,0 +1,1032 @@
+package raio.common.validation;
+
+import raio.common.ErrorCode;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+public final class Preconditions {
+    private Preconditions() {}
+
+    // ╭────────────────────────────╮
+    //    validateNotNull variants
+    // ╰────────────────────────────╯
+
+    public static void validateNotNull(Object value, ErrorCode errorCode) {
+        if (value == null) {
+            throw errorCode.exception();
+        }
+    }
+
+    public static void validateNotNull(Object value, ErrorCode errorCode, Throwable cause) {
+        if (value == null) {
+            throw errorCode.exception(cause);
+        }
+    }
+
+    public static void validateNotNull(Object value, ErrorCode errorCode, Runnable runnable) {
+        if (value == null) {
+            throw errorCode.exception(runnable);
+        }
+    }
+
+    public static void validateNotNull(
+            Object value,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        if (value == null) {
+            throw errorCode.exception(runnable, cause);
+        }
+    }
+
+    public static void validateNotNull(
+            Object value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        if (value == null) {
+            throw errorCode.exception(payloadSupplier);
+        }
+    }
+
+    public static void validateNotNull(
+            Object value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        if (value == null) {
+            throw errorCode.exception(payloadSupplier, cause);
+        }
+    }
+
+    // ╭─────────────────────────────────────╮
+    //    String: validateNotEmpty variants
+    // ╰─────────────────────────────────────╯
+
+    public static void validateNotEmpty(String value, ErrorCode errorCode) {
+        if (isEmpty(value)) {
+            throw errorCode.exception();
+        }
+    }
+
+    public static void validateNotEmpty(String value, ErrorCode errorCode, Throwable cause) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(cause);
+        }
+    }
+
+    public static void validateNotEmpty(String value, ErrorCode errorCode, Runnable runnable) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(runnable);
+        }
+    }
+
+    public static void validateNotEmpty(
+            String value,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(runnable, cause);
+        }
+    }
+
+    public static void validateNotEmpty(
+            String value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(payloadSupplier);
+        }
+    }
+
+    public static void validateNotEmpty(
+            String value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(payloadSupplier, cause);
+        }
+    }
+
+    // ╭─────────────────────────────────────────╮
+    //    Collection: validateNotEmpty variants
+    // ╰─────────────────────────────────────────╯
+
+    public static void validateNotEmpty(Collection<?> value, ErrorCode errorCode) {
+        if (isEmpty(value)) {
+            throw errorCode.exception();
+        }
+    }
+
+    public static void validateNotEmpty(Collection<?> value, ErrorCode errorCode, Throwable cause) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(cause);
+        }
+    }
+
+    public static void validateNotEmpty(Collection<?> value, ErrorCode errorCode, Runnable runnable) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(runnable);
+        }
+    }
+
+    public static void validateNotEmpty(
+            Collection<?> value,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(runnable, cause);
+        }
+    }
+
+    public static void validateNotEmpty(
+            Collection<?> value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(payloadSupplier);
+        }
+    }
+
+    public static void validateNotEmpty(
+            Collection<?> value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        if (isEmpty(value)) {
+            throw errorCode.exception(payloadSupplier, cause);
+        }
+    }
+
+    // ╭─────────────────────────────╮
+    //    validateNotBlank variants
+    // ╰─────────────────────────────╯
+
+    public static void validateNotBlank(String value, ErrorCode errorCode) {
+        if (isBlank(value)) {
+            throw errorCode.exception();
+        }
+    }
+
+    public static void validateNotBlank(String value, ErrorCode errorCode, Throwable cause) {
+        if (isBlank(value)) {
+            throw errorCode.exception(cause);
+        }
+    }
+
+    public static void validateNotBlank(String value, ErrorCode errorCode, Runnable runnable) {
+        if (isBlank(value)) {
+            throw errorCode.exception(runnable);
+        }
+    }
+
+    public static void validateNotBlank(
+            String value,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        if (isBlank(value)) {
+            throw errorCode.exception(runnable, cause);
+        }
+    }
+
+    public static void validateNotBlank(
+            String value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        if (isBlank(value)) {
+            throw errorCode.exception(payloadSupplier);
+        }
+    }
+
+    public static void validateNotBlank(
+            String value,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        if (isBlank(value)) {
+            throw errorCode.exception(payloadSupplier, cause);
+        }
+    }
+
+    // ╭───────────────────────────────────╮
+    //    String: validateLength variants
+    // ╰───────────────────────────────────╯
+
+    public static void validateLength(
+            String value,
+            int min,
+            int max,
+            ErrorCode errorCode
+    ) {
+        performLengthValidation(value, min, max, errorCode::exception);
+    }
+
+    public static void validateLength(
+            String value,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performLengthValidation(value, min, max, () -> errorCode.exception(cause));
+    }
+
+    public static void validateLength(
+            String value,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performLengthValidation(value, min, max, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateLength(
+            String value,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performLengthValidation(value, min, max, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateLength(
+            String value,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performLengthValidation(value, min, max, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateLength(
+            String value,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performLengthValidation(value, min, max, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭───────────────────────────────────────╮
+    //    collection: validateLength variants
+    // ╰───────────────────────────────────────╯
+
+    public static void validateLength(
+            Collection<?> collection,
+            int min,
+            int max,
+            ErrorCode errorCode
+    ) {
+        performLengthValidation(collection, min, max, errorCode::exception);
+    }
+
+    public static void validateLength(
+            Collection<?> collection,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performLengthValidation(collection, min, max, () -> errorCode.exception(cause));
+    }
+
+    public static void validateLength(
+            Collection<?> collection,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performLengthValidation(collection, min, max, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateLength(
+            Collection<?> collection,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performLengthValidation(collection, min, max, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateLength(
+            Collection<?> collection,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performLengthValidation(collection, min, max, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateLength(
+            Collection<?> collection,
+            int min,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performLengthValidation(collection, min, max, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭──────────────────────────────────────────╮
+    //    numeric types: validateMinMax variants
+    // ╰──────────────────────────────────────────╯
+
+    public static void validateMinMax(
+            double value,
+            double min,
+            double max,
+            ErrorCode errorCode
+    ) {
+        performMinMaxValidation(value, min, max, errorCode::exception);
+    }
+
+    public static void validateMinMax(
+            double value,
+            double min,
+            double max,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performMinMaxValidation(value, min, max, () -> errorCode.exception(cause));
+    }
+
+    public static void validateMinMax(
+            double value,
+            double min,
+            double max,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performMinMaxValidation(value, min, max, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateMinMax(
+            double value,
+            double min,
+            double max,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performMinMaxValidation(value, min, max, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateMinMax(
+            double value,
+            double min,
+            double max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performMinMaxValidation(value, min, max, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateMinMax(
+            double value,
+            double min,
+            double max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performMinMaxValidation(value, min, max, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭──────────────────────────────────────╮
+    //    number types: validateMin variants
+    // ╰──────────────────────────────────────╯
+
+
+    public static void validateMin(
+            double value,
+            double min,
+            ErrorCode errorCode
+    ) {
+        if (value < min) {
+            throw errorCode.exception();
+        }
+    }
+
+    public static void validateMin(
+            double value,
+            double min,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        if (value < min) {
+            throw errorCode.exception(cause);
+        }
+    }
+
+    public static void validateMin(
+            double value,
+            double min,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        if (value < min) {
+            throw errorCode.exception(runnable);
+        }
+    }
+
+    public static void validateMinM(
+            double value,
+            double min,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        if (value < min) {
+            throw errorCode.exception(runnable, cause);
+        }
+    }
+
+    public static void validateMin(
+            double value,
+            double min,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        if (value < min) {
+            throw errorCode.exception(payloadSupplier);
+        }
+    }
+
+    public static void validateMin(
+            double value,
+            double min,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        if (value < min) {
+            throw errorCode.exception(payloadSupplier, cause);
+        }
+    }
+
+    // ╭──────────────────────────────────────╮
+    //    number types: validateMax variants
+    // ╰──────────────────────────────────────╯
+
+
+    public static void validateMax(
+            double value,
+            double max,
+            ErrorCode errorCode
+    ) {
+        if (value > max) {
+            throw errorCode.exception();
+        }
+    }
+
+    public static void validateMax(
+            double value,
+            double max,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        if (value > max) {
+            throw errorCode.exception(cause);
+        }
+    }
+
+    public static void validateMax(
+            double value,
+            double max,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        if (value > max) {
+            throw errorCode.exception(runnable);
+        }
+    }
+
+    public static void validateMiax(
+            double value,
+            double max,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        if (value > max) {
+            throw errorCode.exception(runnable, cause);
+        }
+    }
+
+    public static void validateMax(
+            double value,
+            double max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        if (value > max) {
+            throw errorCode.exception(payloadSupplier);
+        }
+    }
+
+    public static void validateMax(
+            double value,
+            double max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        if (value > max) {
+            throw errorCode.exception(payloadSupplier, cause);
+        }
+    }
+
+
+    // ╭────────────────────────────────╮
+    //    String: validateMin variants
+    // ╰────────────────────────────────╯
+
+    public static void validateMin(
+            String value,
+            int min,
+            ErrorCode errorCode
+    ) {
+        performMinValidation(value, min, errorCode::exception);
+    }
+
+    public static void validateMin(
+            String value,
+            int min,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performMinValidation(value, min, () -> errorCode.exception(cause));
+    }
+
+    public static void validateMin(
+            String value,
+            int min,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performMinValidation(value, min, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateMin(
+            String value,
+            int min,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performMinValidation(value, min, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateMin(
+            String value,
+            int min,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performMinValidation(value, min, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateMin(
+            String value,
+            int min,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performMinValidation(value, min, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭────────────────────────────────────╮
+    //    collection: validateMin variants
+    // ╰────────────────────────────────────╯
+
+    public static void validateMin(
+            Collection<?> collection,
+            int min,
+            ErrorCode errorCode
+    ) {
+        performMinValidation(collection, min, errorCode::exception);
+    }
+
+    public static void validateMin(
+            Collection<?> collection,
+            int min,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performMinValidation(collection, min, () -> errorCode.exception(cause));
+    }
+
+    public static void validateMin(
+            Collection<?> collection,
+            int min,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performMinValidation(collection, min, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateMin(
+            Collection<?> collection,
+            int min,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performMinValidation(collection, min, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateMin(
+            Collection<?> collection,
+            int min,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performMinValidation(collection, min, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateMin(
+            Collection<?> collection,
+            int min,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performMinValidation(collection, min, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭────────────────────────────────╮
+    //    String: validateMax variants
+    // ╰────────────────────────────────╯
+
+    public static void validateMax(
+            String value,
+            int max,
+            ErrorCode errorCode
+    ) {
+        performMaxValidation(value, max, errorCode::exception);
+    }
+
+    public static void validateMax(
+            String value,
+            int max,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performMaxValidation(value, max, () -> errorCode.exception(cause));
+    }
+
+    public static void validateMax(
+            String value,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performMaxValidation(value, max, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateMax(
+            String value,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performMaxValidation(value, max, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateMax(
+            String value,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performMaxValidation(value, max, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateMax(
+            String value,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performMaxValidation(value, max, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭────────────────────────────────────╮
+    //    collection: validateMax variants
+    // ╰────────────────────────────────────╯
+
+    public static void validateMax(
+            Collection<?> collection,
+            int max,
+            ErrorCode errorCode
+    ) {
+        performMaxValidation(collection, max, errorCode::exception);
+    }
+
+    public static void validateMax(
+            Collection<?> collection,
+            int max,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performMaxValidation(collection, max, () -> errorCode.exception(cause));
+    }
+
+    public static void validateMax(
+            Collection<?> collection,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performMaxValidation(collection, max, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateMax(
+            Collection<?> collection,
+            int max,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performMaxValidation(collection, max, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateMax(
+            Collection<?> collection,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performMaxValidation(collection, max, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateMax(
+            Collection<?> collection,
+            int max,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performMaxValidation(collection, max, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭──────────────────────────────────╮
+    //    String: validateRegex variants
+    // ╰──────────────────────────────────╯
+
+    public static void validateRegex(
+            String value,
+            String regex,
+            ErrorCode errorCode
+    ) {
+        performRegexValidation(value, regex, errorCode::exception);
+    }
+
+    public static void validateRegex(
+            String value,
+            String regex,
+            ErrorCode errorCode,
+            Throwable cause
+    ) {
+        performRegexValidation(value, regex, () -> errorCode.exception(cause));
+    }
+
+    public static void validateRegex(
+            String value,
+            String regex,
+            ErrorCode errorCode,
+            Runnable runnable
+    ) {
+        performRegexValidation(value, regex, () -> errorCode.exception(runnable));
+    }
+
+    public static void validateRegex(
+            String value,
+            String regex,
+            ErrorCode errorCode,
+            Runnable runnable,
+            Throwable cause
+    ) {
+        performRegexValidation(value, regex, () -> errorCode.exception(runnable, cause));
+    }
+
+    public static void validateRegex(
+            String value,
+            String regex,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier
+    ) {
+        performRegexValidation(value, regex, () -> errorCode.exception(payloadSupplier));
+    }
+
+    public static void validateRegex(
+            String value,
+            String regex,
+            ErrorCode errorCode,
+            Supplier<Map<String, Object>> payloadSupplier,
+            Throwable cause
+    ) {
+        performRegexValidation(value, regex, () -> errorCode.exception(payloadSupplier, cause));
+    }
+
+    // ╭──────────────────╮
+    //    Helper Methods
+    // ╰──────────────────╯
+
+    private static boolean isEmpty(String value) {
+        return value == null || value.isEmpty();
+    }
+
+    private static boolean isEmpty(Collection<?> value) {
+        return value == null || value.isEmpty();
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
+
+    private static void performLengthValidation(
+            String value,
+            int min,
+            int max,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        validateLengthArgument(min, max);
+
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+
+        int len = value.length();
+        if (len < min || len > max) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performLengthValidation(
+            Collection<?> collection,
+            int min,
+            int max,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        validateLengthArgument(min, max);
+
+        if (collection == null || collection.isEmpty()) {
+            return;
+        }
+
+        if (collection.size() < min || collection.size() > max) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performMinMaxValidation(
+            double value,
+            double min,
+            double max,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        assert min >= 0 && max >= 0 : "min, max cannot be less than or equal to 0";
+        assert min < max : "max must be greater than or equal to " + min;
+
+        if (value < min || value > max) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performMinValidation(
+            String value,
+            int min,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        validateMinArgument(min);
+
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+
+        if (value.length() < min) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performMinValidation(
+            Collection<?> collection,
+            int min,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        validateMinArgument(min);
+
+        if (collection == null || collection.isEmpty()) {
+            return;
+        }
+
+        if (collection.size() < min) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performMaxValidation(
+            String value,
+            int max,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        validateMaxArgument(max);
+
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+
+        if (value.length() > max) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performMaxValidation(
+            Collection<?> collection,
+            int max,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        validateMaxArgument(max);
+
+        if (collection == null || collection.isEmpty()) {
+            return;
+        }
+
+        if (collection.size() > max) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void performRegexValidation(
+            String value,
+            String regexp,
+            Supplier<? extends RuntimeException> exceptionSupplier
+    ) {
+        assert regexp != null : "Pattern must not be null.";
+        Pattern pattern = compileRegex(regexp);
+
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+
+        if (!pattern.matcher(value).matches()) {
+            throw exceptionSupplier.get();
+        }
+    }
+
+    private static void validateLengthArgument(int min, int max) {
+        assert min >= 0 : "min cannot be less than 0";
+        assert max >= 0 : "max cannot be less than 0";
+        assert min <= max : "max must be greater than or equal to " + min;
+    }
+
+    private static void validateMinArgument(int min) {
+        assert min >= 0 : "min cannot be less than 0";
+    }
+
+    private static void validateMaxArgument(int max) {
+        assert max >= 0 : "max cannot be less than 0";
+    }
+
+    private static Pattern compileRegex(String regex) {
+        try {
+            return Pattern.compile(regex);
+        } catch (PatternSyntaxException e) {
+            throw new IllegalArgumentException("Invalid regex: " + regex, e);
+        }
+    }
+}

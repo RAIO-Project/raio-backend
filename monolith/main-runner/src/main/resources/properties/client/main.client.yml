@@ -1,0 +1,5 @@
+app:
+  client:
+    base-url: ${SPRING_BOOT_BASE_URL}
+    url:
+      auth: ${SPRING_BOOT_AUTH_URL:${SPRING_BOOT_BASE_URL}}

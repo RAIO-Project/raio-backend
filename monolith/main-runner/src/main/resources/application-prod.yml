@@ -1,0 +1,16 @@
+spring:
+  flyway:
+    locations:
+      - db/migration/dummy
+
+logging:
+  level:
+    root: INFO
+    club: INFO  # 비즈니스 로직
+    org.springframework.web: WARN   # 프레임워크
+    org.hibernate.SQL: WARN         # 쿼리 (파라미터 제외)
+    org.hibernate.type.descriptor.sql: TRACE  # 파라미터 (필요시)
+
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId:-}]"
+

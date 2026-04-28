@@ -1,0 +1,33 @@
+app:
+  auth:
+    filter:
+      exclude-paths:
+        # 서버 간
+        - path: "/actuator/health"
+          methods: "*"
+          description: |
+            Spring Boot Actuator가 제공하는 헬스 체크 경로
+        - path: "/internal/**"
+          methods: "*"
+          description: |
+            내부 API 경로
+        # Docs 등
+        - path: "/swagger-ui/**"
+          methods: "*"
+        - path: "/v3/api-docs/**"
+          methods: "*"
+        - path: "/api/validations/**"
+          methods: "get"
+        # Auth
+        - path: "/auth/signup"
+          methods: "*"
+        - path: "/auth/login"
+          methods: "*"
+        - path: "/auth/email/verification/send"
+          methods: "*"
+        - path: "/auth/email/verification/check"
+          methods: "*"
+        - path: "/auth/email/password/reset"
+          methods: "*"
+        - path: "/auth/email/password/reset/send"
+          methods: "*"

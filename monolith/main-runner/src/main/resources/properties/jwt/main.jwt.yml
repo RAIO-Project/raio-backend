@@ -1,0 +1,7 @@
+jwt:
+  keyType: HMAC
+  secretKey: ${JWT_SECRET_KEY}
+  privateKey: ${JWT_PRIVATE_KEY}
+  publicKey: ${JWT_PUBLIC_KEY}
+  accessTokenMaxAgeSeconds: 1800      # 30 minutes
+  refreshTokenMaxAgeSeconds: 1209600  # 14 days
