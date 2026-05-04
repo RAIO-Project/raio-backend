@@ -10,6 +10,11 @@ version = "0.0.1-SNAPSHOT"
 
 dependencies {
     // service
+    api(project(chat))
+    api(project(donation))
+    api(project(payment))
+    api(project(stream))
+    api(project(user))
 
     // core
     implementation(project(":exception-handler-core"))

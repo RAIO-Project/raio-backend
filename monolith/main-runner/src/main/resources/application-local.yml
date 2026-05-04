@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${BOARD_POSTGRESQL_URL:jdbc:postgresql://localhost:5433/club}
-    username: ${BOARD_POSTGRESQL_USERNAME:root}
-    password: ${BOARD_POSTGRESQL_PASSWORD:root}
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/raio}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
 
   data:
     redis:

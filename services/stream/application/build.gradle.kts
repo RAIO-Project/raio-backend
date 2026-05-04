@@ -1,5 +1,5 @@
-val stream: String by project
+val streamApi: String by project
 
 dependencies {
-    api(project(stream))
+    api(project(streamApi))
 }

@@ -7,6 +7,13 @@ spring:
 
   config:
     import:
+      # services
+      - properties/chat/chat.yml
+      - properties/donation/donation.yml
+      - properties/payment/payment.yml
+      - properties/stream/stream.yml
+      - properties/user/user.yml
+      # core
       - properties/client/main.client.yml
       - properties/jwt/club.jwt.filter.yml
       - properties/jwt/main.jwt.yml
@@ -20,9 +27,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${BOARD_POSTGRESQL_URL}
-    username: ${BOARD_POSTGRESQL_USERNAME}
-    password: ${BOARD_POSTGRESQL_PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   data:
     redis:

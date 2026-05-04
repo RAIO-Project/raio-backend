@@ -1,3 +1,9 @@
 spring:
   flyway:
     enabled: false  # (중요) 기본 Flyway Auto-run 끄고, 우리가 만든 authFlyway만 실행
+
+chat:
+  flyway:
+    locations: classpath:db/migration/v1/chat
+    schema: chat
+    history-table: flyway_schema_history_chat
