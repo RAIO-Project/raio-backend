@@ -1,6 +1,6 @@
 stream:
   flyway:
-    create-schemas: false
+    create-schemas: true
     baseline-on-migrate: false
     validate-on-migrate: true
     out-of-order: false
