@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS "chat";
+
 CREATE TABLE IF NOT EXISTS "chat"."blacklist" (
   "id"           BIGINT        ,
   "user_id"      BIGINT        NOT NULL,

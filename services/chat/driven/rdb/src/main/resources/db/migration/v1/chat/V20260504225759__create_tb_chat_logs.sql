@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS "chat";
+
 CREATE TABLE IF NOT EXISTS "chat"."chat_logs" (
   "id"                BIGINT        NOT NULL,
   "stream_id"         BIGINT        NOT NULL,

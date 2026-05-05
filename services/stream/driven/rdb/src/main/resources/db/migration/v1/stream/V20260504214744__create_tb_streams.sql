@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS "stream";
+
 CREATE TABLE IF NOT EXISTS "stream"."streams" (
       "id"                BIGINT        ,
       "streamer_id"       BIGINT        NOT NULL,

@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS "donation";
+
 CREATE TABLE IF NOT EXISTS "donation"."donations" (
      "id"           BIGINT        ,
      "stream_id"    BIGINT        NOT NULL,

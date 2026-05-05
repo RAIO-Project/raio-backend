@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS "payment";
+
 CREATE TABLE IF NOT EXISTS "payment"."settlement_details" (
     "id"     BIGINT        ,
     "settlement_id" BIGINT        NOT NULL,
