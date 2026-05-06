@@ -7,6 +7,7 @@ val chatApplication: String by settings
 val chatRdbAdapter: String by settings
 val chatWebMvcAdapter: String by settings
 val chatBatchAdapter: String by settings
+val chatWebSocketAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
     var dir = rootDir
