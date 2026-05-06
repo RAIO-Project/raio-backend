@@ -34,6 +34,7 @@ include(
     chatRdbAdapter,
     chatWebMvcAdapter,
     // chatBatchAdapter,
+    chatWebSocketAdapter,
 )
 
 project(chat).projectDir = chatDirectory("chat")
@@ -45,3 +46,4 @@ project(chatApplication).projectDir = chatDirectory("application")
 project(chatRdbAdapter).projectDir = chatDirectory("rdb")
 project(chatWebMvcAdapter).projectDir = chatDirectory("web-mvc")
 // project(chatBatchAdapter).projectDir = chatDirectory("batch")
+project(chatWebSocketAdapter).projectDir = chatDirectory("websocket")
