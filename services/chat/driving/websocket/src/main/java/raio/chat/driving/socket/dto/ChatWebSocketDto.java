@@ -1,4 +1,4 @@
-package raio.chat.driving.websocket.dto;
+package raio.chat.driving.socket.dto;
 
 import jakarta.validation.constraints.*;
 import java.time.Instant;
@@ -26,8 +26,8 @@ public final class ChatWebSocketDto {
     // 서버 → 클라 (입장/퇴장)
     public record StreamPresenceEvent(
             String type,           // "JOIN" | "LEAVE"
-            Long   streamId,
-            Long   userId,
+            String streamId,
+            String userId,
             String nickname,
             Instant occurredAt
     ) {}

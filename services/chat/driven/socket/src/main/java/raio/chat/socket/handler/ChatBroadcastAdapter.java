@@ -1,10 +1,10 @@
-package raio.chat.driving.websocket.handler;
+package raio.chat.socket.handler;
 
 import lombok.RequiredArgsConstructor;
 import raio.chat.application.port.ChatBroadcastPort;
 import raio.chat.domain.ChatLogs;
-import raio.chat.driving.websocket.dto.ChatWebSocketDto.ChatBroadcastEvent;
-import raio.chat.driving.websocket.dto.ChatWebSocketDto.StreamPresenceEvent;
+import raio.chat.driving.socket.dto.ChatWebSocketDto.ChatBroadcastEvent;
+import raio.chat.driving.socket.dto.ChatWebSocketDto.StreamPresenceEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import java.time.Instant;
@@ -34,12 +34,24 @@ public class ChatBroadcastAdapter implements ChatBroadcastPort {
     @Override
     public void broadcastUserJoined(Long streamId, Long userId, String nickname) {
         messaging.convertAndSend(TOPIC + streamId,
-                new StreamPresenceEvent("JOIN", streamId, userId, nickname, Instant.now()));
+                new StreamPresenceEvent(
+                        "JOIN",
+                        String.valueOf(streamId),  // Long → String 변환
+                        String.valueOf(userId),    // Long → String 변환
+                        nickname,
+                        Instant.now()
+                ));
     }
 
     @Override
     public void broadcastUserLeft(Long streamId, Long userId, String nickname) {
         messaging.convertAndSend(TOPIC + streamId,
-                new StreamPresenceEvent("LEAVE", streamId, userId, nickname, Instant.now()));
+                new StreamPresenceEvent(
+                        "LEAVE",
+                        String.valueOf(streamId),  // Long → String 변환
+                        String.valueOf(userId),    // Long → String 변환
+                        nickname,
+                        Instant.now()
+                ));
     }
 }

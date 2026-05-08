@@ -1,11 +1,11 @@
-package raio.chat.driving.websocket;
+package raio.chat.driving.socket;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import raio.chat.application.usecase.ChatSendUseCase;
 import raio.chat.domain.ChatLogs;
-import raio.chat.driving.websocket.dto.ChatWebSocketDto.ChatSendCommand;
-import raio.chat.driving.websocket.interceptor.StompAuthInterceptor;
+import raio.chat.driving.socket.dto.ChatWebSocketDto.ChatSendCommand;
+import raio.chat.driving.socket.interceptor.StompAuthInterceptor;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;

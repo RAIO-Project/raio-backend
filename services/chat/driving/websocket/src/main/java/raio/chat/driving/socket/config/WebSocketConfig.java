@@ -1,7 +1,7 @@
-package raio.chat.driving.websocket.config;
+package raio.chat.driving.socket.config;
 
 import lombok.RequiredArgsConstructor;
-import raio.chat.driving.websocket.interceptor.StompAuthInterceptor;
+import raio.chat.driving.socket.interceptor.StompAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
