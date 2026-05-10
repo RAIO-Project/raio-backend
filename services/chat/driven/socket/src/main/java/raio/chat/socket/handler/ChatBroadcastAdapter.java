@@ -3,8 +3,6 @@ package raio.chat.socket.handler;
 import lombok.RequiredArgsConstructor;
 import raio.chat.application.port.ChatBroadcastPort;
 import raio.chat.domain.ChatLogs;
-import raio.chat.driving.socket.dto.ChatWebSocketDto.ChatBroadcastEvent;
-import raio.chat.driving.socket.dto.ChatWebSocketDto.StreamPresenceEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import java.time.Instant;
@@ -18,40 +16,50 @@ public class ChatBroadcastAdapter implements ChatBroadcastPort {
 
     @Override
     public void broadcastMessage(Long streamId, ChatLogs chatLogs, String senderNickname) {
-        var event = new ChatBroadcastEvent(
-                "CHAT",
-                chatLogs.getStreamId(),
-                chatLogs.getUserId(),
-                senderNickname,          // ← 여기서 사용
-                chatLogs.getMessage(),
-                chatLogs.isBlocked(),
-                chatLogs.getBlockedReason(),
-                Instant.now()
-        );
-        messaging.convertAndSend(TOPIC + streamId, event);
+        messaging.convertAndSend(TOPIC + streamId,
+                new ChatMessagePayload(
+                        "CHAT",
+                        chatLogs.getStreamId(),
+                        chatLogs.getUserId(),
+                        senderNickname,
+                        chatLogs.getMessage(),
+                        chatLogs.isBlocked(),
+                        chatLogs.getBlockedReason(),
+                        Instant.now()
+                ));
     }
 
     @Override
     public void broadcastUserJoined(Long streamId, Long userId, String nickname) {
         messaging.convertAndSend(TOPIC + streamId,
-                new StreamPresenceEvent(
-                        "JOIN",
-                        String.valueOf(streamId),  // Long → String 변환
-                        String.valueOf(userId),    // Long → String 변환
-                        nickname,
-                        Instant.now()
-                ));
+                new PresencePayload("JOIN", String.valueOf(streamId),
+                        String.valueOf(userId), nickname, Instant.now()));
     }
 
     @Override
     public void broadcastUserLeft(Long streamId, Long userId, String nickname) {
         messaging.convertAndSend(TOPIC + streamId,
-                new StreamPresenceEvent(
-                        "LEAVE",
-                        String.valueOf(streamId),  // Long → String 변환
-                        String.valueOf(userId),    // Long → String 변환
-                        nickname,
-                        Instant.now()
-                ));
+                new PresencePayload("LEAVE", String.valueOf(streamId),
+                        String.valueOf(userId), nickname, Instant.now()));
     }
+
+    // 이 어댑터 전용 페이로드 - 외부에 노출 안 됨
+    private record ChatMessagePayload(
+            String type,
+            String streamId,
+            String userId,
+            String senderNickname,
+            String message,
+            Boolean isBlocked,
+            String blockReason,
+            Instant createdAt
+    ) {}
+
+    private record PresencePayload(
+            String type,
+            String streamId,
+            String userId,
+            String nickname,
+            Instant occurredAt
+    ) {}
 }

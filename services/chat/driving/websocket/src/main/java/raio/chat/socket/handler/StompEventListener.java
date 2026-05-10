@@ -1,11 +1,12 @@
-package raio.chat.driving.socket.handler;
+package raio.chat.socket.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import raio.chat.application.port.ChatBroadcastPort;
-import raio.chat.driving.socket.interceptor.StompAuthInterceptor;
+import raio.chat.socket.interceptor.StompAuthInterceptor;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
@@ -23,16 +24,27 @@ public class StompEventListener {
 
     private final ChatBroadcastPort chatBroadcastPort;
 
+    // CONNECT 시 저장
+    private final Map<String, Map<String, Object>> sessionAttrs = new ConcurrentHashMap<>();
     // sessionId → (subscriptionId → streamId)
     // DISCONNECT 시 어떤 방에서 나가야 하는지 추적
     private final Map<String, Map<String, Long>> sessions = new ConcurrentHashMap<>();
 
     @EventListener
-    public void onSubscribe(SessionSubscribeEvent event) {
-        var accessor = StompHeaderAccessor.wrap(event.getMessage());
-        var dest = accessor.getDestination();
+    public void onConnected(SessionConnectedEvent event) {
+        var accessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
+        var sessionId = accessor.getSessionId();
+        var attrs = accessor.getSessionAttributes();
+        if (sessionId != null && attrs != null) {
+            sessionAttrs.put(sessionId, attrs);  // ← 여기서 저장
+        }
+    }
 
-        // /topic/streams/{streamId} 구독만 처리
+
+    @EventListener
+    public void onSubscribe(SessionSubscribeEvent event) {
+        var accessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
+        var dest = accessor.getDestination();
         if (dest == null || !dest.startsWith(TOPIC_PREFIX)) return;
 
         var streamId = parseStreamId(dest);
@@ -40,7 +52,7 @@ public class StompEventListener {
 
         var sessionId = accessor.getSessionId();
         var subscriptionId = accessor.getSubscriptionId();
-        var attrs = accessor.getSessionAttributes();
+        var attrs = sessionAttrs.get(sessionId);  // ← 저장해둔 거 꺼냄
         var userId = extractUserId(attrs);
         var nickname = extractNickname(attrs);
 
@@ -55,28 +67,28 @@ public class StompEventListener {
 
     @EventListener
     public void onUnsubscribe(SessionUnsubscribeEvent event) {
-        var accessor = StompHeaderAccessor.wrap(event.getMessage());
+        var accessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
         var sessionId = accessor.getSessionId();
         var subscriptionId = accessor.getSubscriptionId();
         if (sessionId == null || subscriptionId == null) return;
 
         var subs = sessions.get(sessionId);
         if (subs == null) return;
-
         var streamId = subs.remove(subscriptionId);
         if (streamId == null) return;
 
-        var attrs = accessor.getSessionAttributes();
+        var attrs = sessionAttrs.get(sessionId);  // ← 저장해둔 거 꺼냄
         log.debug("퇴장 - streamId: {}, userId: {}", streamId, extractUserId(attrs));
         chatBroadcastPort.broadcastUserLeft(streamId, extractUserId(attrs), extractNickname(attrs));
     }
 
     @EventListener
     public void onDisconnect(SessionDisconnectEvent event) {
-        var subs = sessions.remove(event.getSessionId());
-        if (subs == null) return;
+        var sessionId = event.getSessionId();
+        sessionAttrs.remove(sessionId);  // ← 세션 정리
 
-        // 연결 끊기면 들어가있던 모든 방에서 퇴장 처리
+        var subs = sessions.remove(sessionId);
+        if (subs == null) return;
         subs.values().forEach(streamId ->
                 chatBroadcastPort.broadcastUserLeft(streamId, -1L, "anonymous")
         );

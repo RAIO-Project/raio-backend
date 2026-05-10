@@ -1,4 +1,4 @@
-package raio.chat.driving.socket.dto;
+package raio.chat.socket.dto;
 
 import jakarta.validation.constraints.*;
 import java.time.Instant;

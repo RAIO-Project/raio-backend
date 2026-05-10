@@ -1,4 +1,4 @@
-package raio.chat.driving.socket.interceptor;
+package raio.chat.socket.interceptor;
 
 import org.springframework.http.server.*;
 import org.springframework.stereotype.Component;
