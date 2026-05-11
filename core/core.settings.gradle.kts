@@ -18,7 +18,8 @@ include(
     ":upload-image-local",
     ":upload-s3-storage",
     ":batch-api",
-    ":batch-core"
+    ":batch-core",
+    ":websocket-core"
 )
 
 project(":time-util").projectDir = core["time-util"]!!
@@ -35,3 +36,4 @@ project(":upload-image-local").projectDir = core["upload-image-local"]!!
 project(":upload-s3-storage").projectDir = core["upload-s3-storage"]!!
 project(":batch-api").projectDir = core["batch-api"]!!
 project(":batch-core").projectDir = core["batch-core"]!!
+project(":websocket-core").projectDir = core["websocket-core"]!!

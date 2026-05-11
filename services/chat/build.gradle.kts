@@ -3,6 +3,7 @@ val chatApplication: String by project
 val chatRdbAdapter: String by project
 val chatWebMvcAdapter: String by project
 val chatWebSocketAdapter: String by project
+val chatSocketAdapter: String by project
 
 dependencies {
     api(project(chatApi))
@@ -10,4 +11,5 @@ dependencies {
     api(project(chatRdbAdapter))
     api(project(chatWebMvcAdapter))
     api(project(chatWebSocketAdapter))
+    api(project(chatSocketAdapter))
 }
