@@ -1,7 +1,7 @@
-package raio.chat.socket.config;
+package raio.socket.config;
 
 import lombok.RequiredArgsConstructor;
-import raio.chat.socket.interceptor.StompAuthInterceptor;
+import raio.socket.interceptor.StompAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
@@ -16,8 +16,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/chat")
-                .setAllowedOriginPatterns("*");
-//                .addInterceptors(stompAuthInterceptor)
+                .setAllowedOriginPatterns("*")
+                .addInterceptors(stompAuthInterceptor);
 //                .withSockJS();
     }
 

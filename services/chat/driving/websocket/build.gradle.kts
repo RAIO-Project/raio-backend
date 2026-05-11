@@ -6,9 +6,8 @@ dependencies {
     api(project(chatApplication))
 
     // STOMP over WebSocket
-    implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework:spring-messaging")
-
+    implementation(project(":websocket-core"))
     // validation
     compileOnly("jakarta.validation:jakarta.validation-api")
 

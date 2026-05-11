@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import raio.chat.application.port.ChatBroadcastPort;
-import raio.chat.socket.interceptor.StompAuthInterceptor;
+import raio.socket.interceptor.StompAuthInterceptor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
