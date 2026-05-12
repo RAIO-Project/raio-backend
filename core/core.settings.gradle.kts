@@ -10,6 +10,8 @@ include(
     ":exception-handler-core",
     ":cors-api",
     ":cors-webmvc",
+    ":jwt-api",
+    ":jwt-webmvc",
     ":snowflake-id-api",
     ":snowflake-id-hibernate",
     ":upload-image-api",
@@ -25,6 +27,8 @@ project(":jpa-core").projectDir = core["jpa-core"]!!
 project(":exception-handler-core").projectDir = core["exception-handler-core"]!!
 project(":cors-webmvc").projectDir = core["cors-webmvc"]!!
 project(":cors-api").projectDir = core["cors-api"]!!
+project(":jwt-api").projectDir = core["jwt-api"]!!
+project(":jwt-webmvc").projectDir = core["jwt-webmvc"]!!
 project(":snowflake-id-api").projectDir = core["snowflake-id-api"]!!
 project(":snowflake-id-hibernate").projectDir = core["snowflake-id-hibernate"]!!
 project(":upload-image-api").projectDir = core["upload-image-api"]!!

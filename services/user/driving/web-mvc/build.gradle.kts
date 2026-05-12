@@ -4,6 +4,7 @@ val userApi: String by project
 dependencies {
     api(project(userApi))
     api(project(userApplication))
+    api(project(":jwt-webmvc"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 

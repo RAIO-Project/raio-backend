@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":exception-handler-core"))
     implementation(project(":jpa-core"))
     implementation(project(":cors-webmvc"))
+    implementation(project(":jwt-webmvc"))
     implementation(project(":websocket-core"))
 
     // webmvc
