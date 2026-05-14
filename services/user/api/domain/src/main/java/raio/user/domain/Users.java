@@ -17,8 +17,8 @@ import java.time.Instant;
 @AllArgsConstructor
 public class Users {
     
-    /** 사용자 ID (PK) */
-    private String id;
+    /** 사용자 ID (PK, Snowflake) */
+    private Long id;
     
     /** 이메일 */
     private String email;
