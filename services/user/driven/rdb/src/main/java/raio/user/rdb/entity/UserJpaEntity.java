@@ -16,7 +16,7 @@ import raio.user.domain.type.UserStatus;
 import java.time.Instant;
 
 @Entity
-@Table(name = "users", schema = "user")
+@Table(name = "users", schema = "`user`")
 @SuperBuilder
 @NoArgsConstructor
 @Getter
