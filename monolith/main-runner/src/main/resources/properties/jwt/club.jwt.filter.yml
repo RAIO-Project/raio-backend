@@ -21,7 +21,11 @@ app:
         # Auth
         - path: "/auth/signup"
           methods: "*"
+        - path: "/auth/register"
+          methods: "*"
         - path: "/auth/login"
+          methods: "*"
+        - path: "/auth/refresh"
           methods: "*"
         - path: "/auth/email/verification/send"
           methods: "*"
