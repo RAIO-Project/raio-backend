@@ -18,6 +18,9 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:${bom["querydsl.version"]}:jakarta")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
+    // redis (RefreshToken 저장소)
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     // mapstruct
     implementation("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
