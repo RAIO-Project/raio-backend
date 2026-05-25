@@ -2,6 +2,7 @@ spring:
   config:
     import:
       - properties/jwt/main.jwt-local.yml
+      - properties/redis/main.redis-local.yml
 
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5433/raio}
