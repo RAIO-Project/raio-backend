@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import raio.jpa.support.SnowflakeBaseTimeEntity;
+import raio.stream.rdb.entity.type.StreamsEntityCategory;
+import raio.stream.rdb.entity.type.StreamsEntityCategoryConverter;
 import raio.stream.rdb.entity.type.StreamsEntityStatus;
 import raio.stream.rdb.entity.type.StreamsEntityStatusConverter;
 
@@ -17,15 +19,6 @@ import java.time.Instant;
 
 /**
  * streams 테이블 매핑 엔티티.
- *
- * <p>[샘플 BoardEntity 컨벤션 적용]
- *  - status 는 {@link StreamsEntityStatus} 로 도메인 enum 과 분리하고 {@code @Convert} 사용.
- *  - public 필드 + {@code @Builder} 생성자 (불변 필드만 빌더로 주입).
- *  - {@code @NoArgsConstructor(access = AccessLevel.PROTECTED)}.
- *
- * <p>[RAIO 메인 컨벤션 유지]
- *  - PK 가 Snowflake 이므로 {@code LongBaseTimeEntity} 대신 {@link SnowflakeBaseTimeEntity} 상속.
- *  - id / createdAt / updatedAt 는 부모에서 상속.
  */
 @Getter
 @DynamicUpdate
@@ -43,8 +36,9 @@ public class StreamsEntity extends SnowflakeBaseTimeEntity {
     @Column(name = "title", nullable = false, length = 255)
     public String title;
 
+    @Convert(converter = StreamsEntityCategoryConverter.class)
     @Column(name = "category", length = 50)
-    public String category;
+    public StreamsEntityCategory category;
 
     @Column(name = "max_viewer_count", nullable = false)
     public Integer maxViewerCount;
@@ -63,7 +57,7 @@ public class StreamsEntity extends SnowflakeBaseTimeEntity {
     public StreamsEntity(
             Long streamerId,
             String title,
-            String category,
+            StreamsEntityCategory category,
             Integer maxViewerCount,
             StreamsEntityStatus status,
             Instant startedAt,

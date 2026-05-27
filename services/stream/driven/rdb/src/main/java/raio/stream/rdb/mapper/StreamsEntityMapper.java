@@ -9,5 +9,6 @@ import raio.stream.readmodel.StreamQueryModels.LiveStreamSummary;
 public interface StreamsEntityMapper {
 
     @Mapping(target = "status", expression = "java(entity.status.toDomain())")
+    @Mapping(target = "category", expression = "java(entity.category == null ? null : entity.category.toDomain())")
     LiveStreamSummary toLiveStreamSummary(StreamsEntity entity);
 }

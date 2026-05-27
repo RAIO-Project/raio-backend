@@ -1,13 +1,16 @@
 package raio.stream.rdb;
 
+import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import raio.stream.application.port.StreamQueryPort;
+import raio.stream.domain.type.StreamCategory;
 import raio.stream.domain.type.StreamStatus;
 import raio.stream.rdb.entity.StreamsEntity;
+import raio.stream.rdb.entity.type.StreamsEntityCategory;
 import raio.stream.rdb.entity.type.StreamsEntityStatus;
 import raio.stream.rdb.mapper.StreamsEntityMapper;
 import raio.stream.readmodel.StreamQueryModels.LiveStreamSummary;
@@ -21,10 +24,8 @@ import java.util.stream.Collectors;
 import static raio.stream.rdb.entity.QStreamsEntity.streamsEntity;
 
 /**
- * 샘플 {@code ArticleQueryAdapter} 패턴 적용:
- *  - {@code QuerydslRepositorySupport} 상속
- *  - status enum 매핑은 {@code ConcurrentHashMap} 캐싱
- *  - 커서 페이지네이션 + {@code PageableExecutionUtils.getPage}
+ *  - category, query 동적 where 절을 {@link BooleanBuilder} 로 구성.
+ *  - title 검색은 {@code containsIgnoreCase} (PostgreSQL ILIKE).
  */
 @Repository
 public class StreamQueryAdapter extends QuerydslRepositorySupport implements StreamQueryPort {
@@ -38,7 +39,13 @@ public class StreamQueryAdapter extends QuerydslRepositorySupport implements Str
     }
 
     @Override
-    public Page<LiveStreamSummary> findByStatusesAfter(Set<StreamStatus> statuses, Instant lastCreatedAt, int size) {
+    public Page<LiveStreamSummary> findByStatusesAfter(
+            Set<StreamStatus> statuses,
+            StreamCategory category,
+            String query,
+            Instant lastCreatedAt,
+            int size
+    ) {
         var entityStatuses = statusMap.computeIfAbsent(
                 statuses,
                 (ignore) -> statuses.stream()
@@ -46,24 +53,29 @@ public class StreamQueryAdapter extends QuerydslRepositorySupport implements Str
                         .collect(Collectors.toSet())
         );
 
-        var query = getQuerydsl().createQuery()
+        var where = new BooleanBuilder()
+                .and(streamsEntity.createdAt.gt(lastCreatedAt))
+                .and(streamsEntity.status.in(entityStatuses));
+
+        if (category != null) {
+            where.and(streamsEntity.category.eq(StreamsEntityCategory.valueOf(category)));
+        }
+        if (query != null && !query.isBlank()) {
+            where.and(streamsEntity.title.containsIgnoreCase(query));
+        }
+
+        var dataQuery = getQuerydsl().createQuery()
                 .select(streamsEntity)
                 .from(streamsEntity)
-                .where(
-                        streamsEntity.createdAt.gt(lastCreatedAt),
-                        streamsEntity.status.in(entityStatuses)
-                )
+                .where(where)
                 .orderBy(streamsEntity.createdAt.desc())
                 .limit(size);
-        var result = query.fetch();
+        var result = dataQuery.fetch();
 
         var totalCountQuery = getQuerydsl().createQuery()
                 .select(streamsEntity.count())
                 .from(streamsEntity)
-                .where(
-                        streamsEntity.createdAt.gt(lastCreatedAt),
-                        streamsEntity.status.in(entityStatuses)
-                );
+                .where(where);
 
         return PageableExecutionUtils.getPage(
                 result.stream()
