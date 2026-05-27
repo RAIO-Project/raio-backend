@@ -1,5 +1,0 @@
--- UUID
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- 해시맵 구조
-CREATE EXTENSION IF NOT EXISTS hstore;
