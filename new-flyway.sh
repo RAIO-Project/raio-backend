@@ -4,7 +4,7 @@ set -euo pipefail
 # Usage:
 #   chmod +x new-flyway.sh
 #   ./new-flyway.sh "add_user_table"
-#   ./new-flyway.sh services/auth "add_user_table"
+#   ./new-flyway.sh services/user "insert_mock_user"
 
 # ---------------------------
 # Input
@@ -19,7 +19,7 @@ elif [ $# -ge 2 ]; then
 else
   echo "Usage:"
   echo "  $0 \"add_user_table\""
-  echo "  $0 services/auth \"add_user_table\""
+  echo "  $0 services/user \"insert_mock_user\""
   exit 1
 fi
 
@@ -46,6 +46,7 @@ if [ ${#MIGRATION_BASES[@]} -gt 1 ]; then
   for i in "${!MIGRATION_BASES[@]}"; do
     echo "  [$i] ${MIGRATION_BASES[$i]}"
   done
+
   echo -n "Select target index: "
   read -r IDX
 
@@ -55,9 +56,14 @@ else
 fi
 
 # ---------------------------
-# Version folder
+# Module directory name
 # ---------------------------
-VERSION_DIR="${TARGET_BASE}/v1"
+MODULE_NAME="$(basename "$SEARCH_ROOT")"
+
+# ex)
+# db/migration/v1/user
+VERSION_DIR="${TARGET_BASE}/v1/${MODULE_NAME}"
+
 mkdir -p "$VERSION_DIR"
 
 # ---------------------------
@@ -66,6 +72,7 @@ mkdir -p "$VERSION_DIR"
 DESC="$(echo "$RAW_DESC" \
   | tr '[:upper:]' '[:lower:]' \
   | sed -E 's/[[:space:]]+/_/g' \
+  | sed -E 's/\.sql$//g' \
   | sed -E 's/[^a-z0-9_]+/_/g' \
   | sed -E 's/_+/_/g' \
   | sed -E 's/^_+|_+$//g')"
