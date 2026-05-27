@@ -22,6 +22,8 @@ dependencies {
     implementation(project(":cors-webmvc"))
     implementation(project(":jwt-webmvc"))
     implementation(project(":websocket-core"))
+    implementation(project(":redis-template"))
+    implementation(project(":redis-cache"))
 
     // webmvc
     implementation("org.springframework.boot:spring-boot-starter-web")

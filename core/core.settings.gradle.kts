@@ -19,7 +19,10 @@ include(
     ":upload-s3-storage",
     ":batch-api",
     ":batch-core",
-    ":websocket-core"
+    ":websocket-core",
+    ":redis-api",
+    ":redis-template",
+    ":redis-cache",
 )
 
 project(":time-util").projectDir = core["time-util"]!!
@@ -37,3 +40,6 @@ project(":upload-s3-storage").projectDir = core["upload-s3-storage"]!!
 project(":batch-api").projectDir = core["batch-api"]!!
 project(":batch-core").projectDir = core["batch-core"]!!
 project(":websocket-core").projectDir = core["websocket-core"]!!
+project(":redis-api").projectDir = core["redis-api"]!!
+project(":redis-template").projectDir = core["redis-template"]!!
+project(":redis-cache").projectDir = core["redis-cache"]!!
