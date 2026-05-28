@@ -7,3 +7,5 @@ user:
     schema: user
     locations: classpath:db/migration/v1/user
     history-table: flyway_schema_history_user
+  auth:
+    refresh-token-ttl: 14d
