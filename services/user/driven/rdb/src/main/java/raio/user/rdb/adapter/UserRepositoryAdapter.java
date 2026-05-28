@@ -8,6 +8,7 @@ import raio.user.rdb.repository.UserJpaRepository;
 
 import java.util.Optional;
 
+/** UserRepository 포트의 JPA 구현체 */
 @Repository
 public class UserRepositoryAdapter implements UserRepository {
 

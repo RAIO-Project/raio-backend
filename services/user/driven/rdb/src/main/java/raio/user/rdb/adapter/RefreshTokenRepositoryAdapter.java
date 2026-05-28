@@ -7,6 +7,7 @@ import raio.user.application.port.RefreshTokenRepository;
 
 import java.util.Optional;
 
+/** RefreshTokenRepository 포트의 Redis 구현체. TTL은 AuthProperties에서 읽어 자동 만료 처리 */
 @Repository
 public class RefreshTokenRepositoryAdapter implements RefreshTokenRepository {
 

@@ -44,6 +44,7 @@ public class UserJpaEntity extends SnowflakeBaseTimeEntity {
 
     private Instant lastLoginAt;
 
+    /** JPA 엔티티 → 도메인 객체 변환 */
     public Users toDomain() {
         return Users.builder()
                 .id(getId())
@@ -57,6 +58,7 @@ public class UserJpaEntity extends SnowflakeBaseTimeEntity {
                 .build();
     }
 
+    /** 도메인 객체 → JPA 엔티티 변환 (id는 Snowflake가 자동 생성) */
     public static UserJpaEntity from(Users user) {
         return UserJpaEntity.builder()
                 .email(user.getEmail())

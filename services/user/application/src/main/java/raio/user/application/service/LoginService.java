@@ -34,13 +34,16 @@ public class LoginService implements LoginUseCase {
 
     @Override
     public TokenPair login(LoginCommand command) {
+        // 이메일로 사용자 조회 (없으면 보안상 동일한 메시지 반환)
         Users user = userRepository.findByEmail(command.email())
                 .orElseThrow(() -> UserErrorCode.INVALID_EMAIL_OR_PASSWORD.exception());
 
+        // 비밀번호 검증
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {
             throw UserErrorCode.INVALID_EMAIL_OR_PASSWORD.exception();
         }
 
+        // 계정 상태 확인
         if (user.getStatus() == UserStatus.SUSPENDED) {
             throw UserErrorCode.USER_SUSPENDED.exception();
         }
@@ -48,6 +51,7 @@ public class LoginService implements LoginUseCase {
             throw UserErrorCode.USER_REMOVED.exception();
         }
 
+        // 토큰 생성 및 RefreshToken Redis 저장
         Set<String> roles = Set.of(user.getRole().name());
         TokenPair tokenPair = jwtProvider.generate(user.getId().toString(), roles);
         refreshTokenRepository.save(user.getId(), tokenPair.refreshToken());
