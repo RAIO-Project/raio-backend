@@ -1,14 +1,13 @@
 package raio.user.rdb.adapter;
 
 import org.springframework.stereotype.Repository;
-import raio.user.domain.UserRepository;
+import raio.user.application.port.UserRepository;
 import raio.user.domain.Users;
 import raio.user.rdb.entity.UserJpaEntity;
 import raio.user.rdb.repository.UserJpaRepository;
 
 import java.util.Optional;
 
-/** UserRepository 포트의 JPA 구현체 */
 @Repository
 public class UserRepositoryAdapter implements UserRepository {
 

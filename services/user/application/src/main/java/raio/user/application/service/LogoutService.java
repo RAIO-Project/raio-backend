@@ -2,7 +2,7 @@ package raio.user.application.service;
 
 import org.springframework.stereotype.Service;
 import raio.user.application.usecase.LogoutUseCase;
-import raio.user.domain.RefreshTokenRepository;
+import raio.user.application.port.RefreshTokenRepository;
 
 @Service
 public class LogoutService implements LogoutUseCase {

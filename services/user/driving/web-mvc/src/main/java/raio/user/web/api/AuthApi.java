@@ -70,7 +70,7 @@ public class AuthApi {
     })
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(Authentication authentication) {
-        Long userId = Long.parseLong((String) authentication.getPrincipal());
+        Long userId = Long.parseLong(authentication.getName());
         logoutUseCase.logout(userId);
         return ResponseEntity.ok().build();
     }

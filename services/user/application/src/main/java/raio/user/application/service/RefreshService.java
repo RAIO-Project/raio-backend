@@ -1,30 +1,24 @@
 package raio.user.application.service;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import raio.jwt.JwtProvider;
 import raio.jwt.TokenPair;
-import raio.user.application.properties.AuthProperties;
 import raio.user.application.usecase.RefreshUseCase;
-import raio.user.domain.RefreshTokenRepository;
+import raio.user.application.port.RefreshTokenRepository;
 import raio.user.exception.UserErrorCode;
 
 import java.util.Set;
 
 @Service
-@EnableConfigurationProperties(AuthProperties.class)
 public class RefreshService implements RefreshUseCase {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
-    private final AuthProperties authProperties;
 
     public RefreshService(RefreshTokenRepository refreshTokenRepository,
-                          JwtProvider jwtProvider,
-                          AuthProperties authProperties) {
+                          JwtProvider jwtProvider) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtProvider = jwtProvider;
-        this.authProperties = authProperties;
     }
 
     @Override
@@ -47,7 +41,7 @@ public class RefreshService implements RefreshUseCase {
 
         // 슬라이딩 만료: 새 토큰 발급 + Redis TTL 14일 리셋
         TokenPair newTokenPair = jwtProvider.generate(userId.toString(), roles);
-        refreshTokenRepository.save(userId, newTokenPair.refreshToken(), authProperties.refreshTokenTtl());
+        refreshTokenRepository.save(userId, newTokenPair.refreshToken());
 
         return newTokenPair;
     }
