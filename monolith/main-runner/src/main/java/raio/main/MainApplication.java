@@ -2,9 +2,10 @@ package raio.main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@SpringBootApplication(scanBasePackages = "raio")
+@SpringBootApplication(scanBasePackages = "raio", exclude = {UserDetailsServiceAutoConfiguration.class})
 @ConfigurationPropertiesScan(basePackages = "raio")
 public class MainApplication {
     
