@@ -9,7 +9,8 @@ import java.util.function.Supplier;
 public enum StreamErrorCode implements ErrorCode {
     // ===== 조회 =====
     STREAM_NOT_FOUND("방송을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    
+    INVALID_STREAM_CATEGORY("유효하지 않은 방송 카테고리입니다.", HttpStatus.BAD_REQUEST),
+
     // ===== 상태 =====
     STREAM_NOT_ACTIVE("현재 활성화된 방송이 아닙니다.", HttpStatus.BAD_REQUEST),
     STREAM_ALREADY_ENDED("이미 종료된 방송입니다.", HttpStatus.BAD_REQUEST),

@@ -1,3 +1,5 @@
+import kotlin.String
+
 val stream: String by settings
 val streamApi: String by settings
 val streamDomain: String by settings
@@ -5,6 +7,7 @@ val streamException: String by settings
 val streamReadModel: String by settings
 val streamApplication: String by settings
 val streamRdbAdapter: String by settings
+val streamRedisAdapter: String by settings
 val streamWebMvcAdapter: String by settings
 val streamBatchAdapter: String by settings
 
@@ -32,6 +35,7 @@ include(
     streamReadModel,
     streamApplication,
     streamRdbAdapter,
+    streamRedisAdapter,
     streamWebMvcAdapter,
     // streamBatchAdapter,
 )
@@ -43,5 +47,6 @@ project(streamException).projectDir = streamDirectory("exception")
 project(streamReadModel).projectDir = streamDirectory("readmodel")
 project(streamApplication).projectDir = streamDirectory("application")
 project(streamRdbAdapter).projectDir = streamDirectory("rdb")
+project(streamRedisAdapter).projectDir = streamDirectory("redis")
 project(streamWebMvcAdapter).projectDir = streamDirectory("web-mvc")
 // project(streamBatchAdapter).projectDir = streamDirectory("batch")
