@@ -2,39 +2,41 @@ package raio.stream.rdb.entity.type;
 
 import raio.stream.domain.type.StreamCategory;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import static raio.stream.exception.StreamErrorCode.INVALID_STREAM_CATEGORY;
 
-/**
- * 영속 계층 전용 category enum.
- *
- * <p>{@link StreamsEntityStatus} 와 동일한 컨벤션으로 도메인 {@link StreamCategory} 와 분리.
- */
 public enum StreamsEntityCategory {
-    GAMING,
-    MUKBANG,
-    TALK,
-    MUSIC,
-    STUDY,
-    SPORTS,
-    CREATIVE;
+    GAMING(1),
+    MUKBANG(2),
+    TALK(3),
+    MUSIC(4),
+    STUDY(5),
+    SPORTS(6),
+    CREATIVE(7);
+
+    private final int code;
+
+    StreamsEntityCategory(int code) {
+        this.code = code;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public static StreamsEntityCategory fromCode(int code) {
+        return switch (code) {
+            case 1 -> GAMING;
+            case 2 -> MUKBANG;
+            case 3 -> TALK;
+            case 4 -> MUSIC;
+            case 5 -> STUDY;
+            case 6 -> SPORTS;
+            case 7 -> CREATIVE;
+            default -> throw INVALID_STREAM_CATEGORY.exception();
+        };
+    }
 
     public static StreamsEntityCategory valueOf(StreamCategory category) {
-        assert Set.of(
-                        StreamCategory.GAMING,
-                        StreamCategory.MUKBANG,
-                        StreamCategory.TALK,
-                        StreamCategory.MUSIC,
-                        StreamCategory.STUDY,
-                        StreamCategory.SPORTS,
-                        StreamCategory.CREATIVE
-                )
-                .containsAll(Arrays.stream(StreamCategory.values()).collect(Collectors.toSet()))
-                : "StreamCategory 중 일부가 StreamsEntityCategory 인스턴스에 매핑되지 않습니다.";
-
         return switch (category) {
             case GAMING -> GAMING;
             case MUKBANG -> MUKBANG;
@@ -43,7 +45,6 @@ public enum StreamsEntityCategory {
             case STUDY -> STUDY;
             case SPORTS -> SPORTS;
             case CREATIVE -> CREATIVE;
-            default -> throw INVALID_STREAM_CATEGORY.exception();
         };
     }
 

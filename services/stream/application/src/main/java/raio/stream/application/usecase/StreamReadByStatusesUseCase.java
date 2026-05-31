@@ -8,6 +8,7 @@ import raio.stream.readmodel.StreamQueryModels.LiveStreamSummary;
 import java.time.Instant;
 import java.util.Set;
 
+/** [최신순] 상태 기반 라이브 목록 조회 (키셋 페이징). */
 public interface StreamReadByStatusesUseCase {
     Page<LiveStreamSummary> findByStatuses(
             Set<StreamStatus> statuses,

@@ -2,38 +2,49 @@ package raio.stream.rdb.entity.type;
 
 import raio.stream.domain.type.StreamStatus;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import static raio.stream.exception.StreamErrorCode.INVALID_STREAM_STATUS;
 
 /**
  * 영속 계층 전용 status enum.
  *
- * <p>샘플 컨벤션 ({@code BoardEntityStatus}) 을 따라 도메인 {@link StreamStatus} 와 분리한다.
+ * <p>도메인 {@link StreamStatus} 와 분리하고, DB 에는 공통코드 형태의 숫자 코드로 저장한다
+ * ({@link StreamsEntityStatusConverter}). 코드 매핑의 단일 출처(SSOT)는 이 enum 의 code 필드다.
  *
- * <p>[샘플과의 차이]
- *  - 샘플은 {@code StatusParameters} 기반 비트 코드(int) 로 컬럼에 저장하지만,
- *    {@code stream.streams.status} 컬럼은 VARCHAR(20) 으로 정의되어 있어
- *    여기서는 enum {@code name()} 그대로 저장한다.
- *  - DB 스키마가 비트 코드로 전환되면 {@code BoardEntityStatus} 식의 분기로 보강.
+ * <p>[설계 메모]
+ *  - status 는 READY → LIVE → ENDED 로 상호 배타적인 단일 라이프사이클이므로
+ *    common/status 의 비트마스크(StatusParameters) 가 아니라 단순 정수 코드를 쓴다.
+ *  - 코드 값은 {@code ordinal()} 이 아니라 명시적으로 고정한다.
+ *    enum 선언 순서가 바뀌어도 저장값이 흔들리지 않도록 하기 위함.
  */
 public enum StreamsEntityStatus {
-    READY,
-    LIVE,
-    ENDED;
+    READY(1),
+    LIVE(2),
+    ENDED(3);
+
+    private final int code;
+
+    StreamsEntityStatus(int code) {
+        this.code = code;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public static StreamsEntityStatus fromCode(int code) {
+        return switch (code) {
+            case 1 -> READY;
+            case 2 -> LIVE;
+            case 3 -> ENDED;
+            default -> throw INVALID_STREAM_STATUS.exception();
+        };
+    }
 
     public static StreamsEntityStatus valueOf(StreamStatus status) {
-        assert Set.of(StreamStatus.READY, StreamStatus.LIVE, StreamStatus.ENDED)
-                .containsAll(Arrays.stream(StreamStatus.values()).collect(Collectors.toSet()))
-                : "StreamStatus 중 일부가 StreamsEntityStatus 인스턴스에 매핑되지 않습니다.";
-
         return switch (status) {
             case READY -> READY;
             case LIVE -> LIVE;
             case ENDED -> ENDED;
-            default -> throw INVALID_STREAM_STATUS.exception();
         };
     }
 

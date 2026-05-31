@@ -4,15 +4,15 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class StreamsEntityCategoryConverter implements AttributeConverter<StreamsEntityCategory, String> {
+public class StreamsEntityCategoryConverter implements AttributeConverter<StreamsEntityCategory, Integer> {
 
     @Override
-    public String convertToDatabaseColumn(StreamsEntityCategory category) {
-        return category == null ? null : category.name();
+    public Integer convertToDatabaseColumn(StreamsEntityCategory category) {
+        return category == null ? null : category.getCode();
     }
 
     @Override
-    public StreamsEntityCategory convertToEntityAttribute(String value) {
-        return value == null ? null : StreamsEntityCategory.valueOf(value);
+    public StreamsEntityCategory convertToEntityAttribute(Integer code) {
+        return code == null ? null : StreamsEntityCategory.fromCode(code);
     }
 }
