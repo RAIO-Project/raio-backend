@@ -22,15 +22,16 @@ public interface StreamsEntityMapper {
     @Mapping(target = "category", expression = "java(entity.category == null ? null : entity.category.toDomain())")
     LiveStreamSummary toLiveStreamSummary(StreamsEntity entity);
 
-    @Mapping(target = "id", expression = "java(entity.getId())")
+    @Mapping(target = "id", expression = "java(String.valueOf(entity.getId()))")
+    @Mapping(target = "streamerId", expression = "java(String.valueOf(entity.streamerId))")
     @Mapping(target = "status", expression = "java(entity.status.toDomain())")
     @Mapping(target = "category", expression = "java(entity.category == null ? null : entity.category.toDomain())")
     StreamDetail toStreamDetail(StreamsEntity entity);
 
     // ----- 신규 방송 저장용: 도메인 -> 엔티티 -----
     @Mapping(target = "streamerId", expression = "java(Long.parseLong(stream.getStreamerId()))")
-    @Mapping(target = "category", expression = "java(stream.getCategory() == null ? null : StreamsEntityCategory.valueOf(stream.getCategory()))")
-    @Mapping(target = "status", expression = "java(StreamsEntityStatus.valueOf(stream.getStatus()))")
+    @Mapping(target = "category", expression = "java(stream.getCategory() == null ? null : raio.stream.rdb.entity.type.StreamsEntityCategory.valueOf(stream.getCategory()))")
+    @Mapping(target = "status", expression = "java(raio.stream.rdb.entity.type.StreamsEntityStatus.valueOf(stream.getStatus()))")
     StreamsEntity toEntity(Streams stream);
 
     // ----- 엔티티 -> 도메인 -----
