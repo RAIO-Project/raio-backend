@@ -26,7 +26,6 @@ public class WalletCommandService implements WalletCreateUseCase, PointChargeUse
     private final PointHistoryCommandRepositoryPort pointHistoryCommandRepositoryPort;
     
     @Override
-    @Transactional
     public Wallet create(String userId) {
         if (userId == null || userId.isBlank()) {
             throw new PaymentException(USER_NOT_FOUND);
