@@ -9,6 +9,15 @@ import java.util.function.Supplier;
 public enum PaymentErrorCode implements ErrorCode {
     // ===== 사용자 / 권한 =====
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    WALLET_FORBIDDEN("해당 지갑에 접근할 수 없습니다.", HttpStatus.FORBIDDEN),
+    
+    // ===== 지갑 / 포인트 =====
+    WALLET_NOT_FOUND("지갑 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    WALLET_ALREADY_EXISTS("이미 생성된 지갑입니다.", HttpStatus.CONFLICT),
+    INVALID_POINT_AMOUNT("유효하지 않은 포인트 금액입니다.", HttpStatus.BAD_REQUEST),
+    INSUFFICIENT_POINT_BALANCE("포인트 잔액이 부족합니다.", HttpStatus.BAD_REQUEST),
+    POINT_HISTORY_NOT_FOUND("포인트 이력을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    INVALID_POINT_HISTORY_TYPE("유효하지 않은 포인트 이력 유형입니다.", HttpStatus.BAD_REQUEST),
     
     // ===== 결제 =====
     PAYMENT_NOT_FOUND("결제 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
