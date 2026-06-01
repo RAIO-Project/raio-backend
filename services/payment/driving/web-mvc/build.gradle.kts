@@ -5,6 +5,9 @@ dependencies {
     val paymentApplication: String by project
     val paymentApi: String by project
 
+    api(project(paymentApi))
+    api(project(paymentApplication))
+
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     // validation
