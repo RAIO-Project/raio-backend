@@ -14,7 +14,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PointHistories {
+public class PointHistory {
 
     /** 포인트 원장 식별자(PK) */
     private String id;

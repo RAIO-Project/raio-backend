@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Wallets {
+public class Wallet {
 
     /** 지갑 식별자(PK) */
     private String id;
