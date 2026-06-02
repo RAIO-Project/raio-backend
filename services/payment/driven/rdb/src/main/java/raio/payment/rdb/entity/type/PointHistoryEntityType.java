@@ -13,7 +13,7 @@ import static raio.payment.exception.PaymentErrorCode.INVALID_POINT_HISTORY_TYPE
 public enum PointHistoryEntityType {
     
     CHARGE((short) 1),
-    DONATE((short) 2),
+    PAYMENT((short) 2),
     REFUND((short) 3);
     
     private final short code;
@@ -21,7 +21,7 @@ public enum PointHistoryEntityType {
     public static PointHistoryEntityType valueOf(PointHistoryType type) {
         return switch (type) {
             case CHARGE -> CHARGE;
-            case DONATE -> DONATE;
+            case PAYMENT -> PAYMENT;
             case REFUND -> REFUND;
         };
     }
@@ -36,7 +36,7 @@ public enum PointHistoryEntityType {
     public PointHistoryType toDomain() {
         return switch (this) {
             case CHARGE -> PointHistoryType.CHARGE;
-            case DONATE -> PointHistoryType.DONATE;
+            case PAYMENT -> PointHistoryType.PAYMENT;
             case REFUND -> PointHistoryType.REFUND;
         };
     }
