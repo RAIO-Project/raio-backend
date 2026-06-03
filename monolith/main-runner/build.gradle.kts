@@ -5,6 +5,7 @@ val donation: String by project
 val payment: String by project
 val stream: String by project
 val user: String by project
+val video: String by project
 
 version = "0.0.1-SNAPSHOT"
 
@@ -15,6 +16,7 @@ dependencies {
     api(project(payment))
     api(project(stream))
     api(project(user))
+    api(project(video))
 
     // core
     implementation(project(":exception-handler-core"))
@@ -24,6 +26,8 @@ dependencies {
     implementation(project(":websocket-core"))
     implementation(project(":redis-template"))
     implementation(project(":redis-cache"))
+    implementation(project(":upload-file-local"))
+    implementation(project(":upload-s3-storage"))
 
     // webmvc
     implementation("org.springframework.boot:spring-boot-starter-web")
