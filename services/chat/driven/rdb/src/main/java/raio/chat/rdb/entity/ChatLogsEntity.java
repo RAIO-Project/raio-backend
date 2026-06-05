@@ -7,14 +7,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import raio.jpa.support.SnowflakeBaseTimeEntity;
+import raio.jpa.support.SnowflakeBaseCreatedEntity;
 
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(schema = "chat", name = "chat_logs")
-public class ChatLogsEntity extends SnowflakeBaseTimeEntity {
+public class ChatLogsEntity extends SnowflakeBaseCreatedEntity {
 
     @Column(name = "stream_id", nullable = false)
     private Long streamId;
