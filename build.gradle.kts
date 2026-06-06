@@ -1,17 +1,23 @@
+import com.google.protobuf.gradle.ProtobufExtension
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     id("java")
     id("java-library")
+
+    id("com.google.protobuf") version "0.9.4" apply false
+
     id("org.springframework.boot") version "3.4.3"
-    id("io.spring.dependency-management")  version "1.1.7"
+    id("io.spring.dependency-management") version "1.1.7"
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
     id("org.jetbrains.kotlin.plugin.spring") version "2.1.20"
 }
 
 allprojects {
     repositories {
+        gradlePluginPortal()
         mavenCentral()
+        google()
     }
 }
 
@@ -25,6 +31,10 @@ subprojects {
         plugin("org.jetbrains.kotlin.plugin.spring")
     }
 
+    if (project.name.endsWith("-proto")) {
+        apply(plugin = "com.google.protobuf")
+    }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
@@ -35,17 +45,17 @@ subprojects {
         compileOnly {
             extendsFrom(configurations.annotationProcessor.get())
         }
+
         configureEach {
             exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
         }
     }
 
     dependencies {
-        if(project.name != "common") {
+        if (project.name != "common") {
             api(project(":common"))
         }
 
-        // FIXME determine the placement of logging library later
         implementation("org.springframework.boot:spring-boot-starter-log4j2")
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 
@@ -65,11 +75,40 @@ subprojects {
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
     }
 
-    tasks.withType<BootJar>{
+    plugins.withId("com.google.protobuf") {
+        dependencies {
+            add("api", "io.grpc:grpc-protobuf:1.64.0")
+            add("api", "io.grpc:grpc-stub:1.64.0")
+            add("api", "com.google.protobuf:protobuf-java:3.25.3")
+            add("compileOnly", "org.apache.tomcat:annotations-api:6.0.53")
+        }
+
+        extensions.configure<ProtobufExtension>("protobuf") {
+            protoc {
+                artifact = "com.google.protobuf:protoc:3.25.3"
+            }
+
+            plugins {
+                create("grpc") {
+                    artifact = "io.grpc:protoc-gen-grpc-java:1.64.0"
+                }
+            }
+
+            generateProtoTasks {
+                all().forEach { task ->
+                    task.plugins {
+                        create("grpc")
+                    }
+                }
+            }
+        }
+    }
+
+    tasks.withType<BootJar> {
         enabled = false
     }
 
-    tasks.withType<Jar>{
+    tasks.withType<Jar> {
         enabled = true
     }
 
@@ -77,7 +116,7 @@ subprojects {
         useJUnitPlatform()
     }
 
-    kotlin{
+    kotlin {
         sourceSets {
             test {
                 kotlin.srcDirs(listOf("src/test/kotlin"))
