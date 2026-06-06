@@ -1,0 +1,11 @@
+grpc:
+  server:
+    port: ${GRPC_SERVER_PORT:9090}
+
+app:
+  grpc:
+    clients:
+      payment:
+        target: ${PAYMENT_GRPC_TARGET:localhost:9090}
+        plaintext: ${PAYMENT_GRPC_PLAINTEXT:true}
+        timeout: ${PAYMENT_GRPC_TIMEOUT:3s}
