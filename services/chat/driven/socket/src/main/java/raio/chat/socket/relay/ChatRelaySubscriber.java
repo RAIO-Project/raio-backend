@@ -12,13 +12,14 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
- * Redis 채널(chat:stream:*) 을 구독해, 수신 메시지를 이 인스턴스에 연결된
- * WebSocket 구독자에게 STOMP 토픽으로 전달한다. (인스턴스 간 fan-out 수신 측)
+ * Redis 채널(chat:stream:*) 을 구독해, 수신 메시지를 이 인스턴스의 WebSocket 구독자에게
+ * STOMP 토픽으로 전달한다. (인스턴스 간 fan-out 수신 측)
  *
- * <p>리스너 컨테이너는 core(redis-api)의 범용 빈을 주입받고, 자신의 구독 채널은
- * {@link PostConstruct} 에서 직접 등록한다. (core 는 chat 을 의존하지 않음 → 의존 방향 chat→core 유지)
+ * <p>chat 채널엔 CHAT/JOIN/LEAVE 가 섞여 흐른다. 구독자는 특정 타입으로 역직렬화하지 않고
+ * 페이로드를 그대로(Map) 전달한다 — 프론트가 type 으로 분기. 새 타입이 추가돼도 이 코드는 불변.
  */
 @Slf4j
 @Component
@@ -40,8 +41,8 @@ public class ChatRelaySubscriber implements MessageListener {
             String channel = new String(message.getChannel(), StandardCharsets.UTF_8);
             String streamId = ChatChannel.streamIdFromChannel(channel);
 
-            ChatRelayMessage payload =
-                    objectMapper.readValue(message.getBody(), ChatRelayMessage.class);
+            // 타입 결합 없이 payload 를 그대로 통과 (type 분기는 클라이언트가)
+            Map<String, Object> payload = objectMapper.readValue(message.getBody(), Map.class);
 
             messaging.convertAndSend(ChatChannel.stompTopic(streamId), payload);
         } catch (Exception e) {

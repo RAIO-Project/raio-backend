@@ -8,6 +8,7 @@ dependencies {
     implementation("org.springframework:spring-messaging")
     implementation("org.springframework:spring-websocket")
 
-    // Redis pub/sub
-    api(project(":redis-api"))
+    implementation(project(":websocket-core"))
+
+    api(project(":redis-template"))
 }
