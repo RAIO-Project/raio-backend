@@ -5,7 +5,9 @@ dependencies {
     api(project(chatApi))
     api(project(chatApplication))
 
-    // WebSocket broadcast
     implementation("org.springframework:spring-messaging")
     implementation("org.springframework:spring-websocket")
+
+    // Redis pub/sub
+    api(project(":redis-api"))
 }
