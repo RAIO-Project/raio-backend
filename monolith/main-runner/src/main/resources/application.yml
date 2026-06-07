@@ -8,7 +8,7 @@ spring:
   config:
     import:
       # services
-      - properties/chat/chat.yml
+      # - properties/chat/chat.yml
       - properties/donation/donation.yml
       - properties/payment/payment.yml
       - properties/stream/stream.yml
@@ -24,6 +24,7 @@ spring:
       - properties/web/main.cors.yml
       - optional:file:.env[.properties]
       - properties/redis/main.redis.yml
+      - properties/grpc/main.grpc.yml
 
   datasource:
     driver-class-name: org.postgresql.Driver

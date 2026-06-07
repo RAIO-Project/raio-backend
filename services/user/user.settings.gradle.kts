@@ -7,6 +7,7 @@ val userApplication: String by settings
 val userRdbAdapter: String by settings
 val userWebMvcAdapter: String by settings
 val userBatchAdapter: String by settings
+val userGrpcClientAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
     var dir = rootDir
@@ -33,6 +34,7 @@ include(
     userApplication,
     userRdbAdapter,
     userWebMvcAdapter,
+    userGrpcClientAdapter,
     // userBatchAdapter,
 )
 
@@ -44,4 +46,5 @@ project(userReadModel).projectDir = userDirectory("readmodel")
 project(userApplication).projectDir = userDirectory("application")
 project(userRdbAdapter).projectDir = userDirectory("rdb")
 project(userWebMvcAdapter).projectDir = userDirectory("web-mvc")
+project(userGrpcClientAdapter).projectDir = userDirectory("grpc-client")
 // project(userBatchAdapter).projectDir = userDirectory("batch")

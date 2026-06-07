@@ -1,11 +1,11 @@
 CREATE SCHEMA IF NOT EXISTS "payment";
 
 CREATE TABLE IF NOT EXISTS "payment"."wallets" (
-   "id"          BIGINT        ,
+   "id"          BIGINT,
    "user_id"     BIGINT        NOT NULL,
    "balance"     BIGINT        DEFAULT 0 NOT NULL,
-   "created_at"  TIMESTAMPTZ   DEFAULT NOW() NOT NULL,
-   "updated_at"  TIMESTAMPTZ   DEFAULT NOW() NOT NULL
+   "created_at"  TIMESTAMP   DEFAULT NOW() NOT NULL,
+   "updated_at"  TIMESTAMP   DEFAULT NOW() NOT NULL
 );
 
 COMMENT ON COLUMN "payment"."wallets"."id"         IS '지갑 식별자';

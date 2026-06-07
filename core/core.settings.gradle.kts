@@ -24,6 +24,9 @@ include(
     ":redis-api",
     ":redis-template",
     ":redis-cache",
+    ":grpc",
+    ":grpc:grpc-server",
+    ":grpc:grpc-client",
 )
 
 project(":time-util").projectDir = core["time-util"]!!
@@ -45,3 +48,6 @@ project(":websocket-core").projectDir = core["websocket-core"]!!
 project(":redis-api").projectDir = core["redis-api"]!!
 project(":redis-template").projectDir = core["redis-template"]!!
 project(":redis-cache").projectDir = core["redis-cache"]!!
+project(":grpc").projectDir = core["grpc"]!!
+project(":grpc:grpc-client").projectDir = core["grpc-client"]!!
+project(":grpc:grpc-server").projectDir = core["grpc-server"]!!

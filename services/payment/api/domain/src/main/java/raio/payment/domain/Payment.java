@@ -13,7 +13,7 @@ import raio.payment.domain.type.PaymentStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payments {
+public class Payment {
     
     /** 결제 식별자(PK) */
     private String id;
