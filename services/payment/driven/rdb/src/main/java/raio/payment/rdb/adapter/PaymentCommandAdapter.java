@@ -25,6 +25,12 @@ public class PaymentCommandAdapter implements PaymentCommandRepositoryPort {
     }
 
     @Override
+    public Optional<Payment> findByIdForUpdate(String id) {
+        return paymentJpaRepository.findByIdForUpdate(Long.parseLong(id))
+                .map(paymentEntityMapper::toDomain);
+    }
+
+    @Override
     public Optional<Payment> updateStatus(String id, PaymentStatus status, String externalTid, String failReason) {
         Long entityId = Long.parseLong(id);
         PaymentStatusEntityType entityStatus = PaymentStatusEntityType.valueOf(status);

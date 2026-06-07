@@ -10,4 +10,6 @@ public interface PaymentCommandRepositoryPort {
     Payment save(Payment payment);
 
     Optional<Payment> updateStatus(String id, PaymentStatus status, String externalTid, String failReason);
+
+    Optional<Payment> findByIdForUpdate(String id);
 }
