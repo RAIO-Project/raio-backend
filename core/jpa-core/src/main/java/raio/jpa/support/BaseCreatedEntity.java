@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @SuperBuilder
@@ -15,8 +16,8 @@ import java.time.Instant;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class SnowflakeBaseCreatedEntity extends SnowflakeBaseEntity {
-
+public abstract class BaseCreatedEntity implements Serializable {
+    
     @CreatedDate
     private Instant createdAt;
 }

@@ -15,8 +15,8 @@ import java.time.Instant;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class SnowflakeBaseCreatedEntity extends SnowflakeBaseEntity {
-
+public abstract class UuidBaseCreatedEntity extends UuidBaseEntity {
+    
     @CreatedDate
     private Instant createdAt;
 }
