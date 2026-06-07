@@ -44,6 +44,15 @@ public class UserJpaEntity extends SnowflakeBaseTimeEntity {
 
     private Instant lastLoginAt;
 
+    public void updateProfile(String nickname, String phoneNumber) {
+        if (nickname != null) this.nickname = nickname;
+        if (phoneNumber != null) this.phoneNumber = phoneNumber;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     /** JPA 엔티티 → 도메인 객체 변환 */
     public Users toDomain() {
         return Users.builder()

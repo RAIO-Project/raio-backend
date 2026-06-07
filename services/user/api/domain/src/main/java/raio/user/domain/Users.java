@@ -23,4 +23,30 @@ public class Users {
     private UserRole role;
     private UserStatus status;
     private Instant lastLoginAt;
+
+    public Users withProfile(String nickname, String phoneNumber) {
+        return Users.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(this.password)
+                .nickname(nickname != null ? nickname : this.nickname)
+                .phoneNumber(phoneNumber != null ? phoneNumber : this.phoneNumber)
+                .role(this.role)
+                .status(this.status)
+                .lastLoginAt(this.lastLoginAt)
+                .build();
+    }
+
+    public Users withPassword(String encodedPassword) {
+        return Users.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(encodedPassword)
+                .nickname(this.nickname)
+                .phoneNumber(this.phoneNumber)
+                .role(this.role)
+                .status(this.status)
+                .lastLoginAt(this.lastLoginAt)
+                .build();
+    }
 }

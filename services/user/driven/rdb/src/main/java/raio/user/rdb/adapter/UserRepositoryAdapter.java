@@ -3,12 +3,12 @@ package raio.user.rdb.adapter;
 import org.springframework.stereotype.Repository;
 import raio.user.application.port.UserRepository;
 import raio.user.domain.Users;
+import raio.user.exception.UserErrorCode;
 import raio.user.rdb.entity.UserJpaEntity;
 import raio.user.rdb.repository.UserJpaRepository;
 
 import java.util.Optional;
 
-/** UserRepository 포트의 JPA 구현체 */
 @Repository
 public class UserRepositoryAdapter implements UserRepository {
 
@@ -21,6 +21,15 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public Users save(Users user) {
         return userJpaRepository.save(UserJpaEntity.from(user)).toDomain();
+    }
+
+    @Override
+    public Users update(Users user) {
+        UserJpaEntity entity = userJpaRepository.findById(user.getId())
+                .orElseThrow(UserErrorCode.USER_NOT_FOUND::exception);
+        entity.updateProfile(user.getNickname(), user.getPhoneNumber());
+        entity.updatePassword(user.getPassword());
+        return entity.toDomain();
     }
 
     @Override

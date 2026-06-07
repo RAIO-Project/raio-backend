@@ -16,6 +16,7 @@ public enum UserErrorCode implements ErrorCode {
     INVALID_EMAIL_OR_PASSWORD("이메일 또는 비밀번호가 올바르지 않습니다.", HttpStatus.UNAUTHORIZED),
     INVALID_TOKEN("유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
     PASSWORD_REQUIRED("비밀번호는 필수입니다.", HttpStatus.BAD_REQUEST),
+    INCORRECT_PASSWORD("현재 비밀번호가 올바르지 않습니다.", HttpStatus.UNAUTHORIZED),
     
     // ===== 상태 =====
     USER_NOT_ACTIVE("활성 상태의 사용자가 아닙니다.", HttpStatus.BAD_REQUEST),
