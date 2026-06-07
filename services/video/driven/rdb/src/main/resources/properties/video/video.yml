@@ -1,9 +1,0 @@
-spring:
-  flyway:
-    enabled: false
-
-video:
-  flyway:
-    schema: video
-    locations: classpath:db/migration/v1/video
-    history-table: flyway_schema_history_video

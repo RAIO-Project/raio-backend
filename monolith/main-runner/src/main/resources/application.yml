@@ -13,7 +13,6 @@ spring:
       - properties/payment/payment.yml
       - properties/stream/stream.yml
       - properties/user/user.yml
-      - properties/video/video.yml
       # core
       - properties/client/main.client.yml
       - properties/jwt/club.jwt.filter.yml
