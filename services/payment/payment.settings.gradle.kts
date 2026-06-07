@@ -6,6 +6,7 @@ val paymentReadModel: String by settings
 val paymentApplication: String by settings
 val paymentRdbAdapter: String by settings
 val paymentWebMvcAdapter: String by settings
+val paymentClientAdapter: String by settings
 val paymentBatchAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
@@ -33,6 +34,7 @@ include(
     paymentApplication,
     paymentRdbAdapter,
     paymentWebMvcAdapter,
+    paymentClientAdapter,
     // paymentBatchAdapter,
 )
 
@@ -44,4 +46,5 @@ project(paymentReadModel).projectDir = paymentDirectory("readmodel")
 project(paymentApplication).projectDir = paymentDirectory("application")
 project(paymentRdbAdapter).projectDir = paymentDirectory("rdb")
 project(paymentWebMvcAdapter).projectDir = paymentDirectory("web-mvc")
+project(paymentClientAdapter).projectDir = paymentDirectory("client")
 // project(paymentBatchAdapter).projectDir = paymentDirectory("batch")
