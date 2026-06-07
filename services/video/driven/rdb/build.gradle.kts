@@ -8,7 +8,6 @@ dependencies {
     api(project(videoApplication))
     api(project(":jpa-core"))
     api(project(":snowflake-id-hibernate"))
-    api(project(":upload-file-local"))
 
     // flyway
     api("org.flywaydb:flyway-core")
