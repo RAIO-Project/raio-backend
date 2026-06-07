@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":websocket-core"))
     implementation(project(":redis-template"))
     implementation(project(":redis-cache"))
+    implementation(project(":upload-s3-storage"))
     implementation(project(grpc))
 
     // webmvc

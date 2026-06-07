@@ -17,6 +17,7 @@ include(
     ":upload-image-api",
     ":upload-image-local",
     ":upload-s3-storage",
+    ":upload-file-api",
     ":batch-api",
     ":batch-core",
     ":websocket-core",
@@ -40,6 +41,7 @@ project(":snowflake-id-hibernate").projectDir = core["snowflake-id-hibernate"]!!
 project(":upload-image-api").projectDir = core["upload-image-api"]!!
 project(":upload-image-local").projectDir = core["upload-image-local"]!!
 project(":upload-s3-storage").projectDir = core["upload-s3-storage"]!!
+project(":upload-file-api").projectDir = core["upload-file-api"]!!
 project(":batch-api").projectDir = core["batch-api"]!!
 project(":batch-core").projectDir = core["batch-core"]!!
 project(":websocket-core").projectDir = core["websocket-core"]!!
