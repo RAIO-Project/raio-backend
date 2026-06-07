@@ -6,6 +6,8 @@ val payment: String by project
 val stream: String by project
 val user: String by project
 
+val grpc: String by project
+
 version = "0.0.1-SNAPSHOT"
 
 dependencies {
@@ -24,6 +26,7 @@ dependencies {
     implementation(project(":websocket-core"))
     implementation(project(":redis-template"))
     implementation(project(":redis-cache"))
+    implementation(project(grpc))
 
     // webmvc
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -31,7 +34,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     // dbProductFlywayConfig
-    runtimeOnly("org.postgresql:postgresql:42.7.4")
+    runtimeOnly("org.postgresql:postgresql:42.7.7")
 
     // test
     testImplementation("com.h2database:h2")
