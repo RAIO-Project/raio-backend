@@ -13,8 +13,8 @@ import static raio.payment.exception.PaymentErrorCode.PAYMENT_INVALID_STATUS;
 public enum PaymentStatusEntityType {
 
     READY((short) 1),
-    IN_PROGRESS((short) 2),
-    DONE((short) 3),
+    APPROVING((short) 2),
+    APPROVED((short) 3),
     FAILED((short) 4),
     CANCELED((short) 5);
 
@@ -23,8 +23,8 @@ public enum PaymentStatusEntityType {
     public static PaymentStatusEntityType valueOf(PaymentStatus status) {
         return switch (status) {
             case READY -> READY;
-            case IN_PROGRESS -> IN_PROGRESS;
-            case DONE -> DONE;
+            case APPROVING -> APPROVING;
+            case APPROVED -> APPROVED;
             case FAILED -> FAILED;
             case CANCELED -> CANCELED;
         };
@@ -40,8 +40,8 @@ public enum PaymentStatusEntityType {
     public PaymentStatus toDomain() {
         return switch (this) {
             case READY -> PaymentStatus.READY;
-            case IN_PROGRESS -> PaymentStatus.IN_PROGRESS;
-            case DONE -> PaymentStatus.DONE;
+            case APPROVING -> PaymentStatus.APPROVING;
+            case APPROVED -> PaymentStatus.APPROVED;
             case FAILED -> PaymentStatus.FAILED;
             case CANCELED -> PaymentStatus.CANCELED;
         };
