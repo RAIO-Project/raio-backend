@@ -1,7 +1,9 @@
 package raio.payment.domain.type;
 
 public enum PaymentStatus {
-    PENDING,
-    SUCCESS,
-    FAIL
+    READY,
+    IN_PROGRESS,
+    DONE,
+    FAILED,
+    CANCELED
 }

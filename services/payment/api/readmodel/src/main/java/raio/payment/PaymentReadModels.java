@@ -42,4 +42,21 @@ public final class PaymentReadModels {
             Instant createdAt
     ) {
     }
+    
+    /**
+     * 결제 승인 조회 모델
+     */
+    public record PaymentConfirmResult(
+            boolean success,
+            String externalTid,
+            String failMessage
+    ) {
+        public static PaymentConfirmResult success(String externalTid) {
+            return new PaymentConfirmResult(true, externalTid, null);
+        }
+        
+        public static PaymentConfirmResult failure(String failMessage) {
+            return new PaymentConfirmResult(false, null, failMessage);
+        }
+    }
 }
