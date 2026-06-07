@@ -77,8 +77,8 @@ subprojects {
 
     plugins.withId("com.google.protobuf") {
         dependencies {
-            add("api", "io.grpc:grpc-protobuf:1.64.0")
-            add("api", "io.grpc:grpc-stub:1.64.0")
+            add("api", "io.grpc:grpc-protobuf:1.75.0")
+            add("api", "io.grpc:grpc-stub:1.75.0")
             add("api", "com.google.protobuf:protobuf-java:3.25.3")
             add("compileOnly", "org.apache.tomcat:annotations-api:6.0.53")
         }
@@ -90,7 +90,7 @@ subprojects {
 
             plugins {
                 create("grpc") {
-                    artifact = "io.grpc:protoc-gen-grpc-java:1.64.0"
+                    artifact = "io.grpc:protoc-gen-grpc-java:1.75.0"
                 }
             }
 
