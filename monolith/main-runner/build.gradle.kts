@@ -10,7 +10,7 @@ version = "0.0.1-SNAPSHOT"
 
 dependencies {
     // service
-    // api(project(chat))
+    api(project(chat))
     api(project(donation))
     api(project(payment))
     api(project(stream))
