@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_ALREADY_PROCESSED;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_AMOUNT_MISMATCH;
+import static raio.payment.exception.PaymentErrorCode.PAYMENT_CONFIRM_FAILED;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_NOT_FOUND;
 
 @Service
@@ -30,14 +31,7 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
     
     @Override
     public Payment prepare(PrepareCommand command) {
-        var payment = Payment.builder()
-                .orderId(UUID.randomUUID().toString().replace("-", ""))
-                .userId(command.userId())
-                .amount(command.amount())
-                .status(PaymentStatus.READY)
-                .method(command.method())
-                .pgProvider(command.pgProvider())
-                .build();
+        var payment = Payment.builder().orderId(UUID.randomUUID().toString().replace("-", "")).userId(command.userId()).amount(command.amount()).status(PaymentStatus.READY).method(command.method()).pgProvider(command.pgProvider()).build();
         
         return paymentCommandRepositoryPort.save(payment);
     }
@@ -52,9 +46,8 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
     public Payment confirm(ConfirmCommand command) {
         // [Tx 1] 비관적 락 → 검증 → APPROVING
         // PESSIMISTIC_WRITE로 결제를 잠근 뒤 검증하고 APPROVING 상태로 전이한다.
-        var approving = paymentCommandRepositoryPort.transaction(()->{
-            var payment = paymentCommandRepositoryPort.findByIdForUpdate(command.paymentId())
-                    .orElseThrow(PAYMENT_NOT_FOUND::exception);
+        var approving = paymentCommandRepositoryPort.transaction(() -> {
+            var payment = paymentCommandRepositoryPort.findByIdForUpdate(command.paymentId()).orElseThrow(PAYMENT_NOT_FOUND::exception);
             
             if (payment.getStatus() != PaymentStatus.READY) {
                 throw PAYMENT_ALREADY_PROCESSED.exception();
@@ -67,9 +60,7 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
             }
             
             // 트랜잭션 종료 시 락이 해제되므로 외부 PG 호출 중 DB 락이 유지되지 않는다.
-            return paymentCommandRepositoryPort
-                    .updateStatus(command.paymentId(), PaymentStatus.APPROVING, null, null)
-                    .orElseThrow(PAYMENT_NOT_FOUND::exception);
+            return paymentCommandRepositoryPort.updateStatus(command.paymentId(), PaymentStatus.APPROVING, command.externalKey(), null).orElseThrow(PAYMENT_NOT_FOUND::exception);
         });
         
         // PG사 승인 검증 호출
@@ -77,24 +68,21 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
         
         // [Tx 2] APPROVED/FAILED 확정 + 지갑 충전
         // PG 승인 결과에 따라 결제 상태를 확정하고, 성공 시 지갑을 충전한다.
-        return paymentCommandRepositoryPort.transaction(() -> {
-            if (result.success()) {
-                Payment done = paymentCommandRepositoryPort
-                        .updateStatus(approving.getId(), PaymentStatus.APPROVED, result.externalTid(), null)
-                        .orElseThrow(PAYMENT_NOT_FOUND::exception);
+        if (result.success()) {
+            
+            return paymentCommandRepositoryPort.transaction(() -> {
+                Payment done = paymentCommandRepositoryPort.updateStatus(approving.getId(), PaymentStatus.APPROVED, result.externalTid(), null).orElseThrow(PAYMENT_NOT_FOUND::exception);
                 
                 // 사용자 지갑 조회
-                var wallet = walletReadUseCase.getWallet(approving.getUserId());
+                var wallet = walletReadUseCase.getWallet(done.getUserId());
                 
                 // 지갑 포인트 충전
-                pointChargeUseCase.charge(wallet.getId(), approving.getAmount());
+                pointChargeUseCase.charge(wallet.getId(), done.getAmount() + command.amount());
                 
-                return done;
-            }
-            
-            return paymentCommandRepositoryPort
-                    .updateStatus(approving.getId(), PaymentStatus.FAILED, null, result.failMessage())
-                    .orElseThrow(PAYMENT_NOT_FOUND::exception);
-        });
+                return paymentCommandRepositoryPort.updateStatus(done.getId(), PaymentStatus.FAILED, null, result.failMessage()).orElseThrow(PAYMENT_NOT_FOUND::exception);
+            });
+        } else {
+            throw PAYMENT_CONFIRM_FAILED.exception();
+        }
     }
 }
