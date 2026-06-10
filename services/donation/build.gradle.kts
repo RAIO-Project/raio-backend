@@ -3,6 +3,7 @@ val donationApplication: String by project
 val donationRdbAdapter: String by project
 val donationWebMvcAdapter: String by project
 val donationSocketAdapter: String by project
+val donationGrpcClientAdapter: String by project
 
 dependencies {
     api(project(donationApi))
@@ -10,4 +11,5 @@ dependencies {
     api(project(donationRdbAdapter))
     api(project(donationWebMvcAdapter))
     api(project(donationSocketAdapter))
+    api(project(donationGrpcClientAdapter))
 }

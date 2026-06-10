@@ -2,44 +2,30 @@ package raio.chat.socket.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
-import raio.chat.application.port.ChatBroadcastPort;
-import raio.socket.interceptor.StompAuthInterceptor;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
-import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
+import raio.chat.application.port.ChatBroadcastPort;
+import raio.socket.interceptor.StompAuthChannelInterceptor;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * STOMP 구독 → 입장 알림.
+ *
+ * <p>치지직/숲 방식: 비로그인(익명) 입장은 띄우지 않고(로그인 유저만 JOIN), 개별 퇴장(LEAVE)은 띄우지 않는다.
+ * 세션 속성(userId)은 구독 이벤트의 accessor 에서 직접 읽는다.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class StompEventListener {
 
     private static final String TOPIC_PREFIX = "/topic/streams/";
+    private static final long ANONYMOUS_USER_ID = -1L;
 
     private final ChatBroadcastPort chatBroadcastPort;
-
-    // CONNECT 시 저장
-    private final Map<String, Map<String, Object>> sessionAttrs = new ConcurrentHashMap<>();
-    // sessionId → (subscriptionId → streamId)
-    // DISCONNECT 시 어떤 방에서 나가야 하는지 추적
-    private final Map<String, Map<String, Long>> sessions = new ConcurrentHashMap<>();
-
-    @EventListener
-    public void onConnected(SessionConnectedEvent event) {
-        var accessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
-        var sessionId = accessor.getSessionId();
-        var attrs = accessor.getSessionAttributes();
-        if (sessionId != null && attrs != null) {
-            sessionAttrs.put(sessionId, attrs);  // ← 여기서 저장
-        }
-    }
-
 
     @EventListener
     public void onSubscribe(SessionSubscribeEvent event) {
@@ -50,48 +36,22 @@ public class StompEventListener {
         var streamId = parseStreamId(dest);
         if (streamId == null) return;
 
-        var sessionId = accessor.getSessionId();
-        var subscriptionId = accessor.getSubscriptionId();
-        var attrs = sessionAttrs.get(sessionId);  // ← 저장해둔 거 꺼냄
+        var attrs = accessor.getSessionAttributes();
         var userId = extractUserId(attrs);
-        var nickname = extractNickname(attrs);
 
-        if (sessionId != null && subscriptionId != null) {
-            sessions.computeIfAbsent(sessionId, k -> new ConcurrentHashMap<>())
-                    .put(subscriptionId, streamId);
+        // 비로그인(익명) 입장은 JOIN 생략 (읽기는 허용)
+        if (!isLoggedIn(userId)) {
+            log.debug("익명 입장 - JOIN 생략 (streamId: {})", streamId);
+            return;
         }
 
+        var nickname = extractNickname(attrs, userId);
         log.debug("입장 - streamId: {}, userId: {}, nickname: {}", streamId, userId, nickname);
         chatBroadcastPort.broadcastUserJoined(streamId, userId, nickname);
     }
 
-    @EventListener
-    public void onUnsubscribe(SessionUnsubscribeEvent event) {
-        var accessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
-        var sessionId = accessor.getSessionId();
-        var subscriptionId = accessor.getSubscriptionId();
-        if (sessionId == null || subscriptionId == null) return;
-
-        var subs = sessions.get(sessionId);
-        if (subs == null) return;
-        var streamId = subs.remove(subscriptionId);
-        if (streamId == null) return;
-
-        var attrs = sessionAttrs.get(sessionId);  // ← 저장해둔 거 꺼냄
-        log.debug("퇴장 - streamId: {}, userId: {}", streamId, extractUserId(attrs));
-        chatBroadcastPort.broadcastUserLeft(streamId, extractUserId(attrs), extractNickname(attrs));
-    }
-
-    @EventListener
-    public void onDisconnect(SessionDisconnectEvent event) {
-        var sessionId = event.getSessionId();
-        sessionAttrs.remove(sessionId);  // ← 세션 정리
-
-        var subs = sessions.remove(sessionId);
-        if (subs == null) return;
-        subs.values().forEach(streamId ->
-                chatBroadcastPort.broadcastUserLeft(streamId, -1L, "anonymous")
-        );
+    private boolean isLoggedIn(Long userId) {
+        return userId != null && userId != ANONYMOUS_USER_ID;
     }
 
     private Long parseStreamId(String dest) {
@@ -104,12 +64,16 @@ public class StompEventListener {
     }
 
     private Long extractUserId(Map<String, Object> attrs) {
-        if (attrs == null || attrs.get(StompAuthInterceptor.USER_ID) == null) return -1L;
-        return (Long) attrs.get(StompAuthInterceptor.USER_ID);
+        if (attrs == null || attrs.get(StompAuthChannelInterceptor.USER_ID) == null) return ANONYMOUS_USER_ID;
+        return (Long) attrs.get(StompAuthChannelInterceptor.USER_ID);
     }
 
-    private String extractNickname(Map<String, Object> attrs) {
-        if (attrs == null || attrs.get(StompAuthInterceptor.NICKNAME) == null) return "anonymous";
-        return (String) attrs.get(StompAuthInterceptor.NICKNAME);
+    // 토큰에 nickname claim 이 없어 현재는 userId 를 표시명으로 사용
+    // TODO(nickname): 토큰 claim 추가되면 세션의 NICKNAME 을 사용
+    private String extractNickname(Map<String, Object> attrs, Long userId) {
+        if (attrs != null && attrs.get(StompAuthChannelInterceptor.NICKNAME) != null) {
+            return (String) attrs.get(StompAuthChannelInterceptor.NICKNAME);
+        }
+        return String.valueOf(userId);
     }
 }
