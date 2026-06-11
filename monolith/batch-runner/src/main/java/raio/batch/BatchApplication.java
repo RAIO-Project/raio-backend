@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@SpringBootApplication(scanBasePackages = "club")
-@ConfigurationPropertiesScan(basePackages = "club")
+@SpringBootApplication(scanBasePackages = "raio")
+@ConfigurationPropertiesScan(basePackages = "raio")
 public class BatchApplication {
     
     public static void main(String[] args) {

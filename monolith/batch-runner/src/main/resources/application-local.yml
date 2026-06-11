@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/raio}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+
+logging:
+  level:
+    root: INFO
+    club: DEBUG  # 비즈니스 로직
+    org.springframework.web: WARN   # 프레임워크
+    org.hibernate.SQL: DEBUG         # 쿼리 (파라미터 제외)
+    org.hibernate.type.descriptor.sql: TRACE  # 파라미터 (필요시)
+    org.flywaydb: DEBUG
+
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId:-}]"
