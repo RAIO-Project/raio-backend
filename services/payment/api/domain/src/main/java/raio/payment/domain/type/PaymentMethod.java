@@ -2,5 +2,8 @@ package raio.payment.domain.type;
 
 public enum PaymentMethod {
     CARD,
-    TOSSPAY
+    VIRTUAL_ACCOUNT,
+    EASY_PAY,
+    TRANSFER,
+    MOBILE_PHONE
 }

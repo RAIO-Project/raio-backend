@@ -23,6 +23,8 @@ public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_NOT_FOUND("결제 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     PAYMENT_ALREADY_PROCESSED("이미 처리된 결제입니다.", HttpStatus.BAD_REQUEST),
     PAYMENT_INVALID_STATUS("유효하지 않은 결제 상태입니다.", HttpStatus.BAD_REQUEST),
+    PAYMENT_INVALID_METHOD("유효하지 않은 결제 수단입니다.", HttpStatus.BAD_REQUEST),
+    PAYMENT_INVALID_PG_PROVIDER("유효하지 않은 PG사입니다.", HttpStatus.BAD_REQUEST),
     PAYMENT_EXPIRED("결제 가능 시간이 만료되었습니다.", HttpStatus.BAD_REQUEST),
     PAYMENT_AMOUNT_MISMATCH("결제 금액이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     
