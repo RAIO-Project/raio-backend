@@ -8,8 +8,7 @@ app.cors.endpoints:
         - http://127.0.0.1:3000
         - https://localhost:3000
         - https://127.0.0.1:3000
-        - https://ai-script-builder-three.vercel.app/
-        - https://coopang-ai-seller.vercel.app/
+        - https://raio-live-stream.vercel.app
       credentials: true
     exposed:
       headers: "*"
