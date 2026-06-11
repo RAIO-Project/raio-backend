@@ -4,6 +4,7 @@ val streamApi: String by project
 dependencies {
     api(project(streamApi))
     api(project(streamApplication))
+    api(project(":jwt-webmvc"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 

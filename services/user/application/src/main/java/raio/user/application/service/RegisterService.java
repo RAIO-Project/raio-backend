@@ -1,8 +1,10 @@
 package raio.user.application.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import raio.user.application.command.RegisterCommand;
+import raio.user.application.port.PaymentCommandPort;
 import raio.user.application.port.UserRepository;
 import raio.user.application.usecase.RegisterUseCase;
 import raio.user.domain.Users;
@@ -11,14 +13,17 @@ import raio.user.domain.type.UserStatus;
 import raio.user.exception.UserErrorCode;
 
 @Service
+@Slf4j
 public class RegisterService implements RegisterUseCase {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PaymentCommandPort paymentCommandPort;
 
-    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder, PaymentCommandPort paymentCommandPort) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.paymentCommandPort = paymentCommandPort;
     }
 
     @Override
@@ -32,7 +37,6 @@ public class RegisterService implements RegisterUseCase {
         if (command.nickname() != null && userRepository.existsByNickname(command.nickname())) {
             throw UserErrorCode.NICKNAME_ALREADY_EXISTS.exception();
         }
-
         Users user = Users.builder()
                 .email(command.email())
                 .password(passwordEncoder.encode(command.password()))
@@ -41,7 +45,15 @@ public class RegisterService implements RegisterUseCase {
                 .role(UserRole.USER)
                 .status(UserStatus.ACTIVE)
                 .build();
-
-        return userRepository.save(user).getId();
+        
+        Users savedUser = userRepository.save(user);
+        
+        try {
+            paymentCommandPort.createWallet(String.valueOf(savedUser.getId()));
+        } catch (Exception e) {
+            log.error("지갑 생성 요청 실패. userId={}", savedUser.getId(), e);
+        }
+        
+        return savedUser.getId();
     }
 }

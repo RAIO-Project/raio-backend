@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package payment.wallet;
+
+option java_multiple_files = true;
+option java_package = "raio.payment.grpc";
+option java_outer_classname = "WalletProto";
+
+service WalletCommandService {
+  rpc CreateWallet(CreateWalletRequest)
+      returns (CreateWalletResponse);
+}
+
+message CreateWalletRequest {
+  string userId = 1;
+}
+
+message CreateWalletResponse {
+  string walletId = 1;
+  string userId = 2;
+  int64 balance = 3;
+}

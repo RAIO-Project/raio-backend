@@ -20,6 +20,11 @@ public enum StreamErrorCode implements ErrorCode {
     STREAM_TITLE_REQUIRED("방송 제목은 필수입니다.", HttpStatus.BAD_REQUEST),
     INVALID_STREAM_STATUS("유효하지 않은 방송 상태입니다.", HttpStatus.BAD_REQUEST),
     
+    // ===== 동영상 =====
+    VIDEO_NOT_FOUND("동영상을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    INVALID_FILE_TYPE("지원하지 않는 파일 형식입니다.", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED("파일 업로드에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+
     // ===== 내부 =====
     INTERNAL_ERROR("서버 내부 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
