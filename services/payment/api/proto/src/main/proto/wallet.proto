@@ -9,6 +9,9 @@ option java_outer_classname = "WalletProto";
 service WalletCommandService {
   rpc CreateWallet(CreateWalletRequest)
       returns (CreateWalletResponse);
+
+  rpc DonatePoint(DonatePointRequest)
+      returns (DonatePointResponse);
 }
 
 message CreateWalletRequest {
@@ -16,6 +19,17 @@ message CreateWalletRequest {
 }
 
 message CreateWalletResponse {
+  string walletId = 1;
+  string userId = 2;
+  int64 balance = 3;
+}
+
+message DonatePointRequest {
+  string walletId = 1;
+  int64 amount = 2;
+}
+
+message DonatePointResponse {
   string walletId = 1;
   string userId = 2;
   int64 balance = 3;
