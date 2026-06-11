@@ -6,14 +6,11 @@ spring:
     job:
       enabled: false
 
-  flyway:
-    enabled: false  # (중요) 기본 Flyway Auto-run 끄고, 우리가 만든 authFlyway만 실행
-
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${BOARD_POSTGRESQL_URL}
-    username: ${BOARD_POSTGRESQL_USERNAME}
-    password: ${BOARD_POSTGRESQL_PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 server:
   port: 8081
