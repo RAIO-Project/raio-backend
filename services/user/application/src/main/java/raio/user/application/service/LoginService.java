@@ -53,7 +53,7 @@ public class LoginService implements LoginUseCase {
 
         // 토큰 생성 및 RefreshToken Redis 저장
         Set<String> roles = Set.of(user.getRole().name());
-        TokenPair tokenPair = jwtProvider.generate(user.getId().toString(), roles);
+        TokenPair tokenPair = jwtProvider.generate(user.getId().toString(), user.getNickname(), roles);
         refreshTokenRepository.save(user.getId(), tokenPair.refreshToken());
 
         return tokenPair;
