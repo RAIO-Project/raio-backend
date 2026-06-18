@@ -1,0 +1,89 @@
+name: Deploy Railway
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      main: ${{ steps.filter.outputs.main }}
+      batch: ${{ steps.filter.outputs.batch }}
+      shared: ${{ steps.filter.outputs.shared }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            main:
+              - 'monolith/main-runner/**'
+              - 'services/**/web-mvc/**'
+              - 'services/**/webmvc/**'
+              - 'services/**/grpc-server/**'
+              - 'Dockerfile'
+
+            batch:
+              - 'monolith/batch-runner/**'
+              - 'services/**/batch/**'
+              - 'services/**/driving/batch/**'
+              - 'Dockerfile.batch'
+
+            shared:
+              - 'core/**'
+              - 'services/**/api/**'
+              - 'services/**/application/**'
+              - 'services/**/rdb/**'
+              - 'services/**/client/**'
+              - 'services/**/driven/**'
+              - 'build.gradle.kts'
+              - 'settings.gradle.kts'
+              - 'gradle.properties'
+              - 'gradle/**'
+              - 'gradlew'
+              - 'gradlew.bat'
+
+  deploy-main:
+    needs: changes
+    if: |
+      needs.changes.outputs.main == 'true' ||
+      needs.changes.outputs.shared == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy main runner
+        run: railway up --service ${{ secrets.RAILWAY_MAIN_SERVICE_ID }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  deploy-batch:
+    needs: changes
+    if: |
+      needs.changes.outputs.batch == 'true' ||
+      needs.changes.outputs.shared == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy batch runner
+        run: railway up --service ${{ secrets.RAILWAY_BATCH_SERVICE_ID }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
