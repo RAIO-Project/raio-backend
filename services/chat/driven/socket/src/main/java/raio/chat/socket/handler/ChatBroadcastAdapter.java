@@ -7,19 +7,18 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import raio.chat.application.port.ChatBroadcastPort;
 import raio.chat.domain.ChatLogs;
-import raio.chat.socket.relay.ChatChannel;
 import raio.chat.socket.relay.ChatMessage;
 import raio.chat.socket.relay.PresenceMessage;
 import raio.socket.relay.RelayMessage;
+import raio.socket.relay.StreamRelayChannel;
 
 import java.time.Instant;
 
 /**
- * {@link ChatBroadcastPort} 의 Redis pub/sub publish 구현.
+ * {@link ChatBroadcastPort} 의 Redis publish 구현.
  *
- * <p>chat 도메인 메시지(ChatMessage/PresenceMessage)를 Redis 채널(chat:stream:{id})로 발행.
- * 수신/전달은 각 인스턴스의 {@link raio.chat.socket.relay.ChatRelaySubscriber} 가 처리.
- * 직렬화는 ObjectMapper 평문 JSON + StringRedisTemplate.
+ * <p>chat 도메인 메시지(ChatMessage/PresenceMessage)를 공용 채널(stream:events:{id})로 발행.
+ * 수신/전달은 core 의 공용 RelaySubscriber 가 처리한다(인스턴스 간 fan-out).
  */
 @Slf4j
 @Component
@@ -61,7 +60,7 @@ public class ChatBroadcastAdapter implements ChatBroadcastPort {
         }
         try {
             String json = objectMapper.writeValueAsString(payload);
-            stringRedisTemplate.convertAndSend(ChatChannel.redisChannel(streamId), json);
+            stringRedisTemplate.convertAndSend(StreamRelayChannel.redisChannel(streamId), json);
         } catch (Exception e) {
             log.error("채팅 메시지 publish 실패 - streamId: {}", streamId, e);
         }
