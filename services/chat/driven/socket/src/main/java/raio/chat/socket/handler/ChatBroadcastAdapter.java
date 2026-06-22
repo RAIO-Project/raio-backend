@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import raio.chat.application.port.ChatBroadcastPort;
 import raio.chat.domain.ChatLogs;
+import raio.chat.socket.relay.BlindMessage;
 import raio.chat.socket.relay.ChatMessage;
 import raio.chat.socket.relay.PresenceMessage;
 import raio.socket.relay.RelayMessage;
@@ -15,10 +16,8 @@ import raio.socket.relay.StreamRelayChannel;
 import java.time.Instant;
 
 /**
- * {@link ChatBroadcastPort} 의 Redis publish 구현.
- *
- * <p>chat 도메인 메시지(ChatMessage/PresenceMessage)를 공용 채널(stream:events:{id})로 발행.
- * 수신/전달은 core 의 공용 RelaySubscriber 가 처리한다(인스턴스 간 fan-out).
+ * {@link ChatBroadcastPort} 의 Redis publish 구현. 공용 채널(stream:events:{id})로 발행하고
+ * core RelaySubscriber 가 /topic/streams/{id} 로 전달한다.
  */
 @Slf4j
 @Component
@@ -32,13 +31,13 @@ public class ChatBroadcastAdapter implements ChatBroadcastPort {
     public void broadcastMessage(Long streamId, ChatLogs chatLogs, String senderNickname) {
         publish(streamId, new ChatMessage(
                 chatLogs.getStreamId(),
+                chatLogs.getId(),
                 chatLogs.getUserId(),
                 senderNickname,
                 chatLogs.getMessage(),
                 chatLogs.isBlocked(),
                 chatLogs.getBlockedReason(),
-                Instant.now()
-        ));
+                Instant.now()));
     }
 
     @Override
@@ -53,16 +52,21 @@ public class ChatBroadcastAdapter implements ChatBroadcastPort {
                 String.valueOf(streamId), String.valueOf(userId), nickname, Instant.now()));
     }
 
+    @Override
+    public void broadcastBlind(Long streamId, String chatId, String reason) {
+        publish(streamId, new BlindMessage(String.valueOf(streamId), chatId, reason, Instant.now()));
+    }
+
     private void publish(Long streamId, RelayMessage payload) {
         if (streamId == null) {
             log.warn("streamId 가 null 이라 publish 생략: {}", payload.type());
             return;
         }
         try {
-            String json = objectMapper.writeValueAsString(payload);
-            stringRedisTemplate.convertAndSend(StreamRelayChannel.redisChannel(streamId), json);
+            stringRedisTemplate.convertAndSend(
+                    StreamRelayChannel.redisChannel(streamId), objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
-            log.error("채팅 메시지 publish 실패 - streamId: {}", streamId, e);
+            log.error("publish 실패 - type: {}, streamId: {}", payload.type(), streamId, e);
         }
     }
 }

@@ -27,4 +27,10 @@ public class ChatCommandAdapter implements ChatCommandPort {
             throw INTERNAL_ERROR.exception(e);
         }
     }
+
+    @Override
+    public void markBlocked(String chatId, String reason) {
+        chatLogsJpaRepository.markBlocked(Long.parseLong(chatId), reason);
+    }
+
 }

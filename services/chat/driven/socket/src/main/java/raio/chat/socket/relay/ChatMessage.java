@@ -10,6 +10,7 @@ import java.time.Instant;
  */
 public record ChatMessage(
         String streamId,
+        String chatId,
         String userId,
         String nickname,
         String message,
