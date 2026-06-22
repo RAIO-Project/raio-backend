@@ -10,13 +10,14 @@ import java.util.Set;
 public interface JwtProvider {
 
     /**
-     * userId와 roles를 담은 Access Token / Refresh Token 쌍을 생성한다.
+     * userId, nickName, roles를 담은 Access Token / Refresh Token 쌍을 생성한다.
      *
-     * @param userId 토큰 subject에 저장할 사용자 ID
-     * @param roles  토큰 claim에 저장할 권한 목록 (예: {"USER", "ADMIN"})
+     * @param userId   토큰 subject에 저장할 사용자 ID
+     * @param nickName 토큰 claim에 저장할 사용자 닉네임
+     * @param roles    토큰 claim에 저장할 권한 목록 (예: {"USER", "ADMIN"})
      * @return accessToken + refreshToken 쌍
      */
-    TokenPair generate(String userId, Set<String> roles);
+    TokenPair generate(String userId, String nickName, Set<String> roles);
 
     /**
      * 토큰의 서명과 만료 시간을 검증한다.
@@ -41,4 +42,12 @@ public interface JwtProvider {
      * @return 권한 이름의 집합 (예: {"USER"})
      */
     Set<String> extractRoles(String token);
+
+    /**
+     * 토큰의 클레임에서 nickName를 추출한다.
+     *
+     * @param token 유효한 JWT 문자열
+     * @return 토큰에 담긴 사용자 nickName
+     */
+    String extractNickName(String token);
 }

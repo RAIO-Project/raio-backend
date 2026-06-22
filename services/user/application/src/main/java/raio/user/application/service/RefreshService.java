@@ -29,6 +29,7 @@ public class RefreshService implements RefreshUseCase {
         }
 
         Long userId = Long.parseLong(jwtProvider.extractUserId(refreshToken));
+        String nickName = jwtProvider.extractNickName(refreshToken);
         Set<String> roles = jwtProvider.extractRoles(refreshToken);
 
         // Redis에 저장된 토큰과 일치하는지 확인 (탈취 여부 검증)
@@ -40,7 +41,7 @@ public class RefreshService implements RefreshUseCase {
         }
 
         // 슬라이딩 만료: 새 토큰 발급 + Redis TTL 14일 리셋
-        TokenPair newTokenPair = jwtProvider.generate(userId.toString(), roles);
+        TokenPair newTokenPair = jwtProvider.generate(userId.toString(), nickName, roles);
         refreshTokenRepository.save(userId, newTokenPair.refreshToken());
 
         return newTokenPair;
