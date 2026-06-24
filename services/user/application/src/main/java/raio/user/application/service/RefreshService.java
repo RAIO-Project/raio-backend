@@ -5,6 +5,7 @@ import raio.jwt.JwtProvider;
 import raio.jwt.TokenPair;
 import raio.user.application.usecase.RefreshUseCase;
 import raio.user.application.port.RefreshTokenRepository;
+import raio.user.application.port.UserMetricsPort;
 import raio.user.exception.UserErrorCode;
 
 import java.util.Set;
@@ -14,11 +15,14 @@ public class RefreshService implements RefreshUseCase {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
+    private final UserMetricsPort userMetricsPort;
 
     public RefreshService(RefreshTokenRepository refreshTokenRepository,
-                          JwtProvider jwtProvider) {
+                          JwtProvider jwtProvider,
+                          UserMetricsPort userMetricsPort) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtProvider = jwtProvider;
+        this.userMetricsPort = userMetricsPort;
     }
 
     @Override
@@ -42,6 +46,7 @@ public class RefreshService implements RefreshUseCase {
         // 슬라이딩 만료: 새 토큰 발급 + Redis TTL 14일 리셋
         TokenPair newTokenPair = jwtProvider.generate(userId.toString(), roles);
         refreshTokenRepository.save(userId, newTokenPair.refreshToken());
+        userMetricsPort.incrementTokenRefresh();
 
         return newTokenPair;
     }
