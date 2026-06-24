@@ -5,24 +5,17 @@ import raio.socket.relay.RelayMessage;
 
 import java.time.Instant;
 
-/**
- * 채팅 메시지 relay 페이로드. {@link RelayMessage} 구현.
- * publish(ChatBroadcastAdapter) / subscribe(ChatRelaySubscriber) 가 공유.
- */
-public record ChatMessage(
+/** 채팅 블라인드 relay 페이로드. type="BLIND". */
+public record BlindMessage(
         String streamId,
         String chatId,
-        String userId,
-        String nickname,
-        String message,
-        boolean isBlocked,
-        String blockReason,
+        String reason,
         Instant occurredAt
 ) implements RelayMessage {
 
     @Override
     @JsonProperty("type")
     public String type() {
-        return "CHAT";
+        return "BLIND";
     }
 }

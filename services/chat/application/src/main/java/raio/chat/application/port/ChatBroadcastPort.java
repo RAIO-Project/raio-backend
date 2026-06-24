@@ -6,4 +6,5 @@ public interface ChatBroadcastPort {
     void broadcastMessage(Long streamId, ChatLogs chatLogs, String senderNickname); // ← 추가
     void broadcastUserJoined(Long streamId, Long userId, String nickname);
     void broadcastUserLeft(Long streamId, Long userId, String nickname);
+    void broadcastBlind(Long streamId, String chatId, String reason);
 }
