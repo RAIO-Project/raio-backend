@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import raio.chat.application.port.ChatBroadcastPort;
+import raio.chat.application.port.ViewerPort;
 import raio.socket.interceptor.StompAuthChannelInterceptor;
 
 import java.util.Map;
@@ -24,8 +26,10 @@ public class StompEventListener {
 
     private static final String TOPIC_PREFIX = "/topic/streams/";
     private static final long ANONYMOUS_USER_ID = -1L;
+    private static final String ANONYMOUS_NICKNAME = "알수없음";
 
     private final ChatBroadcastPort chatBroadcastPort;
+    private final ViewerPort viewerPort;
 
     @EventListener
     public void onSubscribe(SessionSubscribeEvent event) {
@@ -36,6 +40,12 @@ public class StompEventListener {
         var streamId = parseStreamId(dest);
         if (streamId == null) return;
 
+        // 시청자 수 추적: 비로그인 포함 전체 연결을 센다 (JOIN 알림과 별개)
+        var sessionId = accessor.getSessionId();
+        if (sessionId != null) {
+            viewerPort.join(streamId, sessionId);
+        }
+
         var attrs = accessor.getSessionAttributes();
         var userId = extractUserId(attrs);
 
@@ -45,9 +55,18 @@ public class StompEventListener {
             return;
         }
 
-        var nickname = extractNickname(attrs, userId);
+        var nickname = extractNickname(attrs);
         log.debug("입장 - streamId: {}, userId: {}, nickname: {}", streamId, userId, nickname);
         chatBroadcastPort.broadcastUserJoined(streamId, userId, nickname);
+    }
+
+    @EventListener
+    public void onDisconnect(SessionDisconnectEvent event) {
+        // 연결 종료 → 시청자 집합에서 제거 (LEAVE 알림은 안 띄움)
+        var sessionId = event.getSessionId();
+        if (sessionId != null) {
+            viewerPort.leave(sessionId);
+        }
     }
 
     private boolean isLoggedIn(Long userId) {
@@ -68,12 +87,8 @@ public class StompEventListener {
         return (Long) attrs.get(StompAuthChannelInterceptor.USER_ID);
     }
 
-    // 토큰에 nickname claim 이 없어 현재는 userId 를 표시명으로 사용
-    // TODO(nickname): 토큰 claim 추가되면 세션의 NICKNAME 을 사용
-    private String extractNickname(Map<String, Object> attrs, Long userId) {
-        if (attrs != null && attrs.get(StompAuthChannelInterceptor.NICKNAME) != null) {
-            return (String) attrs.get(StompAuthChannelInterceptor.NICKNAME);
-        }
-        return String.valueOf(userId);
+    private String extractNickname(Map<String, Object> attrs) {
+        if (attrs == null && attrs.get(StompAuthChannelInterceptor.NICKNAME) == null) return ANONYMOUS_NICKNAME;
+        return (String) attrs.get(StompAuthChannelInterceptor.NICKNAME);
     }
 }

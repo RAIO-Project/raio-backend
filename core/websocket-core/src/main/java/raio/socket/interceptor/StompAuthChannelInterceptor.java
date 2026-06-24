@@ -55,8 +55,7 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
         Map<String, Object> attrs = accessor.getSessionAttributes();
         if (attrs != null) {
             attrs.put(USER_ID, Long.parseLong(jwtProvider.extractUserId(token)));
-            // TODO(nickname): 토큰 claim 에 nickname 이 추가되면 활성화. 현재는 userId 를 표시명으로 사용.
-            // attrs.put(NICKNAME, jwtProvider.extractNickname(token));
+             attrs.put(NICKNAME, jwtProvider.extractNickName(token));
         }
         return message;
     }
