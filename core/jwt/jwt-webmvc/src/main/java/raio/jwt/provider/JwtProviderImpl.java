@@ -28,6 +28,9 @@ public class JwtProviderImpl implements JwtProvider {
     /** JWT payload에 권한 목록을 저장할 클레임 키 */
     private static final String ROLES_CLAIM = "roles";
 
+    /** JWT payload에 닉네임을 저장할 클레임 키 */
+    private static final String NICKNAME_CLAIM = "nickName";
+
     /** HMAC-SHA256 서명에 사용할 비밀키 */
     private final SecretKey signingKey;
 
@@ -51,9 +54,9 @@ public class JwtProviderImpl implements JwtProvider {
      * Access Token(30분)과 Refresh Token(14일)을 생성해 TokenPair로 반환한다.
      */
     @Override
-    public TokenPair generate(String userId, Set<String> roles) {
-        String accessToken = buildToken(userId, roles, accessTokenMaxAgeSeconds);
-        String refreshToken = buildToken(userId, roles, refreshTokenMaxAgeSeconds);
+    public TokenPair generate(String userId, String nickName, Set<String> roles) {
+        String accessToken = buildToken(userId, nickName, roles, accessTokenMaxAgeSeconds);
+        String refreshToken = buildToken(userId, nickName, roles, refreshTokenMaxAgeSeconds);
         return new TokenPair(accessToken, refreshToken);
     }
 
@@ -100,10 +103,11 @@ public class JwtProviderImpl implements JwtProvider {
      * @param roles         roles 클레임에 담을 권한 집합
      * @param maxAgeSeconds 토큰 만료까지의 시간(초)
      */
-    private String buildToken(String userId, Set<String> roles, long maxAgeSeconds) {
+    private String buildToken(String userId, String nickName, Set<String> roles, long maxAgeSeconds) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .subject(userId)
+                .claim(NICKNAME_CLAIM, nickName)
                 .claim(ROLES_CLAIM, roles)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(maxAgeSeconds)))
@@ -120,5 +124,13 @@ public class JwtProviderImpl implements JwtProvider {
                 .verifyWith(signingKey)
                 .build()
                 .parseSignedClaims(token);
+    }
+
+    /**
+     * 토큰의 클레임에서 nickName을 추출한다.
+     */
+    @Override
+    public String extractNickName(String token) {
+        return (String) parseToken(token).getPayload().get(NICKNAME_CLAIM);
     }
 }

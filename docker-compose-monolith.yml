@@ -64,6 +64,40 @@ services:
       mc mb --ignore-existing local/raio-local
       "
 
+  demo_prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    restart: on-failure
+    volumes:
+      - ./core/monitoring-core/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - sticky_volume_demo_prometheus:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  demo_grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    restart: on-failure
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on:
+      demo_prometheus:
+        condition: service_healthy
+    volumes:
+      - ./core/monitoring-core/grafana/provisioning:/etc/grafana/provisioning:ro
+      - sticky_volume_demo_grafana:/var/lib/grafana
+
 volumes:
   sticky_volume_demo_postgres14:
   sticky_volume_demo_minio:
+  sticky_volume_demo_prometheus:
+  sticky_volume_demo_grafana:
