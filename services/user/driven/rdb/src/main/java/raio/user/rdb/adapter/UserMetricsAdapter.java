@@ -1,18 +1,21 @@
 package raio.user.rdb.adapter;
 
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import raio.monitoring.recorder.MetricsRecorder;
 import raio.user.application.port.RefreshTokenRepository;
 import raio.user.application.port.UserMetricsPort;
 
 @Component
-@RequiredArgsConstructor
 public class UserMetricsAdapter implements UserMetricsPort {
 
     private final MetricsRecorder metricsRecorder;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    public UserMetricsAdapter(MetricsRecorder metricsRecorder, RefreshTokenRepository refreshTokenRepository) {
+        this.metricsRecorder = metricsRecorder;
+        this.refreshTokenRepository = refreshTokenRepository;
+    }
 
     @PostConstruct
     public void init() {
