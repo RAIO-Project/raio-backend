@@ -20,6 +20,6 @@ public class VideoDto {
         }
     }
 
-    public record UploadResponse(Long videoId) {
+    public record UploadResponse(Long videoId, String videoUrl) {
     }
 }

@@ -20,7 +20,7 @@ public class UploadVideoService implements UploadVideoUseCase {
     }
 
     @Override
-    public Long upload(UploadVideoCommand command) {
+    public UploadVideoResult upload(UploadVideoCommand command) {
         String storedPath = fileStorage.store(
                 command.inputStream(),
                 command.originalFileName(),
@@ -37,6 +37,7 @@ public class UploadVideoService implements UploadVideoUseCase {
                 .status(VideoStatus.READY)
                 .build();
 
-        return videoRepository.save(video).getId();
+        Videos saved = videoRepository.save(video);
+        return new UploadVideoResult(saved.getId(), saved.getStoredFilePath());
     }
 }
