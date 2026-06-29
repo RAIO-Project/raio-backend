@@ -10,6 +10,7 @@ val chatBatchAdapter: String by settings
 val chatWebSocketAdapter: String by settings
 val chatSocketAdapter: String by settings
 val chatModerationAdapter: String by settings
+val chatHuggingFaceAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
     var dir = rootDir
@@ -40,6 +41,7 @@ include(
     chatWebSocketAdapter,
     chatSocketAdapter,
     chatModerationAdapter,
+    chatHuggingFaceAdapter,
 )
 
 project(chat).projectDir = chatDirectory("chat")
@@ -54,3 +56,4 @@ project(chatWebMvcAdapter).projectDir = chatDirectory("web-mvc")
 project(chatWebSocketAdapter).projectDir = chatDirectory("websocket")
 project(chatSocketAdapter).projectDir = chatDirectory("socket")
 project(chatModerationAdapter).projectDir = chatDirectory("moderation")
+project(chatHuggingFaceAdapter).projectDir = chatDirectory("huggingface")

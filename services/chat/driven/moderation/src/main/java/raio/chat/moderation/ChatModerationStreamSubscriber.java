@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ModerationStreamSubscriber {
+public class ChatModerationStreamSubscriber {
     private static final String GROUP = "moderation-workers";
     private static final String CONSUMER = "moderation-worker-1";
 
     private final StreamMessageListenerContainer<String, MapRecord<String, String, String>> container;
     private final StringRedisTemplate stringRedisTemplate;
-    private final ModerationStreamConsumer consumer;
+    private final ChatModerationStreamConsumer consumer;
 
     @PostConstruct
     void registerSubscription() {

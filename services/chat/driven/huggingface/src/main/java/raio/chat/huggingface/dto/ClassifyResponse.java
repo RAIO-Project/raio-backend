@@ -1,4 +1,4 @@
-package raio.chat.moderation.dto;
+package raio.chat.huggingface.dto;
 
 import java.util.List;
 
