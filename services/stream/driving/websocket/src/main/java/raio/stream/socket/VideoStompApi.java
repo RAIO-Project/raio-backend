@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -15,6 +16,7 @@ import raio.stream.socket.dto.VideoWebSocketDto.VideoSyncCommand;
 import raio.stream.socket.relay.VideoMessage;
 
 import java.time.Instant;
+import java.util.Map;
 
 /**
  * 방장이 업로드한 영상의 URL·재생 상태를 구독 중인 모든 시청자에게 브로드캐스트.
@@ -34,11 +36,10 @@ public class VideoStompApi {
     public void syncVideo(
             @DestinationVariable String streamId,
             @Payload VideoSyncCommand command,
-            SimpMessageHeaderAccessor accessor) {
+            @Header(SimpMessageHeaderAccessor.SESSION_ATTRIBUTES) Map<String, Object> sessionAttrs) {
 
-        var attrs = accessor.getSessionAttributes();
-        var userId = (attrs != null && attrs.get(StompAuthChannelInterceptor.USER_ID) != null)
-                ? (Long) attrs.get(StompAuthChannelInterceptor.USER_ID)
+        var userId = (sessionAttrs != null && sessionAttrs.get(StompAuthChannelInterceptor.USER_ID) != null)
+                ? (Long) sessionAttrs.get(StompAuthChannelInterceptor.USER_ID)
                 : ANONYMOUS_USER_ID;
 
         if (userId == ANONYMOUS_USER_ID) {
