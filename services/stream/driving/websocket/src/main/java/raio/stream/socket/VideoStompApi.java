@@ -12,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import raio.socket.interceptor.StompAuthChannelInterceptor;
 import raio.socket.relay.StreamRelayChannel;
+import raio.stream.application.port.StreamQueryPort;
 import raio.stream.socket.dto.VideoWebSocketDto.VideoSyncCommand;
 import raio.stream.socket.relay.VideoMessage;
 
@@ -31,6 +32,7 @@ public class VideoStompApi {
 
     private final StringRedisTemplate stringRedisTemplate;
     private final ObjectMapper objectMapper;
+    private final StreamQueryPort streamQueryPort;
 
     @MessageMapping("/streams/{streamId}/video")
     public void syncVideo(
@@ -44,6 +46,16 @@ public class VideoStompApi {
 
         if (userId == ANONYMOUS_USER_ID) {
             log.warn("[VideoSync] 인증 실패(익명) → 거부 streamId={}", streamId);
+            return;
+        }
+
+        // 해당 방송의 방장인지 검증
+        boolean isOwner = streamQueryPort.findDetailById(streamId)
+                .map(detail -> String.valueOf(userId).equals(detail.streamerId()))
+                .orElse(false);
+
+        if (!isOwner) {
+            log.warn("[VideoSync] 권한 없음 → 거부 userId={} streamId={}", userId, streamId);
             return;
         }
 
