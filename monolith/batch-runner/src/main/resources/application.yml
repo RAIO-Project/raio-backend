@@ -6,6 +6,11 @@ spring:
     job:
       enabled: false
 
+  config:
+    import:
+      - properties/payment/payment.toss.yml
+      - properties/payment/payment.rdb.yml
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DB_URL}
@@ -14,3 +19,11 @@ spring:
 
 server:
   port: 8081
+
+app:
+  batch:
+    enabled: true
+    jobs:
+      payment-recovery:
+        enabled: true
+        cron: "0 */5 * * * *"

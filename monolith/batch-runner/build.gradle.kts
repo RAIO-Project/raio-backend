@@ -1,15 +1,24 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val payment: String by project
+val paymentBatchAdapter: String by project
+val paymentRdbAdapter: String by project
+val paymentClientAdapter: String by project
 
 version = "0.0.1-SNAPSHOT"
 
 dependencies {
-    api(project(":batch-core"))
+    // service
+    api(project(paymentBatchAdapter))
+    api(project(paymentRdbAdapter))
+    api(project(paymentClientAdapter))
 
     implementation("org.springframework.boot:spring-boot-starter-batch")
 
-    // dbProductFlywayConfig
+    // core
+    api(project(":batch-engine"))
+    api(project(":batch-dashboard-support"))
+
+    // db
     runtimeOnly("org.postgresql:postgresql:42.7.4")
 }
 
