@@ -19,7 +19,7 @@ dependencies {
     api(project(":batch-dashboard-support"))
 
     // db
-    runtimeOnly("org.postgresql:postgresql:42.7.4")
+    runtimeOnly("org.postgresql:postgresql:42.7.7")
 }
 
 tasks.withType<Test> {
