@@ -9,3 +9,10 @@ logging:
   pattern:
     level: "%5p [${spring.application.name},%X{traceId:-}]"
 
+app:
+  batch:
+    dashboard:
+      enabled: true
+      metadata:
+        initialize-schema: true
+        fail-on-error: true

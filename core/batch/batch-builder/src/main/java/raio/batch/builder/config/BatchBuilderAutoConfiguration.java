@@ -8,7 +8,7 @@ import raio.batch.builder.job.BatchJobs;
 import raio.batch.builder.step.FunctionalStepBuilder;
 
 @AutoConfiguration
-public class BatchBuilderConfig {
+public class BatchBuilderAutoConfiguration {
     
     @Bean
     public FunctionalStepBuilder functionalStepBuilder(

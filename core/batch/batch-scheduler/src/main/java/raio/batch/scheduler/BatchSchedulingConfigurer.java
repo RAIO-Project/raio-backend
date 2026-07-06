@@ -18,6 +18,8 @@ public class BatchSchedulingConfigurer implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         if (!batchProperties.enabled()) {
             log.info("[BATCH-SCHEDULER] disabled");
+            
+            return;
         }
         
         batchProperties.jobs().forEach((jobName, job) -> {

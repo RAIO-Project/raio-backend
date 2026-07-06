@@ -46,6 +46,8 @@ public class SpringBatchMetadataSchemaInstaller {
             return;
         }
         
+        log.info("[BATCH-DASHBOARD] metadata installer started");
+        
         install();
     }
     

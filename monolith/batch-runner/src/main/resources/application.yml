@@ -5,11 +5,15 @@ spring:
   batch:
     job:
       enabled: false
+    # 자동으로 batch 스키마 생성 방징
+    jdbc:
+        initialize-schema: never
 
   config:
     import:
-      - properties/payment/payment.toss.yml
+      - properties/payment/payment.client.yml
       - properties/payment/payment.rdb.yml
+      - properties/payment/payment.batch.yml
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -19,11 +23,3 @@ spring:
 
 server:
   port: 8081
-
-app:
-  batch:
-    enabled: true
-    jobs:
-      payment-recovery:
-        enabled: true
-        cron: "0 */5 * * * *"
