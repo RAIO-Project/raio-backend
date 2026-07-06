@@ -1,4 +1,4 @@
-package raio.payment.batch.job;
+package raio.payment.batch.tasklet;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -10,7 +10,7 @@ import raio.payment.application.usecase.PaymentRecoveryUseCase;
 
 @Configuration
 @RequiredArgsConstructor
-public class PaymentRecoveryJob {
+public class PaymentTaskletConfiguration {
     
     private final PaymentRecoveryUseCase paymentRecoveryUseCase;
     

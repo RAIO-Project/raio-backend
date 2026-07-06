@@ -4,6 +4,6 @@ val paymentApi: String by project
 dependencies {
     api(project(paymentApplication))
 
-    api(":batch-scheduler")
-    api(":batch-builder")
+    api(project(":batch-scheduler"))
+    api(project(":batch-builder"))
 }
