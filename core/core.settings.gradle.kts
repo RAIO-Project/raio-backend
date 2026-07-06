@@ -19,7 +19,11 @@ include(
     ":upload-s3-storage",
     ":upload-file-api",
     ":batch-api",
-    ":batch-core",
+    ":batch-builder",
+    ":batch-engine",
+    ":batch-scheduler",
+    ":batch-dashboard-support",
+    ":batch-ondemand",
     ":websocket-core",
     ":redis-api",
     ":redis-template",
@@ -44,7 +48,11 @@ project(":upload-image-local").projectDir = core["upload-image-local"]!!
 project(":upload-s3-storage").projectDir = core["upload-s3-storage"]!!
 project(":upload-file-api").projectDir = core["upload-file-api"]!!
 project(":batch-api").projectDir = core["batch-api"]!!
-project(":batch-core").projectDir = core["batch-core"]!!
+project(":batch-builder").projectDir = core["batch-builder"]!!
+project(":batch-engine").projectDir = core["batch-engine"]!!
+project(":batch-scheduler").projectDir = core["batch-scheduler"]!!
+project(":batch-dashboard-support").projectDir = core["batch-dashboard-support"]!!
+project(":batch-ondemand").projectDir = core["batch-ondemand"]!!
 project(":websocket-core").projectDir = core["websocket-core"]!!
 project(":redis-api").projectDir = core["redis-api"]!!
 project(":redis-template").projectDir = core["redis-template"]!!

@@ -1,6 +1,6 @@
 package raio.batch.properties;
 
-import raio.batch.properties.job.JobProperties;
+import raio.batch.job.JobProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
