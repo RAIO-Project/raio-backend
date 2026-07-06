@@ -1,0 +1,5 @@
+app:
+  chat:
+    moderation:
+      baseUrl: ${MODERATION_BASE_URL:https://cjn4336-raio-moderator.hf.space}
+      api-secret-key: ${MODERATION_SECRET_KEY:5LLhXq1RdzAEuqBLUE7yS1kNH7f8ds9VOHARLgbXOpE}
