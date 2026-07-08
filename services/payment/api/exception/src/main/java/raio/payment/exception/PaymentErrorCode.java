@@ -33,6 +33,21 @@ public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_CANCEL_FAILED("결제 취소에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     PAYMENT_REFUND_FAILED("결제 환불에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     
+    // ===== 정산 =====
+    SETTLEMENT_NOT_FOUND("정산 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    SETTLEMENT_DETAIL_NOT_FOUND("정산 상세 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    SETTLEMENT_ALREADY_EXISTS("이미 생성된 정산입니다.", HttpStatus.CONFLICT),
+    SETTLEMENT_ALREADY_COMPLETED("이미 완료된 정산입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_INVALID_STATUS("유효하지 않은 정산 상태입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_INVALID_AMOUNT("유효하지 않은 정산 금액입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_AMOUNT_MISMATCH("정산 금액이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_TARGET_NOT_FOUND("정산 대상이 없습니다.", HttpStatus.NOT_FOUND),
+    SETTLEMENT_DUPLICATED_HISTORY("이미 정산에 포함된 포인트 이력입니다.", HttpStatus.CONFLICT),
+    SETTLEMENT_PERIOD_INVALID("유효하지 않은 정산 기간입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_BATCH_ALREADY_RUNNING("정산 배치가 이미 실행 중입니다.", HttpStatus.CONFLICT),
+    SETTLEMENT_BATCH_FAILED("정산 배치 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    SETTLEMENT_BATCH_PARTIAL_FAILED("일부 정산 배치 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    
     // ===== 내부 =====
     INTERNAL_ERROR("서버 내부 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
