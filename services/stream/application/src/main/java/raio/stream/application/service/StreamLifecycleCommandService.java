@@ -15,9 +15,14 @@ import raio.stream.readmodel.StreamQueryModels.StreamDetail;
 
 import java.time.Instant;
 
+import static raio.stream.exception.StreamErrorCode.STREAM_FORBIDDEN;
+
 /**
  * <p>세 동작이 동일 포트({@link StreamCommandPort}, {@link StreamLiveRankCommandPort})를 공유하고
  * 전이(READY → LIVE → ENDED)가 하나의 흐름이므로 한 서비스로 묶는다.
+ *
+ * <p>방송의 상태 전이는 방송 주인만 수행할 수 있다. 요청자는 인증된 사용자(토큰)에서 오며,
+ * 요청 본문으로 받지 않는다.
  */
 @Service
 @RequiredArgsConstructor
@@ -38,8 +43,10 @@ public class StreamLifecycleCommandService implements
     }
 
     @Override
-    public StreamDetail start(String streamId) {
+    public StreamDetail start(String streamId, String requesterId) {
         Streams stream = streamCommandPort.getById(streamId);
+        verifyOwner(stream, requesterId);
+
         stream.start(Instant.now());
         Streams updated = streamCommandPort.update(stream);
 
@@ -49,8 +56,9 @@ public class StreamLifecycleCommandService implements
     }
 
     @Override
-    public StreamDetail end(String streamId) {
+    public StreamDetail end(String streamId, String requesterId) {
         Streams stream = streamCommandPort.getById(streamId);
+        verifyOwner(stream, requesterId);
 
         long streamIdLong = Long.parseLong(stream.getId());
         long finalViewers = streamLiveRankQueryPort.currentViewerCount(streamIdLong);
@@ -61,6 +69,13 @@ public class StreamLifecycleCommandService implements
         streamLiveRankCommandPort.removeLiveStream(streamIdLong);
 
         return toDetail(updated);
+    }
+
+    /** 방송 주인만 상태를 바꿀 수 있다. */
+    private void verifyOwner(Streams stream, String requesterId) {
+        if (!stream.getStreamerId().equals(requesterId)) {
+            throw STREAM_FORBIDDEN.exception();
+        }
     }
 
     private StreamDetail toDetail(Streams s) {
