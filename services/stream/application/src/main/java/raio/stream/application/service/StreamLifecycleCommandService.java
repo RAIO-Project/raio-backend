@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raio.stream.application.port.StreamCommandPort;
-import raio.stream.application.port.StreamLiveRankPort;
+import raio.stream.application.port.StreamLiveRankCommandPort;
+import raio.stream.application.port.StreamLiveRankQueryPort;
 import raio.stream.application.usecase.StreamEndUseCase;
 import raio.stream.application.usecase.StreamOpenUseCase;
 import raio.stream.application.usecase.StreamStartUseCase;
@@ -15,19 +16,20 @@ import raio.stream.readmodel.StreamQueryModels.StreamDetail;
 import java.time.Instant;
 
 /**
- * <p>세 동작이 동일 포트({@link StreamCommandPort}, {@link StreamLiveRankPort})를 공유하고
+ * <p>세 동작이 동일 포트({@link StreamCommandPort}, {@link StreamLiveRankCommandPort})를 공유하고
  * 전이(READY → LIVE → ENDED)가 하나의 흐름이므로 한 서비스로 묶는다.
  */
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class StreamLifecycleService implements
+public class StreamLifecycleCommandService implements
         StreamOpenUseCase,
         StreamStartUseCase,
         StreamEndUseCase {
 
     private final StreamCommandPort streamCommandPort;
-    private final StreamLiveRankPort streamLiveRankPort;
+    private final StreamLiveRankCommandPort streamLiveRankCommandPort;
+    private final StreamLiveRankQueryPort streamLiveRankQueryPort;
 
     @Override
     public StreamDetail open(String streamerId, String title, StreamCategory category) {
@@ -41,7 +43,7 @@ public class StreamLifecycleService implements
         stream.start(Instant.now());
         Streams updated = streamCommandPort.update(stream);
 
-        streamLiveRankPort.addLiveStream(Long.parseLong(updated.getId()));
+        streamLiveRankCommandPort.addLiveStream(Long.parseLong(updated.getId()));
 
         return toDetail(updated);
     }
@@ -51,12 +53,12 @@ public class StreamLifecycleService implements
         Streams stream = streamCommandPort.getById(streamId);
 
         long streamIdLong = Long.parseLong(stream.getId());
-        long finalViewers = streamLiveRankPort.currentViewerCount(streamIdLong);
+        long finalViewers = streamLiveRankQueryPort.currentViewerCount(streamIdLong);
 
         stream.end(Instant.now(), (int) finalViewers);
         Streams updated = streamCommandPort.update(stream);
 
-        streamLiveRankPort.removeLiveStream(streamIdLong);
+        streamLiveRankCommandPort.removeLiveStream(streamIdLong);
 
         return toDetail(updated);
     }
