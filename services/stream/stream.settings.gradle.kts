@@ -1,5 +1,3 @@
-import kotlin.String
-
 val stream: String by settings
 val streamApi: String by settings
 val streamDomain: String by settings
