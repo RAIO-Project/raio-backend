@@ -23,6 +23,12 @@ public class WalletCommandAdapter implements WalletCommandRepositoryPort {
     }
     
     @Override
+    public Optional<Wallet> findByUserId(String userId) {
+        return walletJpaRepository.findByUserId(Long.parseLong(userId))
+                .map(walletEntityMapper::toDomain);
+    }
+    
+    @Override
     public Wallet save(Wallet wallet) {
         WalletEntity saved = walletJpaRepository.saveAndFlush(walletEntityMapper.toEntity(wallet));
         return walletEntityMapper.toDomain(saved);
