@@ -4,5 +4,5 @@ import raio.payment.domain.Wallet;
 
 public interface PointDonateUseCase {
     
-    Wallet donate(String walletId, Long amount);
+    Wallet donate(String userId, Long amount);
 }
