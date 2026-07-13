@@ -5,19 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import raio.socket.interceptor.StompAuthChannelInterceptor;
+import raio.socket.interceptor.StompPrincipal;
 import raio.socket.relay.StreamRelayChannel;
 import raio.stream.application.port.StreamQueryPort;
 import raio.stream.socket.dto.VideoWebSocketDto.VideoSyncCommand;
 import raio.stream.socket.relay.VideoMessage;
 
+import java.security.Principal;
 import java.time.Instant;
-import java.util.Map;
 
 /**
  * 방장이 업로드한 영상의 URL·재생 상태를 구독 중인 모든 시청자에게 브로드캐스트.
@@ -28,8 +26,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class VideoStompApi {
 
-    private static final long ANONYMOUS_USER_ID = -1L;
-
     private final StringRedisTemplate stringRedisTemplate;
     private final ObjectMapper objectMapper;
     private final StreamQueryPort streamQueryPort;
@@ -38,16 +34,14 @@ public class VideoStompApi {
     public void syncVideo(
             @DestinationVariable String streamId,
             @Payload VideoSyncCommand command,
-            @Header(SimpMessageHeaderAccessor.SESSION_ATTRIBUTES) Map<String, Object> sessionAttrs) {
+            Principal principal) {
 
-        var userId = (sessionAttrs != null && sessionAttrs.get(StompAuthChannelInterceptor.USER_ID) != null)
-                ? (Long) sessionAttrs.get(StompAuthChannelInterceptor.USER_ID)
-                : ANONYMOUS_USER_ID;
-
-        if (userId == ANONYMOUS_USER_ID) {
+        if (!(principal instanceof StompPrincipal user)) {
             log.warn("[VideoSync] 인증 실패(익명) → 거부 streamId={}", streamId);
             return;
         }
+
+        Long userId = Long.parseLong(user.getName());
 
         // 해당 방송의 방장인지 검증
         boolean isOwner = streamQueryPort.findDetailById(streamId)
