@@ -3,3 +3,4 @@ spring:
     import:
       - classpath:properties/payment/payment.client.yml
       - classpath:properties/payment/payment.rdb.yml
+      - optional:classpath:properties/payment/payment.batch.yml

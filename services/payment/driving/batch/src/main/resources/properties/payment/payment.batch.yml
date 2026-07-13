@@ -1,0 +1,6 @@
+app:
+  batch:
+    enabled: true
+    jobs:
+      paymentRecoveryJob:
+        cron: "0 */1 * * * *" # 1분 마다 실행

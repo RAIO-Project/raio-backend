@@ -39,7 +39,7 @@ include(
     paymentClientAdapter,
     paymentProto,
     paymentGrpcServerAdapter,
-    // paymentBatchAdapter,
+    paymentBatchAdapter,
 )
 
 project(payment).projectDir = paymentDirectory("payment")
@@ -53,4 +53,4 @@ project(paymentWebMvcAdapter).projectDir = paymentDirectory("web-mvc")
 project(paymentClientAdapter).projectDir = paymentDirectory("client")
 project(paymentProto).projectDir = paymentDirectory("proto")
 project(paymentGrpcServerAdapter).projectDir = paymentDirectory("grpc-server")
-// project(paymentBatchAdapter).projectDir = paymentDirectory("batch")
+project(paymentBatchAdapter).projectDir = paymentDirectory("batch")
