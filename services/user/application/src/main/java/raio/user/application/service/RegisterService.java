@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import raio.user.application.command.RegisterCommand;
 import raio.user.application.port.PaymentCommandPort;
+import raio.user.application.port.UserMetricsPort;
 import raio.user.application.port.UserRepository;
 import raio.user.application.usecase.RegisterUseCase;
 import raio.user.domain.Users;
@@ -19,11 +20,13 @@ public class RegisterService implements RegisterUseCase {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PaymentCommandPort paymentCommandPort;
+    private final UserMetricsPort userMetricsPort;
 
-    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder, PaymentCommandPort paymentCommandPort) {
+    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder, PaymentCommandPort paymentCommandPort, UserMetricsPort userMetricsPort) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.paymentCommandPort = paymentCommandPort;
+        this.userMetricsPort = userMetricsPort;
     }
 
     @Override
@@ -45,15 +48,16 @@ public class RegisterService implements RegisterUseCase {
                 .role(UserRole.USER)
                 .status(UserStatus.ACTIVE)
                 .build();
-        
+
         Users savedUser = userRepository.save(user);
-        
+        userMetricsPort.incrementRegisteredUser();
+
         try {
             paymentCommandPort.createWallet(String.valueOf(savedUser.getId()));
         } catch (Exception e) {
             log.error("지갑 생성 요청 실패. userId={}", savedUser.getId(), e);
         }
-        
+
         return savedUser.getId();
     }
 }
