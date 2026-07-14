@@ -3,19 +3,20 @@ package raio.stream.redis;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
-import raio.stream.application.port.StreamLiveRankPort;
+import raio.stream.application.port.StreamLiveRankCommandPort;
+import raio.stream.application.port.StreamLiveRankQueryPort;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
 /**
- * {@link StreamLiveRankPort} 의 Redis ZSET 구현.
+ * {@link StreamLiveRankQueryPort} 의 Redis ZSET 구현.
  * core 의 {@code :redis-template} 가 제공하는 {@link StringRedisTemplate} 사용.
  * member = streamId, score = 현재 시청자 수. key = {@value #LIVE_VIEWERS_KEY}
  */
 @Repository
-public class StreamRankRedisAdapter implements StreamLiveRankPort {
+public class StreamRankRedisAdapter implements StreamLiveRankQueryPort, StreamLiveRankCommandPort {
 
     private static final String LIVE_VIEWERS_KEY = "stream:live:viewers";
 

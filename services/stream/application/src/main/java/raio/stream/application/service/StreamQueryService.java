@@ -6,8 +6,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raio.stream.application.port.StreamLiveRankPort;
-import raio.stream.application.port.StreamLiveRankPort.LiveRank;
+import raio.stream.application.port.StreamLiveRankQueryPort;
+import raio.stream.application.port.StreamLiveRankQueryPort.LiveRank;
 import raio.stream.application.port.StreamQueryPort;
 import raio.stream.application.usecase.StreamReadByIdUseCase;
 import raio.stream.application.usecase.StreamReadByStatusesUseCase;
@@ -30,18 +30,18 @@ import static raio.stream.exception.StreamErrorCode.STREAM_NOT_FOUND;
 
 /**
  * 방송 조회 응용 서비스. 조회 유스케이스(최신순/시청자순/단건)를 함께 구현한다.
- * 라이프사이클(상태 전이)과 책임이 다르므로 {@link StreamLifecycleService} 와 분리.
+ * 라이프사이클(상태 전이)과 책임이 다르므로 {@link StreamLifecycleCommandService} 와 분리.
  */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StreamReadService implements
+public class StreamQueryService implements
         StreamReadByStatusesUseCase,
         StreamReadByViewerUseCase,
         StreamReadByIdUseCase {
 
     private final StreamQueryPort streamQueryPort;
-    private final StreamLiveRankPort streamLiveRankPort;
+    private final StreamLiveRankQueryPort streamLiveRankQueryPort;
 
     @Override
     public Page<LiveStreamSummary> findByStatuses(
@@ -64,7 +64,7 @@ public class StreamReadService implements
         int safeSize = Math.max(size, 1);
         int safeOffset = Math.max(offset, 0);
 
-        List<LiveRank> ranks = streamLiveRankPort.findLiveRanksByViewerDesc();
+        List<LiveRank> ranks = streamLiveRankQueryPort.findLiveRanksByViewerDesc();
         if (ranks.isEmpty()) {
             return new PageImpl<>(List.of(), PageRequest.of(0, safeSize), 0);
         }
