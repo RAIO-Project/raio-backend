@@ -1,5 +1,5 @@
 FROM grafana/grafana:latest
 
-COPY provisioning /etc/grafana/provisioning
+COPY provisioning-prod /etc/grafana/provisioning
 
 EXPOSE 3000
