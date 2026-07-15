@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import raio.jwt.JwtProvider;
+import raio.jwt.principal.UserPrincipal;
 
 import java.io.IOException;
 import java.util.List;
@@ -75,6 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtProvider.validate(token)) {
             String userId = jwtProvider.extractUserId(token);
+            String nickName = jwtProvider.extractNickName(token);
             Set<String> roles = jwtProvider.extractRoles(token);
 
             // 권한 이름 앞에 "ROLE_" 접두사를 붙여 Spring Security 규약에 맞춤
@@ -82,9 +84,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(role -> (GrantedAuthority) new SimpleGrantedAuthority("ROLE_" + role))
                     .toList();
 
-            // principal에 userId를 담아 컨트롤러에서 authentication.getPrincipal()로 꺼낼 수 있게 한다
+            // principal에 userId·nickname을 담아 컨트롤러가 @AuthenticationPrincipal 로 꺼낼 수 있게 한다.
+            UserPrincipal principal = new UserPrincipal(userId, nickName);
             UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(userId, null, authorities);
+                    new UsernamePasswordAuthenticationToken(principal, null, authorities);
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
