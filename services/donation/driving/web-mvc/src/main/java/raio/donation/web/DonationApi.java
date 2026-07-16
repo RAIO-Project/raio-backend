@@ -13,18 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import raio.donation.application.usecase.DonationCreateUseCase;
 import raio.donation.application.usecase.DonationCreateUseCase.DonationCreateCommand;
+import raio.jwt.principal.UserPrincipal;
 
 import static raio.donation.exception.DonationErrorCode.DONATION_FORBIDDEN;
 
 /**
  * 후원 REST 진입점.
  *
- * <p>후원자(senderId)는 JWT 에서만 식별한다. 클라이언트가 보낸 값을 신원으로 신뢰하면
- * 남의 포인트를 차감시킬 수 있으므로 요청 본문에서 받지 않는다.
+ * <p>후원자(senderId)·표시명(nickname) 모두 JWT 에서만 식별한다. 클라이언트가 보낸 값을 신뢰하면
+ * 남의 포인트를 차감시키거나 표시명을 위조할 수 있으므로 요청 본문에서 받지 않는다.
  *
- * <p>TODO(nickname): senderNickname 은 표시용이라 아직 요청 본문으로 받는다.
- *  REST 필터(JwtAuthenticationFilter)가 principal 에 nickname 까지 담으면 토큰에서 추출하도록 교체한다.
- *  (STOMP 는 이미 StompPrincipal(userId, nickname) 방식)
+ * <p>{@link UserPrincipal} = (userId, nickname). REST 필터(JwtAuthenticationFilter)가 토큰에서 채워
+ *  principal 로 심고, 여기서 {@code @AuthenticationPrincipal} 로 꺼낸다.
+ *  (STOMP 측 StompPrincipal(userId, nickname) 과 대응)
  */
 @RestController
 @RequestMapping("/donations")
@@ -35,31 +36,30 @@ public class DonationApi {
 
     @PostMapping
     public ResponseEntity<DonationResponse> donate(
-            @AuthenticationPrincipal String senderId,
+            @AuthenticationPrincipal UserPrincipal principal,
             @RequestBody @Valid DonationRequest request
     ) {
-        if (senderId == null) {
+        if (principal == null) {
             throw DONATION_FORBIDDEN.exception(); // 비로그인 후원 거부
         }
 
         Long id = donationCreateUseCase.create(new DonationCreateCommand(
                 request.streamId(),
-                Long.parseLong(senderId), // 신원은 토큰에서만
+                Long.parseLong(principal.userId()), // 신원은 토큰에서만
                 request.receiverId(),
                 request.amount(),
                 request.message(),
-                request.senderNickname()
+                principal.nickname()                // 표시명도 토큰에서 (요청 본문 신뢰 X)
         ));
         return ResponseEntity.ok(new DonationResponse(id));
     }
 
-    /** senderId 는 받지 않는다 — 토큰의 요청자가 후원자다. */
+    /** senderId·senderNickname 은 받지 않는다 — 후원자 신원·표시명 모두 토큰에서 온다. */
     public record DonationRequest(
             @NotNull Long streamId,
             @NotNull Long receiverId,
             @NotNull @Positive Long amount,
-            @Size(max = 200) String message,
-            @Size(max = 20) String senderNickname
+            @Size(max = 200) String message
     ) {
     }
 

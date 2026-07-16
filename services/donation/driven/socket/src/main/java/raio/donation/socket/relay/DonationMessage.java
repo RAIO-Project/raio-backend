@@ -1,5 +1,6 @@
 package raio.donation.socket.relay;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import raio.socket.relay.RelayMessage;
 
 import java.time.Instant;
@@ -18,6 +19,7 @@ public record DonationMessage(
         Instant occurredAt
 ) implements RelayMessage {
 
+    @JsonProperty("type")   // 추가 — Jackson이 type을 JSON 필드로 직렬화
     @Override
     public String type() {
         return "DONATION";
