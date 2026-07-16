@@ -41,10 +41,9 @@ public class WalletGrpcServerAdapter
             DonatePointRequest request,
             StreamObserver<DonatePointResponse> responseObserver
     ) {
-        var wallet = pointDonateUseCase.donate(request.getWalletId(), request.getAmount());
+        var wallet = pointDonateUseCase.donate(request.getUserId(), request.getAmount());
         
         var response = DonatePointResponse.newBuilder()
-                .setWalletId(wallet.getId())
                 .setUserId(wallet.getUserId())
                 .setBalance(wallet.getBalance())
                 .build();
