@@ -1,5 +1,5 @@
-val streamApi: String by project
 val streamApplication: String by project
+val streamApi: String by project
 
 dependencies {
     api(project(streamApi))
@@ -7,4 +7,5 @@ dependencies {
 
     implementation("org.springframework:spring-messaging")
     implementation(project(":websocket-core"))
+    implementation(project(":redis-template"))
 }

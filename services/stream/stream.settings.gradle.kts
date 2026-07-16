@@ -9,6 +9,7 @@ val streamRedisAdapter: String by settings
 val streamSocketAdapter: String by settings
 val streamWebSocketAdapter: String by settings
 val streamWebMvcAdapter: String by settings
+val streamWebSocketAdapter: String by settings
 val streamBatchAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
@@ -39,6 +40,7 @@ include(
     streamSocketAdapter,
     streamWebSocketAdapter,
     streamWebMvcAdapter,
+    streamWebSocketAdapter,
     // streamBatchAdapter,
 )
 
@@ -53,4 +55,5 @@ project(streamRedisAdapter).projectDir = streamDirectory("redis")
 project(streamSocketAdapter).projectDir = streamDirectory("socket")
 project(streamWebSocketAdapter).projectDir = streamDirectory("websocket")
 project(streamWebMvcAdapter).projectDir = streamDirectory("web-mvc")
+project(streamWebSocketAdapter).projectDir = streamDirectory("websocket")
 // project(streamBatchAdapter).projectDir = streamDirectory("batch")
