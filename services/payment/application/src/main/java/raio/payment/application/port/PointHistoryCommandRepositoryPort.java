@@ -1,6 +1,6 @@
 package raio.payment.application.port;
 
-import raio.payment.domain.PointHistory;
+import raio.payment.domain.wallet.PointHistory;
 
 public interface PointHistoryCommandRepositoryPort {
     

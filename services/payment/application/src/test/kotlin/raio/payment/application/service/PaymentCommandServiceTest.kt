@@ -13,13 +13,13 @@ import raio.payment.application.command.PaymentCommands.ConfirmCommand
 import raio.payment.application.command.PaymentCommands.PrepareCommand
 import raio.payment.application.port.PaymentClientPort
 import raio.payment.application.port.PaymentCommandRepositoryPort
-import raio.payment.application.usecase.PointChargeUseCase
-import raio.payment.application.usecase.WalletReadUseCase
-import raio.payment.domain.Payment
-import raio.payment.domain.Wallet
-import raio.payment.domain.type.PaymentMethod
-import raio.payment.domain.type.PaymentStatus
-import raio.payment.domain.type.PgProvider
+import raio.payment.application.usecase.point.PointChargeUseCase
+import raio.payment.application.usecase.wallet.WalletReadUseCase
+import raio.payment.domain.payment.Payment
+import raio.payment.domain.wallet.Wallet
+import raio.payment.domain.payment.type.PaymentMethod
+import raio.payment.domain.payment.type.PaymentStatus
+import raio.payment.domain.payment.type.PgProvider
 import raio.payment.exception.PaymentException
 import java.util.Optional
 import java.util.function.Supplier
@@ -62,7 +62,9 @@ class PaymentCommandServiceTest : FreeSpec({
             val command = PrepareCommand("user-1", 10_000L, PaymentMethod.EASY_PAY, PgProvider.TOSS)
             val saved = Payment.builder()
                 .id("1").orderId("abc123").userId("user-1").amount(10_000L)
-                .status(PaymentStatus.READY).method(PaymentMethod.EASY_PAY).pgProvider(PgProvider.TOSS)
+                .status(PaymentStatus.READY).method(
+                    PaymentMethod.EASY_PAY).pgProvider(
+                    PgProvider.TOSS)
                 .build()
 
             every { paymentCommandRepositoryPort.save(any()) } returns saved

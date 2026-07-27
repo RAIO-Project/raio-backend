@@ -1,4 +1,4 @@
-package raio.payment.application.usecase;
+package raio.payment.application.usecase.payment;
 
 public interface PaymentRecoveryUseCase {
 

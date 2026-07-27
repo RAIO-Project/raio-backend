@@ -1,7 +1,7 @@
 package raio.payment.application.port;
 
-import raio.payment.domain.Payment;
-import raio.payment.domain.type.PaymentStatus;
+import raio.payment.domain.payment.Payment;
+import raio.payment.domain.payment.type.PaymentStatus;
 
 import java.util.Optional;
 import java.util.function.Supplier;

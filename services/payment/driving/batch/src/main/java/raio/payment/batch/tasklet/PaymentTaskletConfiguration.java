@@ -6,7 +6,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import raio.batch.builder.job.BatchJobs;
-import raio.payment.application.usecase.PaymentRecoveryUseCase;
+import raio.payment.application.usecase.payment.PaymentRecoveryUseCase;
 
 @Configuration
 @RequiredArgsConstructor

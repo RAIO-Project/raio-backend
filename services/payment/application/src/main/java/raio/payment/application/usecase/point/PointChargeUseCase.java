@@ -1,6 +1,6 @@
-package raio.payment.application.usecase;
+package raio.payment.application.usecase.point;
 
-import raio.payment.domain.Wallet;
+import raio.payment.domain.wallet.Wallet;
 
 public interface PointChargeUseCase {
     

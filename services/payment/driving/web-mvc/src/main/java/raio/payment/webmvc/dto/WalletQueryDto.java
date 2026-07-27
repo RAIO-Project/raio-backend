@@ -2,7 +2,7 @@ package raio.payment.webmvc.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import raio.payment.domain.Wallet;
+import raio.payment.domain.wallet.Wallet;
 
 public final class WalletQueryDto {
     

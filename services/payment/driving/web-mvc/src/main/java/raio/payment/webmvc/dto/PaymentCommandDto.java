@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
-import raio.payment.domain.type.PaymentMethod;
-import raio.payment.domain.type.PgProvider;
+import raio.payment.domain.payment.type.PaymentMethod;
+import raio.payment.domain.payment.type.PgProvider;
 
 public final class PaymentCommandDto {
 

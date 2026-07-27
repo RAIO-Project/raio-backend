@@ -1,7 +1,7 @@
 package raio.payment.application.command;
 
-import raio.payment.domain.type.PaymentMethod;
-import raio.payment.domain.type.PgProvider;
+import raio.payment.domain.payment.type.PaymentMethod;
+import raio.payment.domain.payment.type.PgProvider;
 
 public final class PaymentCommands {
     

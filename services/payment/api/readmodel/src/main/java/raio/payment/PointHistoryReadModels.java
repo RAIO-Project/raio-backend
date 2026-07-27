@@ -1,6 +1,6 @@
 package raio.payment;
 
-import raio.payment.domain.type.PointHistoryType;
+import raio.payment.domain.wallet.type.PointHistoryType;
 
 import java.time.Instant;
 

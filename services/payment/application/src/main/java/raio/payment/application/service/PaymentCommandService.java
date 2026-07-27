@@ -6,12 +6,12 @@ import raio.payment.application.command.PaymentCommands.ConfirmCommand;
 import raio.payment.application.command.PaymentCommands.PrepareCommand;
 import raio.payment.application.port.PaymentClientPort;
 import raio.payment.application.port.PaymentCommandRepositoryPort;
-import raio.payment.application.usecase.PaymentConfirmUseCase;
-import raio.payment.application.usecase.PaymentPrepareUseCase;
-import raio.payment.application.usecase.PointChargeUseCase;
-import raio.payment.application.usecase.WalletReadUseCase;
-import raio.payment.domain.Payment;
-import raio.payment.domain.type.PaymentStatus;
+import raio.payment.application.usecase.payment.PaymentConfirmUseCase;
+import raio.payment.application.usecase.payment.PaymentPrepareUseCase;
+import raio.payment.application.usecase.point.PointChargeUseCase;
+import raio.payment.application.usecase.wallet.WalletReadUseCase;
+import raio.payment.domain.payment.Payment;
+import raio.payment.domain.payment.type.PaymentStatus;
 
 import java.util.UUID;
 

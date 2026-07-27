@@ -1,4 +1,4 @@
-package raio.payment.domain.type;
+package raio.payment.domain.payment.type;
 
 public enum PaymentStatus {
     READY,

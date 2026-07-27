@@ -1,13 +1,13 @@
-package raio.payment.domain;
+package raio.payment.domain.payment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import raio.payment.domain.type.PaymentMethod;
-import raio.payment.domain.type.PaymentStatus;
-import raio.payment.domain.type.PgProvider;
+import raio.payment.domain.payment.type.PaymentMethod;
+import raio.payment.domain.payment.type.PaymentStatus;
+import raio.payment.domain.payment.type.PgProvider;
 
 @Getter
 @Setter

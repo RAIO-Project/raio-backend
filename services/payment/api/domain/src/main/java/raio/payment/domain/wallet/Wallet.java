@@ -1,4 +1,4 @@
-package raio.payment.domain;
+package raio.payment.domain.wallet;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

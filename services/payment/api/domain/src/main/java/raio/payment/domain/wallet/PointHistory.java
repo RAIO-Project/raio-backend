@@ -1,11 +1,11 @@
-package raio.payment.domain;
+package raio.payment.domain.wallet;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import raio.payment.domain.type.PointHistoryType;
+import raio.payment.domain.wallet.type.PointHistoryType;
 
 import java.time.Instant;
 

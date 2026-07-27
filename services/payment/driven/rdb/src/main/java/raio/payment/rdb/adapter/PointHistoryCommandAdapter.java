@@ -3,7 +3,7 @@ package raio.payment.rdb.adapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import raio.payment.application.port.PointHistoryCommandRepositoryPort;
-import raio.payment.domain.PointHistory;
+import raio.payment.domain.wallet.PointHistory;
 import raio.payment.rdb.mapper.PointHistoryEntityMapper;
 import raio.payment.rdb.repository.PointHistoryJpaRepository;
 

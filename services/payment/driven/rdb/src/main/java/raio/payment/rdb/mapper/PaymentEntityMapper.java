@@ -3,7 +3,7 @@ package raio.payment.rdb.mapper;
 import org.mapstruct.Mapper;
 import raio.payment.PaymentReadModels.PaymentDetail;
 import raio.payment.PaymentReadModels.PaymentSummary;
-import raio.payment.domain.Payment;
+import raio.payment.domain.payment.Payment;
 import raio.payment.rdb.entity.PaymentEntity;
 
 @Mapper(componentModel = "spring")

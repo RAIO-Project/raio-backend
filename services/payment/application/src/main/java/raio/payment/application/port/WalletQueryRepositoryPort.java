@@ -1,6 +1,6 @@
 package raio.payment.application.port;
 
-import raio.payment.domain.Wallet;
+import raio.payment.domain.wallet.Wallet;
 
 import java.util.Optional;
 

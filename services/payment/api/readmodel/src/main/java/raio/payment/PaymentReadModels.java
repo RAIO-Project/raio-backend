@@ -1,8 +1,8 @@
 package raio.payment;
 
-import raio.payment.domain.type.PaymentMethod;
-import raio.payment.domain.type.PaymentStatus;
-import raio.payment.domain.type.PgProvider;
+import raio.payment.domain.payment.type.PaymentMethod;
+import raio.payment.domain.payment.type.PaymentStatus;
+import raio.payment.domain.payment.type.PgProvider;
 
 import java.time.Instant;
 

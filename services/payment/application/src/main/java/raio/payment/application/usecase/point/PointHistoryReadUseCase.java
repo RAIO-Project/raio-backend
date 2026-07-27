@@ -1,4 +1,4 @@
-package raio.payment.application.usecase;
+package raio.payment.application.usecase.point;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

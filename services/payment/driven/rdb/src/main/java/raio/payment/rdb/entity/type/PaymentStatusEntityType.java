@@ -2,7 +2,7 @@ package raio.payment.rdb.entity.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import raio.payment.domain.type.PaymentStatus;
+import raio.payment.domain.payment.type.PaymentStatus;
 
 import java.util.Arrays;
 

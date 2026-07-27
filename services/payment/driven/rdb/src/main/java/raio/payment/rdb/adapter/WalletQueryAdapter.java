@@ -3,7 +3,7 @@ package raio.payment.rdb.adapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import raio.payment.application.port.WalletQueryRepositoryPort;
-import raio.payment.domain.Wallet;
+import raio.payment.domain.wallet.Wallet;
 import raio.payment.rdb.mapper.WalletEntityMapper;
 import raio.payment.rdb.repository.WalletJpaRepository;
 
