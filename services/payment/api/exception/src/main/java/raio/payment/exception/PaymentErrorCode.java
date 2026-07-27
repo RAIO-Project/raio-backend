@@ -47,6 +47,12 @@ public enum PaymentErrorCode implements ErrorCode {
     SETTLEMENT_BATCH_ALREADY_RUNNING("정산 배치가 이미 실행 중입니다.", HttpStatus.CONFLICT),
     SETTLEMENT_BATCH_FAILED("정산 배치 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     SETTLEMENT_BATCH_PARTIAL_FAILED("일부 정산 배치 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    SETTLEMENT_INVALID_CYCLE("유효하지 않은 정산 주기입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_INVALID_FEE_RATE("유효하지 않은 수수료율입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_ITEM_OUT_OF_PERIOD("정산 기간을 벗어난 후원 내역입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_ITEM_FEE_RATE_MISMATCH("정산 항목의 수수료율이 정산 기준과 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_DUPLICATED_DONATION("이미 정산에 포함된 후원 내역입니다.", HttpStatus.CONFLICT),
+    SETTLEMENT_CYCLE_CHANGE_INVALID("유효하지 않은 정산 주기 변경 요청입니다.", HttpStatus.BAD_REQUEST),
     
     // ===== 내부 =====
     INTERNAL_ERROR("서버 내부 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
