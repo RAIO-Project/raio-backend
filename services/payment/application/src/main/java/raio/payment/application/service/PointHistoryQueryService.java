@@ -8,7 +8,7 @@ import raio.payment.PointHistoryReadModels.PointHistoryDetail;
 import raio.payment.PointHistoryReadModels.PointHistorySummary;
 import raio.payment.application.port.PointHistoryQueryRepositoryPort;
 import raio.payment.application.port.WalletCommandRepositoryPort;
-import raio.payment.application.usecase.point.PointHistoryReadUseCase;
+import raio.payment.application.usecase.wallet.PointHistoryReadUseCase;
 
 import static raio.payment.exception.PaymentErrorCode.POINT_HISTORY_NOT_FOUND;
 import static raio.payment.exception.PaymentErrorCode.WALLET_NOT_FOUND;

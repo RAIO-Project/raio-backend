@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-import raio.payment.application.usecase.point.PointHistoryReadUseCase;
+import raio.payment.application.usecase.wallet.PointHistoryReadUseCase;
 import raio.payment.webmvc.dto.PointHistoryQueryDto.PointHistoryDetailResponse;
 import raio.payment.webmvc.dto.PointHistoryQueryDto.PointHistorySummaryResponse;
 

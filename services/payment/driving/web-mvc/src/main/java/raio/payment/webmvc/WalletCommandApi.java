@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import raio.payment.application.usecase.point.PointRefundUseCase;
+import raio.payment.application.usecase.wallet.PointRefundUseCase;
 import raio.payment.application.usecase.wallet.WalletCreateUseCase;
 import raio.payment.webmvc.dto.WalletCommandDto.PointAmountCommand;
 import raio.payment.webmvc.dto.WalletCommandDto.WalletCreateCommand;

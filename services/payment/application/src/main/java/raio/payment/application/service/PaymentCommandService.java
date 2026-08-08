@@ -8,7 +8,7 @@ import raio.payment.application.port.PaymentClientPort;
 import raio.payment.application.port.PaymentCommandRepositoryPort;
 import raio.payment.application.usecase.payment.PaymentConfirmUseCase;
 import raio.payment.application.usecase.payment.PaymentPrepareUseCase;
-import raio.payment.application.usecase.point.PointChargeUseCase;
+import raio.payment.application.usecase.wallet.PointChargeUseCase;
 import raio.payment.application.usecase.wallet.WalletReadUseCase;
 import raio.payment.domain.payment.Payment;
 import raio.payment.domain.payment.type.PaymentStatus;

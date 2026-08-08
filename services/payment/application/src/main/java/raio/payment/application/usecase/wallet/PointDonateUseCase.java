@@ -1,4 +1,4 @@
-package raio.payment.application.usecase.point;
+package raio.payment.application.usecase.wallet;
 
 import raio.payment.domain.wallet.Wallet;
 

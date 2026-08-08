@@ -3,7 +3,7 @@ package raio.payment.grpc.server;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
-import raio.payment.application.usecase.point.PointDonateUseCase;
+import raio.payment.application.usecase.wallet.PointDonateUseCase;
 import raio.payment.application.usecase.wallet.WalletCreateUseCase;
 import raio.payment.grpc.CreateWalletRequest;
 import raio.payment.grpc.CreateWalletResponse;
