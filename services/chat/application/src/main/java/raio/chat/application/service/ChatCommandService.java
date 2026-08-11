@@ -1,6 +1,7 @@
 package raio.chat.application.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raio.chat.application.port.BlacklistCommandPort;
@@ -17,6 +18,7 @@ import raio.chat.domain.ChatLogs;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatCommandService implements ChatSendUseCase, ChatBlindUseCase {
@@ -33,6 +35,12 @@ public class ChatCommandService implements ChatSendUseCase, ChatBlindUseCase {
 
     @Override
     public ChatLogs sendMessage(ChatLogs chatLogs, String senderNickname) {
+        // 0. 블랙리스트(활성 차단) 사용자는 전송 자체를 거부
+        if (blacklistQueryPort.existsActiveByUserId(chatLogs.getUserId())) {
+            log.debug("블랙리스트 사용자 채팅 전송 거부 - userId: {}", chatLogs.getUserId());
+            return null;
+        }
+
         // TODO(정규식 1차 필터): AI 전에 금칙어/정규식으로 명백 위반 사전 차단.
         //   명백 위반이면 여기서 차단 표시 + 브로드캐스트 스킵(한순간도 안 보이게).
         //   애매한 건 통과시켜 아래 AI 비동기 모더레이션에 맡긴다.
