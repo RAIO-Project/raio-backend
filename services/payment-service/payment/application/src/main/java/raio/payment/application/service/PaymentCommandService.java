@@ -179,7 +179,6 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
         
         // [Tx 2] APPROVED 확정 + 지갑 충전
         return paymentCommandRepositoryPort.transaction(() -> {
-            
             var approved = paymentCommandRepositoryPort
                     .updateStatus(
                             approving.getId(),
@@ -205,8 +204,7 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
                     approved.getUserId()
             );
             
-            var wallet = walletCommandPort
-                    .findWalletByUserId(approved.getUserId())
+            var wallet = walletCommandPort.findWalletByUserId(approved.getUserId())
                     .orElseThrow(WALLET_NOT_FOUND::exception);
             
             log.debug(
@@ -225,10 +223,7 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
                     approved.getAmount()
             );
             
-            walletCommandPort.increaseWalletBalance(
-                    wallet.getId(),
-                    approved.getAmount()
-            );
+            walletCommandPort.increaseWalletBalance(wallet.getId(), approved.getAmount());
             
             log.info(
                     "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, walletId={}, amount={}",
