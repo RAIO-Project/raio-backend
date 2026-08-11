@@ -1,0 +1,43 @@
+package raio.wallet.adapter.rdb.entity.type;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import raio.wallet.domain.type.PointHistoryType;
+
+import java.util.Arrays;
+
+import static raio.wallet.exception.WalletErrorCode.INVALID_POINT_HISTORY_TYPE;
+
+@Getter
+@RequiredArgsConstructor
+public enum PointHistoryEntityType {
+    
+    CHARGE((short) 1),
+    DONATION((short) 2),
+    REFUND((short) 3);
+    
+    private final short code;
+    
+    public static PointHistoryEntityType valueOf(PointHistoryType type) {
+        return switch (type) {
+            case CHARGE -> CHARGE;
+            case DONATION -> DONATION;
+            case REFUND -> REFUND;
+        };
+    }
+    
+    public static PointHistoryEntityType fromCode(short code) {
+        return Arrays.stream(values())
+                .filter(type -> type.code == code)
+                .findFirst()
+                .orElseThrow(INVALID_POINT_HISTORY_TYPE::exception);
+    }
+    
+    public PointHistoryType toDomain() {
+        return switch (this) {
+            case CHARGE -> PointHistoryType.CHARGE;
+            case DONATION -> PointHistoryType.DONATION;
+            case REFUND -> PointHistoryType.REFUND;
+        };
+    }
+}

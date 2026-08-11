@@ -1,16 +1,22 @@
 package raio.user.grpc.client;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import raio.payment.grpc.CreateWalletRequest;
-import raio.payment.grpc.WalletCommandServiceGrpc.WalletCommandServiceBlockingStub;
 import raio.user.application.port.PaymentCommandPort;
+import raio.wallet.grpc.CreateWalletRequest;
+import raio.wallet.grpc.WalletCommandServiceGrpc.WalletCommandServiceBlockingStub;
 
 @Component
-@RequiredArgsConstructor
 public class UserGrpcClientAdapter implements PaymentCommandPort {
     
     private final WalletCommandServiceBlockingStub walletStub;
+    
+    public UserGrpcClientAdapter(
+            @Qualifier("userWalletCommandServiceBlockingStub")
+            WalletCommandServiceBlockingStub walletStub
+    ) {
+        this.walletStub = walletStub;
+    }
     
     @Override
     public void createWallet(String userId) {
