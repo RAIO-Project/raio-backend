@@ -5,7 +5,6 @@ val streamRedisAdapter: String by project
 val streamSocketAdapter: String by project
 val streamWebSocketAdapter: String by project
 val streamWebMvcAdapter: String by project
-val streamWebSocketAdapter: String by project
 
 dependencies {
     api(project(streamApi))
@@ -13,7 +12,5 @@ dependencies {
     api(project(streamRdbAdapter))
     api(project(streamRedisAdapter))
     api(project(streamSocketAdapter))
-    api(project(streamWebSocketAdapter))
     api(project(streamWebMvcAdapter))
-    api(project(streamWebSocketAdapter))
 }
