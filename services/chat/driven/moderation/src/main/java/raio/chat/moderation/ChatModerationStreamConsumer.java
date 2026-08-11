@@ -37,11 +37,15 @@ public class ChatModerationStreamConsumer implements StreamListener<String, MapR
         ModerationResult result = moderationPort.classify(chatId, message);
         if (result.isHate()) {
             String reason = String.join(",", result.hateLabels());
-            // 1) 영속 갱신 (커밋)
-            chatBlindCommand.markBlocked(chatId, reason);
+            // 1) 영속 갱신 (커밋) — 누적 위반 임계치 초과 시 블랙리스트까지 처리됨
+            boolean blacklisted = chatBlindCommand.markBlocked(chatId, reason);
             // 2) 커밋 후 실시간 통지
             chatBroadcastPort.broadcastBlind(Long.parseLong(streamId), chatId, reason);
-            log.debug("채팅 블라인드 - chatId: {}, streamId: {}, reason: {}", chatId, streamId, reason);
+            if (blacklisted) {
+                log.warn("채팅 블랙리스트 처리 - chatId: {}, streamId: {}, reason: {}", chatId, streamId, reason);
+            } else {
+                log.debug("채팅 블라인드 - chatId: {}, streamId: {}, reason: {}", chatId, streamId, reason);
+            }
         }
         // ack 는 컨테이너 설정(autoAck)에 따름
     }

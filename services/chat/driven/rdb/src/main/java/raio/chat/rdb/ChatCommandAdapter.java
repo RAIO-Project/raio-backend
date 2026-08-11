@@ -32,5 +32,4 @@ public class ChatCommandAdapter implements ChatCommandPort {
     public void markBlocked(String chatId, String reason) {
         chatLogsJpaRepository.markBlocked(Long.parseLong(chatId), reason);
     }
-
 }

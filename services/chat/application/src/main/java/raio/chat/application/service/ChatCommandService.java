@@ -3,20 +3,33 @@ package raio.chat.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import raio.chat.application.port.BlacklistCommandPort;
+import raio.chat.application.port.BlacklistQueryPort;
 import raio.chat.application.port.ChatBroadcastPort;
 import raio.chat.application.port.ChatCommandPort;
 import raio.chat.application.port.ChatModerationPort;
+import raio.chat.application.port.ChatQueryPort;
 import raio.chat.application.usecase.ChatBlindUseCase;
 import raio.chat.application.usecase.ChatSendUseCase;
+import raio.chat.domain.Blacklist;
 import raio.chat.domain.ChatLogs;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
 public class ChatCommandService implements ChatSendUseCase, ChatBlindUseCase {
 
+    private static final int BLACKLIST_THRESHOLD = 5;
+    private static final long UNBLOCK_AFTER_DAYS = 1L;
+
     private final ChatCommandPort chatCommandPort;
+    private final ChatQueryPort chatQueryPort;
     private final ChatBroadcastPort chatBroadcastPort;
     private final ChatModerationPort chatModerationPort;
+    private final BlacklistCommandPort blacklistCommandPort;
+    private final BlacklistQueryPort blacklistQueryPort;
 
     @Override
     public ChatLogs sendMessage(ChatLogs chatLogs, String senderNickname) {
@@ -39,12 +52,30 @@ public class ChatCommandService implements ChatSendUseCase, ChatBlindUseCase {
     }
 
     /**
-     * 블라인드 영속 갱신 (is_blocked=true). DB 상태 변경은 커맨드 책임.
-     * 실시간 블라인드는 컨슈머에서 커밋 후 별도로 수행.
+     * 블라인드 영속 갱신 (is_blocked=true) + 누적 위반 5회 이상이면 블랙리스트 처리.
+     * 실시간 통지는 컨슈머에서 커밋 후 별도로 수행.
      */
     @Transactional
     @Override
-    public void markBlocked(String chatId, String reason) {
+    public boolean markBlocked(String chatId, String reason) {
         chatCommandPort.markBlocked(chatId, reason);
+
+        String userId = chatQueryPort.findUserIdById(chatId);
+
+        if (blacklistQueryPort.existsActiveByUserId(userId)) {
+            return false; // 이미 활성 차단 중 — 중복 블랙리스트 처리 방지
+        }
+
+        long blockedCount = chatQueryPort.countBlockedByUserId(userId);
+
+        if (blockedCount >= BLACKLIST_THRESHOLD) {
+            blacklistCommandPort.save(Blacklist.builder()
+                    .userId(userId)
+                    .reason(reason)
+                    .unblockAt(Instant.now().plus(UNBLOCK_AFTER_DAYS, ChronoUnit.DAYS))
+                    .build());
+            return true;
+        }
+        return false;
     }
 }
