@@ -1,8 +1,8 @@
-package raio.payment.settlement.domain;
+package raio.settlement.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import raio.payment.settlement.domain.type.SettlementCycle;
+import raio.settlement.domain.type.SettlementCycle;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -95,6 +95,29 @@ public class SettlementSetting {
         );
     }
     
+    /**
+     * 영속 데이터로부터 정산 설정을 복원한다.
+     */
+    public static SettlementSetting restore(
+            String streamerId,
+            SettlementCycle currentCycle,
+            SettlementCycle pendingCycle,
+            Instant pendingCycleEffectiveAt,
+            boolean active,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
+        return new SettlementSetting(
+                streamerId,
+                currentCycle,
+                pendingCycle,
+                pendingCycleEffectiveAt,
+                active,
+                createdAt,
+                updatedAt
+        );
+    }
+
     /**
      * 정산 주기 변경을 예약한다.
      *

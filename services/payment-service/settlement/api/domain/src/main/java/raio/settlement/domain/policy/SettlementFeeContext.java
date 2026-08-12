@@ -1,6 +1,6 @@
-package raio.payment.settlement.domain.policy;
+package raio.settlement.domain.policy;
 
-import raio.payment.settlement.domain.type.SettlementCycle;
+import raio.settlement.domain.type.SettlementCycle;
 
 import java.time.Instant;
 

@@ -6,10 +6,8 @@ val settlementReadModel: String by settings
 val settlementApplication: String by settings
 val settlementRdbAdapter: String by settings
 val settlementWebMvcAdapter: String by settings
-val settlementClientAdapter: String by settings
 val settlementBatchAdapter: String by settings
-val settlementProto: String by settings
-val settlementGrpcServerAdapter: String by settings
+val settlementGrpcClientAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
     var dir = rootDir
@@ -24,7 +22,7 @@ fun getDirectories(vararg names: String): (String) -> File {
     }
 }
 
-val settlementDirectory = getDirectories("services/settlement-service", "settlement")
+val settlementDirectory = getDirectories("services/payment-service", "settlement")
 
 // SERVICE/settlement
 include(
@@ -36,10 +34,8 @@ include(
     settlementApplication,
     settlementRdbAdapter,
     settlementWebMvcAdapter,
-    settlementClientAdapter,
-    settlementProto,
-    settlementGrpcServerAdapter,
     settlementBatchAdapter,
+    settlementGrpcClientAdapter,
 )
 
 project(settlement).projectDir = settlementDirectory("settlement")
@@ -50,7 +46,5 @@ project(settlementReadModel).projectDir = settlementDirectory("readmodel")
 project(settlementApplication).projectDir = settlementDirectory("application")
 project(settlementRdbAdapter).projectDir = settlementDirectory("rdb")
 project(settlementWebMvcAdapter).projectDir = settlementDirectory("web-mvc")
-project(settlementClientAdapter).projectDir = settlementDirectory("client")
-project(settlementProto).projectDir = settlementDirectory("proto")
-project(settlementGrpcServerAdapter).projectDir = settlementDirectory("grpc-server")
 project(settlementBatchAdapter).projectDir = settlementDirectory("batch")
+project(settlementGrpcClientAdapter).projectDir = settlementDirectory("grpc-client")

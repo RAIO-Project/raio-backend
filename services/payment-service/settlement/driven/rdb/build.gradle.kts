@@ -1,11 +1,10 @@
-val paymentApplication: String by project
-val paymentApi: String by project
+val settlementApplication: String by project
 
 dependencies {
     val bom = dependencyManagement.importedProperties
 
-    api(project(paymentApi))
-    api(project(paymentApplication))
+    api(project(settlementApplication))
+
     api(project(":jpa-core"))
     api(project(":snowflake-id-hibernate"))
 

@@ -38,4 +38,4 @@ val paymentServiceDir = rootDir.resolve("services/payment-service")
 
 apply(from = paymentServiceDir.resolve("payment/payment.settings.gradle.kts"))
 apply(from = paymentServiceDir.resolve("wallet/wallet.settings.gradle.kts"))
-// apply(from = paymentServiceDir.resolve("settlement/settlement.settings.gradle.kts"))
+apply(from = paymentServiceDir.resolve("settlement/settlement.settings.gradle.kts"))

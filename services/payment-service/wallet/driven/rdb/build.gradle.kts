@@ -7,10 +7,6 @@ dependencies {
     api(project(":jpa-core"))
     api(project(":snowflake-id-hibernate"))
 
-    // flyway
-    api("org.flywaydb:flyway-core")
-    api("org.flywaydb:flyway-database-postgresql")
-
     // querydsl
     implementation("com.querydsl:querydsl-jpa:${bom["querydsl.version"]}:jakarta")
     annotationProcessor("com.querydsl:querydsl-apt:${bom["querydsl.version"]}:jakarta")

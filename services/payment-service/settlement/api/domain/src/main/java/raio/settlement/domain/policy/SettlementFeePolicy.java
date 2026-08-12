@@ -1,4 +1,4 @@
-package raio.payment.settlement.domain.policy;
+package raio.settlement.domain.policy;
 
 import java.math.BigDecimal;
 

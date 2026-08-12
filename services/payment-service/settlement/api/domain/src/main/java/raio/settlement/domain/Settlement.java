@@ -1,11 +1,11 @@
-package raio.payment.settlement.domain;
+package raio.settlement.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import raio.payment.settlement.domain.type.SettlementCycle;
-import raio.payment.settlement.domain.type.SettlementStatus;
+import raio.settlement.domain.type.SettlementCycle;
+import raio.settlement.domain.type.SettlementStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -177,6 +177,37 @@ public class Settlement {
                 .build();
     }
     
+    /**
+     * 영속 데이터로부터 정산을 복원한다.
+     */
+    public static Settlement restore(
+            String id,
+            String streamerId,
+            SettlementCycle cycle,
+            Instant periodStartAt,
+            Instant periodEndAt,
+            BigDecimal grossAmount,
+            BigDecimal appliedFeeRate,
+            BigDecimal feeAmount,
+            BigDecimal netAmount,
+            SettlementStatus status,
+            Instant createdAt
+    ) {
+        return Settlement.builder()
+                .id(id)
+                .streamerId(streamerId)
+                .cycle(cycle)
+                .periodStartAt(periodStartAt)
+                .periodEndAt(periodEndAt)
+                .grossAmount(grossAmount)
+                .appliedFeeRate(appliedFeeRate)
+                .feeAmount(feeAmount)
+                .netAmount(netAmount)
+                .status(status)
+                .createdAt(createdAt)
+                .build();
+    }
+
     /**
      * 정산 집계를 완료한다.
      */

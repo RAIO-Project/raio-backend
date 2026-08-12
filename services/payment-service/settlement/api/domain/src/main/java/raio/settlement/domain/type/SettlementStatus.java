@@ -1,4 +1,4 @@
-package raio.payment.settlement.domain.type;
+package raio.settlement.domain.type;
 
 public enum SettlementStatus {
     

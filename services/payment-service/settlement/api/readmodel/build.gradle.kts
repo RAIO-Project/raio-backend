@@ -1,5 +1,5 @@
-val paymentDomain: String by project
+val settlementDomain: String by project
 
 dependencies {
-    api(project(paymentDomain))
+    api(project(settlementDomain))
 }

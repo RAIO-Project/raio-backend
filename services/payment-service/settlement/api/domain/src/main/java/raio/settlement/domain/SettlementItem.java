@@ -1,4 +1,4 @@
-package raio.payment.settlement.domain;
+package raio.settlement.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -121,6 +121,31 @@ public class SettlementItem {
                 .build();
     }
     
+    /**
+     * 영속 데이터로부터 정산 항목을 복원한다.
+     */
+    public static SettlementItem restore(
+            String id,
+            String settlementId,
+            String donationId,
+            BigDecimal grossAmount,
+            BigDecimal appliedFeeRate,
+            BigDecimal feeAmount,
+            BigDecimal netAmount,
+            Instant revenueOccurredAt
+    ) {
+        return SettlementItem.builder()
+                .id(id)
+                .settlementId(settlementId)
+                .donationId(donationId)
+                .grossAmount(grossAmount)
+                .appliedFeeRate(appliedFeeRate)
+                .feeAmount(feeAmount)
+                .netAmount(netAmount)
+                .revenueOccurredAt(revenueOccurredAt)
+                .build();
+    }
+
     /**
      * 후원 발생 시각이 주어진 정산 기간에 포함되는지 확인한다.
      * 정산 기간은 시작 시각을 포함하고 종료 시각은 포함하지 않는 반개구간으로 처리한다.
