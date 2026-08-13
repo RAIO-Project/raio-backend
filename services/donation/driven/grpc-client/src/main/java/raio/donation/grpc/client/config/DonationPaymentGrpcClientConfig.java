@@ -1,6 +1,7 @@
 package raio.donation.grpc.client.config;
 
 import io.grpc.ManagedChannel;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import raio.grpc.client.config.GrpcClientConfig;
@@ -20,7 +21,7 @@ public class DonationPaymentGrpcClientConfig {
     /** 빈 이름 = donationWalletStub (DonationGrpcClientAdapter 의 필드명과 일치) */
     @Bean
     WalletCommandServiceBlockingStub donationWalletStub(
-            ManagedChannel donationPaymentManagedChannel
+            @Qualifier("donationPaymentManagedChannel") ManagedChannel donationPaymentManagedChannel
     ) {
         return WalletCommandServiceGrpc.newBlockingStub(donationPaymentManagedChannel);
     }

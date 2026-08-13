@@ -1,8 +1,8 @@
 package raio.donation.grpc.client;
 
 import io.grpc.StatusRuntimeException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import raio.donation.application.port.PaymentCommandPort;
 import raio.payment.grpc.DonatePointRequest;
@@ -18,10 +18,13 @@ import raio.payment.grpc.WalletCommandServiceGrpc.WalletCommandServiceBlockingSt
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class DonationGrpcClientAdapter implements PaymentCommandPort {
 
     private final WalletCommandServiceBlockingStub donationWalletStub;
+
+    public DonationGrpcClientAdapter(@Qualifier("donationWalletStub") WalletCommandServiceBlockingStub donationWalletStub) {
+        this.donationWalletStub = donationWalletStub;
+    }
 
     @Override
     public boolean deductPoint(Long senderId, Long amount) {
