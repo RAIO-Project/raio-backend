@@ -46,7 +46,7 @@ public class VideoApi {
     ) throws IOException {
         Long uploaderId = Long.parseLong(authentication.getName());
         VideoDto.UploadRequest request = new VideoDto.UploadRequest(file, title);
-        Long videoId = uploadVideoUseCase.upload(request.toCommand(uploaderId));
-        return new VideoDto.UploadResponse(videoId);
+        UploadVideoUseCase.UploadVideoResult result = uploadVideoUseCase.upload(request.toCommand(uploaderId));
+        return new VideoDto.UploadResponse(result.videoId(), result.videoUrl());
     }
 }

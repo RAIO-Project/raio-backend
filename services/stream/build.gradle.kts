@@ -12,6 +12,5 @@ dependencies {
     api(project(streamRdbAdapter))
     api(project(streamRedisAdapter))
     api(project(streamSocketAdapter))
-    api(project(streamWebSocketAdapter))
     api(project(streamWebMvcAdapter))
 }
