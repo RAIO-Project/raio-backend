@@ -12,6 +12,7 @@ import raio.stream.application.usecase.StreamOpenUseCase;
 import raio.stream.application.usecase.StreamStartUseCase;
 import raio.stream.readmodel.StreamQueryModels.StreamDetail;
 import raio.stream.web.dto.StreamLifecycleDto.OpenStreamRequest;
+import raio.jwt.principal.UserPrincipal;
 
 import static raio.stream.exception.StreamErrorCode.STREAM_UNAUTHORIZED;
 
@@ -33,35 +34,35 @@ public class StreamLifecycleCommandApi {
     /** 방송 개설 (READY). 개설자는 인증된 요청자 본인. */
     @PostMapping
     public StreamDetail open(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal UserPrincipal principal,
             @RequestBody OpenStreamRequest request
     ) {
-        return streamOpenUseCase.open(requireLogin(userId), request.title(), request.category());
+        return streamOpenUseCase.open(requireLogin(principal), request.title(), request.category());
     }
 
     /** 방송 시작 (READY -> LIVE). 방송 주인만 가능. */
     @PostMapping("{streamId}/start")
     public StreamDetail start(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable String streamId
     ) {
-        return streamStartUseCase.start(streamId, requireLogin(userId));
+        return streamStartUseCase.start(streamId, requireLogin(principal));
     }
 
     /** 방송 종료 (LIVE -> ENDED). 방송 주인만 가능. */
     @PostMapping("{streamId}/end")
     public StreamDetail end(
-            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable String streamId
     ) {
-        return streamEndUseCase.end(streamId, requireLogin(userId));
+        return streamEndUseCase.end(streamId, requireLogin(principal));
     }
 
     /** 토큰이 없으면 principal 이 null 이다. */
-    private String requireLogin(String userId) {
-        if (userId == null) {
+    private String requireLogin(UserPrincipal principal) {
+        if (principal == null) {
             throw STREAM_UNAUTHORIZED.exception();
         }
-        return userId;
+        return principal.userId();
     }
 }
