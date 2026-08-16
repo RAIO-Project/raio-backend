@@ -18,15 +18,14 @@ public interface DonationsJpaRepository extends JpaRepository<DonationsEntity, L
      * <p>{@code List} 가 아니라 {@code Stream} 을 반환한다. Hibernate 가 ScrollableResults 로
      * 결과를 조금씩 읽어오므로, 결과가 수만 건이어도 전체를 메모리에 올리지 않는다.
      *
-     * <p>주의 사항이 두 가지 있다.
+     * <p>
      * <ul>
      *   <li>반드시 트랜잭션 안에서 호출해야 한다. 순회가 끝날 때까지 커넥션이 열려 있어야 한다.</li>
      *   <li>반환된 Stream 은 반드시 닫아야 한다. 닫지 않으면 DB 커서가 반납되지 않는다.</li>
      * </ul>
      *
      * <p>{@code HINT_FETCH_SIZE} 를 지정하는 이유는, 이 값이 없으면 JDBC 드라이버가 결과를 한 번에
-     * 모두 가져오는 경우가 있어 커서를 쓰는 의미가 사라지기 때문이다. 차단·환불 건은 WHERE 절에서
-     * 걸러 애플리케이션으로 불필요한 행을 올리지 않는다.
+     * 모두 가져오는 경우가 있어 커서를 쓰는 의미가 사라지기 때문이다. 정상 건만 조회.
      */
     @QueryHints(@QueryHint(name = "org.hibernate.fetchSize", value = "500"))
     @Query("""
