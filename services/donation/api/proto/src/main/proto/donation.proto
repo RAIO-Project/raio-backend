@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package donation.query;
+
+option java_multiple_files = true;
+option java_package = "raio.donation.grpc";
+option java_outer_classname = "DonationProto";
+
+service DonationQueryService {
+
+  rpc GetReceivedDonations(GetReceivedDonationsRequest)
+      returns (stream ReceivedDonation);
+}
+
+message GetReceivedDonationsRequest {
+  // 스트리머 ID
+  string streamerId = 1;
+
+  // 조회 시작 시각 (epoch milli, 해당 시각 포함)
+  int64 periodStartAt = 2;
+
+  // 조회 종료 시각 (epoch milli, 해당 시각 포함)
+  int64 periodEndAt = 3;
+}
+
+message ReceivedDonation {
+  string donationId = 1;
+  string streamId = 2;
+  string senderId = 3;
+  int64 amount = 4;
+  string message = 5;
+
+  // 후원 발생 시각 (epoch milli)
+  int64 donatedAt = 6;
+}

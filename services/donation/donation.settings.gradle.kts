@@ -9,6 +9,8 @@ val donationWebMvcAdapter: String by settings
 val donationBatchAdapter: String by settings
 val donationSocketAdapter: String by settings
 val donationGrpcClientAdapter: String by settings
+val donationProto: String by settings
+val donationGrpcServerAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
     var dir = rootDir
@@ -38,6 +40,8 @@ include(
     // donationBatchAdapter,
     donationSocketAdapter,
     donationGrpcClientAdapter,
+    donationProto,
+    donationGrpcServerAdapter,
 )
 
 project(donation).projectDir = donationDirectory("donation")
@@ -51,3 +55,5 @@ project(donationWebMvcAdapter).projectDir = donationDirectory("web-mvc")
 // project(donationBatchAdapter).projectDir = donationDirectory("batch")
 project(donationSocketAdapter).projectDir = donationDirectory("socket")
 project(donationGrpcClientAdapter).projectDir = donationDirectory("grpc-client")
+project(donationProto).projectDir = donationDirectory("proto")
+project(donationGrpcServerAdapter).projectDir = donationDirectory("grpc-server")
