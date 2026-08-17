@@ -2,9 +2,11 @@ package raio.wallet.adapter.grpc.server;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import raio.wallet.application.usecase.PointChargeUseCase;
 import raio.wallet.application.usecase.PointDonateUseCase;
+import raio.wallet.application.usecase.PointRefundUseCase;
 import raio.wallet.application.usecase.WalletCreateUseCase;
 import raio.wallet.application.usecase.WalletReadUseCase;
 import raio.wallet.grpc.ChargePointsRequest;
@@ -15,8 +17,11 @@ import raio.wallet.grpc.DonatePointRequest;
 import raio.wallet.grpc.DonatePointResponse;
 import raio.wallet.grpc.GetWalletRequest;
 import raio.wallet.grpc.GetWalletResponse;
+import raio.wallet.grpc.RefundPointsRequest;
+import raio.wallet.grpc.RefundPointsResponse;
 import raio.wallet.grpc.WalletCommandServiceGrpc;
 
+@Slf4j
 @GrpcService
 @RequiredArgsConstructor
 public class WalletGrpcServerAdapter
@@ -26,6 +31,7 @@ public class WalletGrpcServerAdapter
     private final WalletReadUseCase walletReadUseCase;
     private final PointDonateUseCase pointDonateUseCase;
     private final PointChargeUseCase pointChargeUseCase;
+    private final PointRefundUseCase pointRefundUseCase;
     
     @Override
     public void createWallet(
@@ -49,10 +55,9 @@ public class WalletGrpcServerAdapter
             DonatePointRequest request,
             StreamObserver<DonatePointResponse> responseObserver
     ) {
-        var wallet = pointDonateUseCase.donate(request.getWalletId(), request.getAmount());
+        var wallet = pointDonateUseCase.donate(request.getUserId(), request.getAmount());
         
         var response = DonatePointResponse.newBuilder()
-                .setWalletId(wallet.getId())
                 .setUserId(wallet.getUserId())
                 .setBalance(wallet.getBalance())
                 .build();
@@ -81,7 +86,7 @@ public class WalletGrpcServerAdapter
     public void chargePoints(ChargePointsRequest request,
                              StreamObserver<ChargePointsResponse> responseObserver
     ) {
-        var wallet = pointChargeUseCase.charge(request.getWalletId(), request.getAmount());
+        var wallet = pointChargeUseCase.charge(request.getWalletId(), request.getSourceId(), request.getAmount());
         
         var response = ChargePointsResponse.newBuilder()
                 .setWalletId(wallet.getId())
@@ -90,5 +95,27 @@ public class WalletGrpcServerAdapter
         
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+    
+    @Override
+    public void refundPoints(RefundPointsRequest request,
+                             StreamObserver<RefundPointsResponse> responseObserver
+    ) {
+        var wallet = walletReadUseCase.getWallet(request.getUserId());
+        
+        if(wallet == null) {
+            log.error("[지갑 조회 실패]: userId={}", request.getUserId());
+            
+        } else {
+            pointRefundUseCase.refund(wallet.getId(), request.getSourceId(), request.getAmount());
+            
+            var response = RefundPointsResponse.newBuilder()
+                    .setUserId(wallet.getUserId())
+                    .setBalance(wallet.getBalance())
+                    .build();
+            
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
     }
 }

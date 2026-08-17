@@ -27,4 +27,7 @@ public class PointHistoryEntity extends LongBaseCreatedEntity {
     
     @Column(name = "balance_snapshot", nullable = false)
     public Long balanceSnapshot;
+
+    @Column(name = "source_id")
+    public Long sourceId;
 }

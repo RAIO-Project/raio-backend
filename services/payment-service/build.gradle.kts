@@ -5,7 +5,7 @@ val paymentServiceFlyway: String by project
 
 dependencies {
     api(project(payment))
-    // api(project(settlement))
+    api(project(settlement))
     api(project(wallet))
     api(project(paymentServiceFlyway))
 }

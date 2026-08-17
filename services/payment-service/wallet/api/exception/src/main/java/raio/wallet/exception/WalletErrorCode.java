@@ -13,7 +13,10 @@ public enum WalletErrorCode implements ErrorCode {
     INVALID_POINT_AMOUNT("유효하지 않은 포인트 금액입니다.", HttpStatus.BAD_REQUEST),
     INSUFFICIENT_POINT_BALANCE("포인트 잔액이 부족합니다.", HttpStatus.BAD_REQUEST),
     POINT_HISTORY_NOT_FOUND("포인트 이력을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    INVALID_POINT_HISTORY_TYPE("유효하지 않은 포인트 이력 유형입니다.", HttpStatus.BAD_REQUEST);
+    INVALID_POINT_HISTORY_TYPE("유효하지 않은 포인트 이력 유형입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_SOURCE_ID("유효하지 않은 원천 이벤트 ID입니다.", HttpStatus.BAD_REQUEST),
+    SETTLEMENT_SERVICE_UNAVAILABLE("정산 서비스에 연결할 수 없습니다.", HttpStatus.SERVICE_UNAVAILABLE),
+    SETTLEMENT_SERVICE_TIMEOUT("정산 서비스 응답 시간이 초과되었습니다.", HttpStatus.GATEWAY_TIMEOUT);
 
     private final String message;
     

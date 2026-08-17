@@ -47,7 +47,7 @@ public class PaymentRecoveryService implements PaymentRecoveryUseCase {
                     
                     var wallet = walletCommandPort.findWalletByUserId(payment.getUserId()).orElseThrow(WALLET_NOT_FOUND::exception);
                     
-                    walletCommandPort.increaseWalletBalance(wallet.getId(), payment.getAmount());
+                    walletCommandPort.increaseWalletBalance(wallet.getId(), payment.getId(), payment.getAmount());
                     
                     return null;
                 });

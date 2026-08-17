@@ -1,7 +1,15 @@
-dependencies {
-    compileOnly("org.springframework:spring-tx")
-    implementation("org.springframework:spring-context")
-    implementation("org.springframework:spring-web")
+val settlementApi: String by project
+val settlementApplication: String by project
+val settlementRdbAdapter: String by project
+val settlementWebMvcAdapter: String by project
+val settlementGrpcServerAdapter: String by project
+val settlementGrpcClientAdapter: String by project
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+dependencies {
+    api(project(settlementApi))
+    api(project(settlementApplication))
+    api(project(settlementRdbAdapter))
+    api(project(settlementWebMvcAdapter))
+    api(project(settlementGrpcServerAdapter))
+    api(project(settlementGrpcClientAdapter))
 }

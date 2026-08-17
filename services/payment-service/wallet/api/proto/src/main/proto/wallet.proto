@@ -18,6 +18,9 @@ service WalletCommandService {
 
   rpc ChargePoints(ChargePointsRequest)
       returns (ChargePointsResponse);
+
+  rpc RefundPoints(RefundPointsRequest)
+      returns (RefundPointsResponse);
 }
 
 message CreateWalletRequest {
@@ -31,14 +34,13 @@ message CreateWalletResponse {
 }
 
 message DonatePointRequest {
-  string walletId = 1;
+  string userId = 1;
   int64 amount = 2;
 }
 
 message DonatePointResponse {
-  string walletId = 1;
-  string userId = 2;
-  int64 balance = 3;
+  string userId = 1;
+  int64 balance = 2;
 }
 
 message GetWalletRequest {
@@ -54,9 +56,21 @@ message GetWalletResponse {
 message ChargePointsRequest {
   string walletId = 1;
   int64 amount = 2;
+  string sourceId = 3;
 }
 
 message ChargePointsResponse {
   string walletId = 1;
+  int64 balance = 2;
+}
+
+message RefundPointsRequest {
+  string userId = 1;
+  int64 amount = 2;
+  string sourceId = 3;
+}
+
+message RefundPointsResponse {
+  string userId = 1;
   int64 balance = 2;
 }

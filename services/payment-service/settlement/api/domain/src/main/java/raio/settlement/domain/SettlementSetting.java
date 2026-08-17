@@ -38,7 +38,19 @@ public class SettlementSetting {
      * 예약된 정산 주기가 적용되는 정산 기간 시작 시각.
      */
     private Instant pendingCycleEffectiveAt;
-    
+
+    /**
+     * 다음 정산 실행 예정 시각.
+     * 배치는 이 시각이 현재 시각 이하인 활성 설정만 정산 대상으로 선정한다.
+     */
+    private Instant nextSettlementAt;
+
+    /**
+     * 마지막으로 정산이 완료된 기간의 종료 시각.
+     * 다음 정산 대상 기간의 시작 시각으로 사용된다.
+     */
+    private Instant lastSettledAt;
+
     /**
      * 정산 설정 활성 여부.
      */
@@ -59,6 +71,8 @@ public class SettlementSetting {
             SettlementCycle currentCycle,
             SettlementCycle pendingCycle,
             Instant pendingCycleEffectiveAt,
+            Instant nextSettlementAt,
+            Instant lastSettledAt,
             boolean active,
             Instant createdAt,
             Instant updatedAt
@@ -67,11 +81,13 @@ public class SettlementSetting {
         this.currentCycle = currentCycle;
         this.pendingCycle = pendingCycle;
         this.pendingCycleEffectiveAt = pendingCycleEffectiveAt;
+        this.nextSettlementAt = nextSettlementAt;
+        this.lastSettledAt = lastSettledAt;
         this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    
+
     /**
      * 스트리머의 정산 설정을 생성한다.
      */
@@ -83,18 +99,20 @@ public class SettlementSetting {
         requireText(streamerId);
         Objects.requireNonNull(initialCycle, "initialCycle");
         Objects.requireNonNull(now, "now");
-        
+
         return new SettlementSetting(
                 streamerId,
                 initialCycle,
                 null,
                 null,
+                initialCycle.nextBoundaryAfter(now),
+                null,
                 true,
-                now,
-                now
+                null,
+                null
         );
     }
-    
+
     /**
      * 영속 데이터로부터 정산 설정을 복원한다.
      */
@@ -103,6 +121,8 @@ public class SettlementSetting {
             SettlementCycle currentCycle,
             SettlementCycle pendingCycle,
             Instant pendingCycleEffectiveAt,
+            Instant nextSettlementAt,
+            Instant lastSettledAt,
             boolean active,
             Instant createdAt,
             Instant updatedAt
@@ -112,6 +132,8 @@ public class SettlementSetting {
                 currentCycle,
                 pendingCycle,
                 pendingCycleEffectiveAt,
+                nextSettlementAt,
+                lastSettledAt,
                 active,
                 createdAt,
                 updatedAt
@@ -185,6 +207,24 @@ public class SettlementSetting {
         this.updatedAt = now;
     }
     
+    /**
+     * 정산 완료를 반영한다.
+     *
+     * <p>{@code settledThroughAt}을 다음 정산 대상 기간의 시작 시각으로 기록하고,
+     * 그 시점에 예약된 주기 변경이 도래했다면 반영한 뒤, 현재 주기를 기준으로
+     * 다음 정산 예정 시각을 계산한다.</p>
+     */
+    public void markSettled(Instant settledThroughAt, Instant now) {
+        Objects.requireNonNull(settledThroughAt, "settledThroughAt");
+        Objects.requireNonNull(now, "now");
+
+        applyPendingCycleIfDue(settledThroughAt, now);
+
+        this.lastSettledAt = settledThroughAt;
+        this.nextSettlementAt = currentCycle.nextBoundaryAfter(settledThroughAt);
+        this.updatedAt = now;
+    }
+
     /**
      * 예약된 정산 주기 변경을 취소한다.
      */

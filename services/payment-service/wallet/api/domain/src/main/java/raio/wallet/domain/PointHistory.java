@@ -34,6 +34,9 @@ public class PointHistory {
     /** 변동 직후 잔액 스냅샷 */
     private Long balanceSnapshot;
 
+    /** 변동을 유발한 원인 이벤트 ID (충전/환불은 Payment ID). 멱등성 검증에 사용 */
+    private String sourceId;
+
     /** 원장 생성 일시 */
     private Instant createdAt;
 }

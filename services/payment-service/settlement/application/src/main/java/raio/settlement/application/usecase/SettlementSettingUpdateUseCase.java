@@ -3,9 +3,7 @@ package raio.settlement.application.usecase;
 import raio.settlement.readmodel.SettlementReadModels.SettlementSettingSummary;
 import raio.settlement.application.command.SettlementCommands.SettlementCycleChangeCommand;
 
-public interface SettlementSettingUseCase {
-    
-    SettlementSettingSummary getSettlementSetting(String streamerId);
+public interface SettlementSettingUpdateUseCase {
     
     SettlementSettingSummary changeCycle(SettlementCycleChangeCommand command);
     

@@ -8,6 +8,7 @@ val walletRdbAdapter: String by settings
 val walletWebMvcAdapter: String by settings
 val walletProto: String by settings
 val walletGrpcServerAdapter: String by settings
+val walletGrpcClientAdapter: String by settings
 
 fun getDirectories(vararg names: String): (String) -> File {
     var dir = rootDir
@@ -36,6 +37,7 @@ include(
     walletWebMvcAdapter,
     walletProto,
     walletGrpcServerAdapter,
+    walletGrpcClientAdapter,
 )
 
 project(wallet).projectDir = walletDirectory("wallet")
@@ -48,3 +50,4 @@ project(walletRdbAdapter).projectDir = walletDirectory("rdb")
 project(walletWebMvcAdapter).projectDir = walletDirectory("web-mvc")
 project(walletProto).projectDir = walletDirectory("proto")
 project(walletGrpcServerAdapter).projectDir = walletDirectory("grpc-server")
+project(walletGrpcClientAdapter).projectDir = walletDirectory("grpc-client")

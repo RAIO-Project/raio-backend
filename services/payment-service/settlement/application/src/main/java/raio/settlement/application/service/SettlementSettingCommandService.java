@@ -3,28 +3,30 @@ package raio.settlement.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raio.settlement.domain.SettlementSetting;
-import raio.settlement.readmodel.SettlementReadModels.SettlementSettingSummary;
 import raio.settlement.application.command.SettlementCommands.SettlementCycleChangeCommand;
 import raio.settlement.application.port.SettlementSettingCommandRepositoryPort;
-import raio.settlement.application.port.SettlementSettingQueryRepositoryPort;
-import raio.settlement.application.usecase.SettlementSettingUseCase;
+import raio.settlement.application.usecase.SettlementSettingCreateUseCase;
+import raio.settlement.application.usecase.SettlementSettingUpdateUseCase;
+import raio.settlement.domain.SettlementSetting;
+import raio.settlement.readmodel.SettlementReadModels.SettlementSettingSummary;
 
 import java.time.Instant;
 
+import static raio.settlement.domain.type.SettlementCycle.MONTHLY;
 import static raio.settlement.exception.SettlementErrorCode.SETTLEMENT_SETTING_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
-public class SettlementSettingService implements SettlementSettingUseCase {
+public class SettlementSettingCommandService implements SettlementSettingCreateUseCase, SettlementSettingUpdateUseCase {
 
     private final SettlementSettingCommandRepositoryPort settlementSettingCommandRepositoryPort;
-    private final SettlementSettingQueryRepositoryPort settlementSettingQueryRepositoryPort;
-
+    
     @Override
-    public SettlementSettingSummary getSettlementSetting(String streamerId) {
-        return settlementSettingQueryRepositoryPort.findSettlementSettingByStreamerId(streamerId)
-                .orElseThrow(SETTLEMENT_SETTING_NOT_FOUND::exception);
+    public SettlementSetting createSettlementSetting(String streamerId) {
+        // 스트리머는 신규 정산 세팅 시, 정산 주기는 기본 월로 지정한다.
+        var newSetting = SettlementSetting.create(streamerId, MONTHLY, Instant.now());
+
+        return settlementSettingCommandRepositoryPort.save(newSetting);
     }
 
     @Override
@@ -55,6 +57,7 @@ public class SettlementSettingService implements SettlementSettingUseCase {
                 setting.getCurrentCycle(),
                 setting.getPendingCycle(),
                 setting.getPendingCycleEffectiveAt(),
+                setting.getNextSettlementAt(),
                 setting.isActive()
         );
     }

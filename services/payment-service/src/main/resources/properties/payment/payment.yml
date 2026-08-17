@@ -4,3 +4,4 @@ spring:
       - classpath:properties/payment/payment.client.yml
       - optional:classpath:properties/payment/payment.batch.yml
       - classpath:properties/payment-service/payment-service.rdb.yml
+      - optional:classpath:properties/settlement/settlement.batch.yml

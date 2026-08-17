@@ -18,6 +18,8 @@ public interface SettlementSettingEntityMapper {
                 entity.currentCycle.toDomain(),
                 entity.pendingCycle == null ? null : entity.pendingCycle.toDomain(),
                 entity.pendingCycleEffectiveAt,
+                entity.nextSettlementAt,
+                entity.lastSettledAt,
                 entity.active,
                 entity.createdAt,
                 entity.updatedAt

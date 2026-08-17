@@ -1,0 +1,6 @@
+app:
+  batch:
+    enabled: true
+    jobs:
+      settlementCalculateJob:
+        cron: "0 5 0 * * *" # 매일 00:05에 실행

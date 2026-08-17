@@ -7,7 +7,6 @@ public final class SettlementCommands {
     
     public record SettlementCalculateCommand(
             String streamerId,
-            Instant periodStartAt,
             Instant periodEndAt
     ) {
     }

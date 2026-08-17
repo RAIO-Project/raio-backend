@@ -13,6 +13,8 @@ import java.math.BigDecimal;
  */
 public interface SettlementFeePolicy {
     
+    boolean supports(SettlementFeeContext context);
+    
     BigDecimal resolveFeeRate(SettlementFeeContext context);
 }
 

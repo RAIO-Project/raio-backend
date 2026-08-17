@@ -24,9 +24,14 @@ public class FunctionalStepBuilder {
             int chunkSize,
             ChunkStepSpec<I, O> spec
     ) {
-        var builder = new StepBuilder(stepName, jobRepository)
+        var springBuilder = new StepBuilder(stepName, jobRepository)
                 .<I, O>chunk(chunkSize, transactionManager);
         
-        return spec.apply(builder).build();
+        var functionalBuilder =
+                new FunctionalChunkBuilder<>(springBuilder);
+        
+        spec.apply(functionalBuilder);
+        
+        return functionalBuilder.build();
     }
 }

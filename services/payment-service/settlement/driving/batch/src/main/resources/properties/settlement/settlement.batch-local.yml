@@ -1,0 +1,6 @@
+app:
+  batch:
+    enabled: true
+    jobs:
+      settlementCalculateJob:
+        cron: "0 */5 * * * *" # 5분마다 실행 (로컬 테스트용)

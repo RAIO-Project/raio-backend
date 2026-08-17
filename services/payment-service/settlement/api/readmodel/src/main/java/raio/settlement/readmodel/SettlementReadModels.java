@@ -27,6 +27,7 @@ public final class SettlementReadModels {
             SettlementCycle currentCycle,
             SettlementCycle pendingCycle,
             Instant pendingCycleEffectiveAt,
+            Instant nextSettlementAt,
             boolean active
     ) {
     }
