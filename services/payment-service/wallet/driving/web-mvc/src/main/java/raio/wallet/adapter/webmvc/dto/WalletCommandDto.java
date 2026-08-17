@@ -20,6 +20,10 @@ public final class WalletCommandDto {
     
     @Builder
     public record PointAmountCommand(
+            @NotNull(message = "원천 이벤트 ID는 필수입니다.")
+            @Schema(description = "멱등성 검증용 원천 이벤트 ID (예: Payment ID)", example = "123456789")
+            String sourceId,
+
             @NotNull(message = "포인트 금액은 필수입니다.")
             @Positive(message = "포인트 금액은 1 이상이어야 합니다.")
             @Schema(description = "포인트 금액", example = "10000")

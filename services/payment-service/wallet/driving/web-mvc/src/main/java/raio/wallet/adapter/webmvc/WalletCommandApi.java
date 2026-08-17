@@ -36,7 +36,7 @@ public class WalletCommandApi {
             @Valid @RequestBody PointAmountCommand command
     ) {
         return WalletResponse.builder()
-                .wallet(pointRefundUseCase.refund(walletId, command.amount()))
+                .wallet(pointRefundUseCase.refund(walletId, command.sourceId(), command.amount()))
                 .build();
     }
 }
