@@ -13,9 +13,36 @@ root
 ├── monolith
 │   └── main-runner [:main-runner]
 └── services    
-    ├── auth [:auth]
-    ├── user [:user]
+     ├── user [:user]
+     ├── stream [:stream]
+     ├── chat [:chat]
+     ├── donation [:donation]
+     ├── payment-service [:payment-service]
 ```
+
+<details> <summary><b>📂 모듈 구성 자세히 보기</b></summary>
+
+<br/>
+
+RAIO의 각 도메인은 일반적으로 다음과 같은 구조를 가집니다.
+
+domain
+├── api
+│   ├── domain
+│   ├── exception
+│   └── readmodel
+│
+├── application
+├── rdb-adapter
+├── webmvc
+├── batch
+└── grpc / redis / socket adapter
+
+각 도메인은 자신의 비즈니스 규칙과 Persistence Adapter를 소유하며, 필요한 Infrastructure Adapter를 선택적으로 구성합니다.
+
+</details>
+
+<br/>
 
 ## Inter-Module Dependencies
 
@@ -44,7 +71,7 @@ flowchart TB
 ```
 
 <details>
-  <summary>설명 보기</summary>
+  <summary><b>🔎 모듈 의존성 원칙 자세히 보기</b></summary>
 
   - 모든 서브프로젝트에 `:common` 모듈을 의존시킵니다.
   - `:board:board-api` 모듈은 다음 목록을 통합합니다. 그 외 추가 기능을 제공하지 않습니다.
@@ -58,6 +85,28 @@ flowchart TB
   - 위 보드 관련 구현 소스 및 리소스를 모두 통합하여 `:board` 모듈을 완성합니다.
   - `:board` 모듈을 `:main-runner` 모듈이 통합하고 실행합니다.
   - 각 코어 모듈은 알맞은 모듈에서 취사선택하여 사용합니다.
+
+
+### API Module
+
+`*-api` 모듈은 다음과 같은 도메인 관련 모듈을 통합합니다.
+
+- `*-domain` : 도메인 모델
+- `*-exception` : 도메인 관련 예외
+- `*-readmodel` : 조회 모델
+- `*-proto` *(Optional)* : gRPC 통신이 필요한 도메인에서 사용하는 Protocol Buffers 메시지 및 서비스 정의
+
+### Application Module
+
+`*-application` 모듈은 헥사고날 아키텍처의 UseCase 및 Port 인터페이스를 제공합니다.
+
+Application은 API Module에 의존하지만 외부 Infrastructure 구현에 직접 의존하지 않습니다.
+
+### Adapter
+
+`*-rdb-adapter`, `*-webmvc`, `*-grpc-*`, `*-redis-*` 등의 Adapter는 Application Port를 구현하거나 사용합니다.
+
+이를 통해 비즈니스 로직과 Infrastructure를 분리합니다.
 
 </details>
 
@@ -86,6 +135,26 @@ flowchart TB
 3. Please include 'local' profile to your active profiles.
 4. Run MainApplication!
 ```
+
+<br />
+
+# Engineering Wiki
+
+RAIO Wiki에서는 프로젝트를 개발하며 축적한 **도메인별 비즈니스 프로세스, 아키텍처 설계, 기술 학습 내용과 문제 해결 과정**을 기록하고 공유합니다
+
+👉 **[RAIO Backend Wiki](https://github.com/RAIO-Project/raio-backend/wiki)**
+
+<br />
+
+| Documentation | Description |
+|---|---|
+| 🏗️ **Architecture** | DDD · Hexagonal Architecture · Multi-Module 설계 및 발전 과정 |
+| 💬 **Chat & Moderation** | Redis Stream · AI Moderation · Retry · 멱등성 |
+| 💳 **Payment** | Payment · Wallet · Settlement 도메인 설계 |
+| ⚙️ **Batch Architecture** | Spring Batch Core · Batch Server 구조 |
+| 🔗 **gRPC** | 도메인 간 통신 및 서비스 분리 전략 |
+| 🚀 **Performance & Load Testing** | 부하 테스트 · 병목 분석 · 성능 개선 |
+| 🔥 **Troubleshooting** | 장애 분석 및 문제 해결 기록 |
 
 <br />
 
