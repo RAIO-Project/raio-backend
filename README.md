@@ -44,6 +44,32 @@ domain
 
 <br/>
 
+## Tech Stack
+
+### Backend & Data
+![Java](https://img.shields.io/badge/Java_21-007396?style=flat-square&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![Spring Batch](https://img.shields.io/badge/Spring_Batch-6DB33F?style=flat-square&logo=spring&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis_Stream-DC382D?style=flat-square&logo=redis&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=flat-square&logo=spring&logoColor=white)
+![QueryDSL](https://img.shields.io/badge/QueryDSL-0769AD?style=flat-square)
+
+### Communication & AI
+![REST](https://img.shields.io/badge/REST-005571?style=flat-square)
+![gRPC](https://img.shields.io/badge/gRPC-244C5A?style=flat-square)
+![WebSocket](https://img.shields.io/badge/WebSocket-010101?style=flat-square)
+![Hugging Face](https://img.shields.io/badge/Hugging_Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
+
+### Infrastructure & Monitoring
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
+
+</br>
+
+
 ## Inter-Module Dependencies
 
 ```mermaid
@@ -137,31 +163,6 @@ Application은 API Module에 의존하지만 외부 Infrastructure 구현에 직
 ```
 
 <br />
-
-# Tech Stack
-
-### Backend & Data
-![Java](https://img.shields.io/badge/Java_21-007396?style=flat-square&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
-![Spring Batch](https://img.shields.io/badge/Spring_Batch-6DB33F?style=flat-square&logo=spring&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis_Stream-DC382D?style=flat-square&logo=redis&logoColor=white)
-![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=flat-square&logo=spring&logoColor=white)
-![QueryDSL](https://img.shields.io/badge/QueryDSL-0769AD?style=flat-square)
-
-### Communication & AI
-![REST](https://img.shields.io/badge/REST-005571?style=flat-square)
-![gRPC](https://img.shields.io/badge/gRPC-244C5A?style=flat-square)
-![WebSocket](https://img.shields.io/badge/WebSocket-010101?style=flat-square)
-![Hugging Face](https://img.shields.io/badge/Hugging_Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
-
-### Infrastructure & Monitoring
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)
-![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
-![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
-
-</br>
 
 # Engineering Wiki
 
