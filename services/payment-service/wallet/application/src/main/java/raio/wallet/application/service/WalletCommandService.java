@@ -96,9 +96,17 @@ public class WalletCommandService implements WalletCreateUseCase, PointChargeUse
 
     @Override
     @Transactional
-    public Wallet donate(String walletId, Long amount) {
+    public Wallet donate(String walletId, Long amount, String sourceId) {
         validateAmount(amount);
-
+        
+        var existing = pointHistoryCommandRepositoryPort.findByWalletIdAndTypeAndSourceId(walletId, PointHistoryType.DONATION, sourceId);
+        
+        if (existing.isPresent()) {
+            log.info("[중복 후원 요청(IDEMPOTENT_SKIP)] walletId={}, sourceId={}", walletId, sourceId);
+            
+            return walletQueryRepositoryPort.findById(walletId).orElseThrow(WALLET_NOT_FOUND::exception);
+        }
+        
         var donatedWallet = walletCommandRepositoryPort.decreaseBalance(walletId, amount).orElseThrow(INSUFFICIENT_POINT_BALANCE::exception);
 
         savePointHistory(donatedWallet, PointHistoryType.DONATION, amount, null);
