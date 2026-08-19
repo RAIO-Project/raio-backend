@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import raio.donation.application.port.DonationCommandPort;
-import raio.donation.application.port.PaymentCommandPort;
+import raio.donation.application.port.WalletCommandPort;
 import raio.donation.application.usecase.DonationCreateUseCase;
 import raio.donation.application.usecase.DonationNotifyUseCase;
 import raio.donation.domain.Donations;
@@ -14,7 +14,7 @@ import static raio.donation.exception.DonationErrorCode.PAYMENT_FAILED;
 
 /**
  * 후원 생성 플로우.
- * 1) 포인트 차감 ({@link PaymentCommandPort}) — 실패 시 후원 중단
+ * 1) 포인트 차감 ({@link WalletCommandPort}) — 실패 시 후원 중단
  * 2) 후원 영속화 ({@link DonationCommandPort}) — id 채번
  * 3) 시청자 실시간 알림 — {@link DonationNotifyUseCase} 에 위임
  *
@@ -26,14 +26,14 @@ import static raio.donation.exception.DonationErrorCode.PAYMENT_FAILED;
 @RequiredArgsConstructor
 public class DonationCommandService implements DonationCreateUseCase {
 
-    private final PaymentCommandPort paymentCommandPort;
+    private final WalletCommandPort walletCommandPort;
     private final DonationCommandPort donationCommandPort;
     private final DonationNotifyUseCase donationNotifyUseCase;
 
     @Override
     public Long create(DonationCreateCommand command) {
         // 1) 포인트 차감
-        boolean paid = paymentCommandPort.deductPoint(command.senderId(), command.amount());
+        boolean paid = walletCommandPort.deductPoint(command.senderId(), command.amount());
         if (!paid) {
             log.warn("포인트 차감 실패 - 후원 중단 (senderId={}, amount={})",
                     command.senderId(), command.amount());
