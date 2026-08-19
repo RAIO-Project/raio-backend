@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package payment.wallet;
+
+option java_multiple_files = true;
+option java_package = "raio.wallet.grpc";
+option java_outer_classname = "WalletProto";
+
+service WalletCommandService {
+  rpc CreateWallet(CreateWalletRequest)
+      returns (CreateWalletResponse);
+
+  rpc DonatePoint(DonatePointRequest)
+      returns (DonatePointResponse);
+
+  rpc GetWallet(GetWalletRequest)
+      returns (GetWalletResponse);
+
+  rpc ChargePoints(ChargePointsRequest)
+      returns (ChargePointsResponse);
+
+  rpc RefundPoints(RefundPointsRequest)
+      returns (RefundPointsResponse);
+}
+
+message CreateWalletRequest {
+  string userId = 1;
+}
+
+message CreateWalletResponse {
+  string walletId = 1;
+  string userId = 2;
+  int64 balance = 3;
+}
+
+message DonatePointRequest {
+  string userId = 1;
+  int64 amount = 2;
+}
+
+message DonatePointResponse {
+  string userId = 1;
+  int64 balance = 2;
+}
+
+message GetWalletRequest {
+  string userId = 1;
+}
+
+message GetWalletResponse {
+  string walletId = 1;
+  string userId = 2;
+  int64 balance = 3;
+}
+
+message ChargePointsRequest {
+  string walletId = 1;
+  int64 amount = 2;
+  string sourceId = 3;
+}
+
+message ChargePointsResponse {
+  string walletId = 1;
+  int64 balance = 2;
+}
+
+message RefundPointsRequest {
+  string userId = 1;
+  int64 amount = 2;
+  string sourceId = 3;
+}
+
+message RefundPointsResponse {
+  string userId = 1;
+  int64 balance = 2;
+}

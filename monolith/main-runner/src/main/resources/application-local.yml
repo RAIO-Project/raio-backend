@@ -26,7 +26,7 @@ spring:
 logging:
   level:
     root: INFO
-    club: DEBUG  # 비즈니스 로직
+    raio: DEBUG  # 비즈니스 로직
     org.springframework.web: WARN   # 프레임워크
     org.hibernate.SQL: DEBUG         # 쿼리 (파라미터 제외)
     org.hibernate.type.descriptor.sql: TRACE  # 파라미터 (필요시)

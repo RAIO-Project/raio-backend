@@ -5,7 +5,12 @@ grpc:
 app:
   grpc:
     clients:
-      payment:
+      wallet:
         target: ${PAYMENT_GRPC_TARGET:localhost:9090}
         plaintext: ${PAYMENT_GRPC_PLAINTEXT:true}
         timeout: ${PAYMENT_GRPC_TIMEOUT:3s}
+
+      settlement:
+        target: ${SETTLEMENT_GRPC_TARGET:localhost:9090}
+        plaintext: ${SETTLEMENT_GRPC_PLAINTEXT:true}
+        timeout: ${SETTLEMENT_GRPC_TIMEOUT:3s}

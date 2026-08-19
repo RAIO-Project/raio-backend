@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package payment.settlement;
+
+option java_multiple_files = true;
+option java_package = "raio.settlement.grpc";
+option java_outer_classname = "SettlementProto";
+
+service SettlementCommandService {
+  rpc CreateSettlementSetting(CreateSettlementSettingRequest)
+      returns (CreateSettlementSettingResponse);
+}
+
+message CreateSettlementSettingRequest {
+  string streamerId = 1;
+}
+
+message CreateSettlementSettingResponse {
+  string streamerId = 1;
+  string currentCycle = 2;
+  string activeYn = 3;
+}

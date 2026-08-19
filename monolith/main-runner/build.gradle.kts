@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 val chat: String by project
 val donation: String by project
-val payment: String by project
+val paymentService: String by project
 val stream: String by project
 val user: String by project
 
@@ -14,7 +14,7 @@ dependencies {
     // service
     api(project(chat))
     api(project(donation))
-    api(project(payment))
+    api(project(paymentService))
     api(project(stream))
     api(project(user))
 
@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":websocket-core"))
     implementation(project(":redis-template"))
     implementation(project(":redis-cache"))
-    implementation(project(":upload-s3-storage"))
+    // implementation(project(":upload-s3-storage"))
     implementation(project(grpc))
 
     // webmvc
