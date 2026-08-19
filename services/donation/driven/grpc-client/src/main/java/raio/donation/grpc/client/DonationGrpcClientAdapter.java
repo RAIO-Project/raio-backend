@@ -4,12 +4,12 @@ import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import raio.donation.application.port.PaymentCommandPort;
-import raio.payment.grpc.DonatePointRequest;
-import raio.payment.grpc.WalletCommandServiceGrpc.WalletCommandServiceBlockingStub;
+import raio.donation.application.port.WalletCommandPort;
+import raio.wallet.grpc.DonatePointRequest;
+import raio.wallet.grpc.WalletCommandServiceGrpc.WalletCommandServiceBlockingStub;
 
 /**
- * payment 서비스로의 gRPC Client Adapter ({@link PaymentCommandPort} 구현).
+ * payment 서비스로의 gRPC Client Adapter ({@link WalletCommandPort} 구현).
  *
  * <p>지갑 조회·잔액 검증·차감은 payment 의 책임이다. 여기서는 후원자(userId)와 금액만 넘기고,
  * 잔액 부족 등으로 실패하면 gRPC 예외를 받아 false 로 변환한다.
@@ -18,7 +18,7 @@ import raio.payment.grpc.WalletCommandServiceGrpc.WalletCommandServiceBlockingSt
  */
 @Slf4j
 @Component
-public class DonationGrpcClientAdapter implements PaymentCommandPort {
+public class DonationGrpcClientAdapter implements WalletCommandPort {
 
     private final WalletCommandServiceBlockingStub donationWalletStub;
 

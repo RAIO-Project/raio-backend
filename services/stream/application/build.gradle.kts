@@ -2,7 +2,7 @@ val streamApi: String by project
 
 dependencies {
     api(project(streamApi))
-    api(project(":upload-file-api"))
+    api(project(":upload-s3-storage"))
 
     // spring
     implementation("org.springframework.data:spring-data-commons")
