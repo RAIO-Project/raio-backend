@@ -15,14 +15,10 @@ import static raio.stream.exception.StreamErrorCode.STREAM_NOT_ACTIVE;
 import static raio.stream.exception.StreamErrorCode.STREAM_TITLE_REQUIRED;
 
 /**
- * 방송 도메인. 상태 전이 불변식을 이 안에 캡슐화한다.
+ * 방송 도메인.
  *
  * <p>전이 규칙: READY --start--> LIVE --end--> ENDED (역방향/건너뛰기 불가).
  * 서비스는 이 메서드들을 호출만 하고, 전이 검증의 책임은 도메인이 진다.
- *
- * <p>불변식 위반은 {@code StreamErrorCode} 로 던진다. 표준 예외(IllegalState/IllegalArgument)로
- * 던지면 전역 핸들러가 매핑하지 못해 클라이언트에게 500 이 나가고, 정상적인 사용자 실수
- * (이미 시작된 방송을 다시 시작 등)가 서버 오류로 집계된다.
  */
 @Getter
 @Builder
