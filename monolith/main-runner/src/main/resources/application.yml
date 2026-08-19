@@ -53,3 +53,4 @@ springdoc:
 server:
   # 5000 포트를 사용하지 않기: macOS '제어 센터'가 5000, 7000 포트를 계속 사용함. (macOS Monterey 이후 AirPlay receiver 활성화 시)
   port: 8080
+  address: '::' # Railway private network(IPv6)와 public network(IPv4)를 동시에 수신하기 위한 dual-stack 바인딩

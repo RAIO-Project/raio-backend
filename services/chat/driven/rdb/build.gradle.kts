@@ -8,6 +8,7 @@ dependencies {
     api(project(chatApplication))
     api(project(":jpa-core"))
     api(project(":snowflake-id-hibernate"))
+    api(project(":redis-template"))
 
     // flyway
     api("org.flywaydb:flyway-core")

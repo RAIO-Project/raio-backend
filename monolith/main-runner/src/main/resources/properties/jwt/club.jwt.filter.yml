@@ -7,6 +7,10 @@ app:
           methods: "*"
           description: |
             Spring Boot Actuator가 제공하는 헬스 체크 경로
+        - path: "/actuator/prometheus"
+          methods: "get"
+          description: |
+            Prometheus 스크레이핑 경로
         - path: "/internal/**"
           methods: "*"
           description: |

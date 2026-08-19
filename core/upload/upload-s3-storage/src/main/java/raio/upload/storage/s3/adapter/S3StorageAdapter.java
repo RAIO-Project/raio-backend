@@ -7,6 +7,7 @@ import raio.upload.file.FileStorage;
 import raio.upload.storage.s3.properties.S3StorageProperties;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -60,6 +61,16 @@ public class S3StorageAdapter implements FileStorage {
         String url = buildPublicUrl(key);
 
         return new UploadedObject(key, url, bytes.length, contentType);
+    }
+
+    @Override
+    public void delete(String storedPath) {
+        // storedPath는 publicBaseUrl이 붙은 전체 URL일 수 있으므로 key만 추출
+        String key = storedPath.contains("/") ? storedPath.substring(storedPath.lastIndexOf('/') + 1) : storedPath;
+        s3.deleteObject(DeleteObjectRequest.builder()
+                .bucket(props.bucket())
+                .key(key)
+                .build());
     }
 
     public String generatePresignedGetUrl(String key, Duration validFor) {

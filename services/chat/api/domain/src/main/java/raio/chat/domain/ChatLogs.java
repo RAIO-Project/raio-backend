@@ -30,4 +30,12 @@ public class ChatLogs {
     
     /** 차단 사유 */
     private String blockedReason;
+
+    /**
+     * 차단 처리.
+     */
+    public void blind(String reason) {
+        this.isBlocked = true;
+        this.blockedReason = reason;
+    }
 }

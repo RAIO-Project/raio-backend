@@ -8,6 +8,8 @@ public interface WalletCommandRepositoryPort {
     
     boolean existsById(String id);
     
+    Optional<Wallet> findByUserId(String userId);
+    
     Wallet save(Wallet wallet);
     
     Optional<Wallet> increaseBalance(String walletId, Long amount);

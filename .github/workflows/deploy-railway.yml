@@ -71,9 +71,7 @@ jobs:
 
   deploy-batch:
     needs: changes
-    if: |
-      needs.changes.outputs.batch == 'true' ||
-      needs.changes.outputs.shared == 'true'
+    if: false #임시 비활성화
     runs-on: ubuntu-latest
 
     steps:

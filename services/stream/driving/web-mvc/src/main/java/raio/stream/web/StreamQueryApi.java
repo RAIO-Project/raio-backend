@@ -28,7 +28,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("streams")
 @RequiredArgsConstructor
-public class StreamReadApi {
+public class StreamQueryApi {
 
     private final StreamReadByStatusesUseCase streamReadByStatusesUseCase;
     private final StreamReadByViewerUseCase streamReadByViewerUseCase;

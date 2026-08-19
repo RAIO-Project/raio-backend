@@ -4,6 +4,7 @@ val donationApi: String by project
 dependencies {
     api(project(donationApi))
     api(project(donationApplication))
+    api(project(":jwt-webmvc"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 
