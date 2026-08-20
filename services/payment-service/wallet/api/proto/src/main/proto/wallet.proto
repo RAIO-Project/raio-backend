@@ -55,13 +55,13 @@ message GetWalletResponse {
 }
 
 message ChargePointsRequest {
-  string walletId = 1;
+  string userId = 1;
   int64 amount = 2;
   string sourceId = 3;
 }
 
 message ChargePointsResponse {
-  string walletId = 1;
+  string userId = 1;
   int64 balance = 2;
 }
 
