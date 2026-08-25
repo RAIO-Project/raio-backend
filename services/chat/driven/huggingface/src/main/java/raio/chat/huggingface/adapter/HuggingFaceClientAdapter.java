@@ -7,10 +7,12 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 import raio.chat.ChatReadModels.ModerationResult;
 import raio.chat.application.port.ModerationPort;
-import raio.chat.huggingface.dto.ClassifyRequest;
-import raio.chat.huggingface.dto.ClassifyResponse;
+import raio.chat.huggingface.dto.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static raio.chat.exception.ChatErrorCode.MODERATION_FAILED;
 
@@ -61,6 +63,53 @@ public class HuggingFaceClientAdapter implements ModerationPort {
 
         } catch (Exception e) {
             log.warn("huggingface classify 오류 - chatId: {}, cause: {}", chatId, e.toString());
+            throw MODERATION_FAILED.exception(e);
+        }
+    }
+
+    @Override
+    public Map<String, ModerationResult> classifyBatch(List<ModerationRequestItem> items) {
+        if(items.isEmpty()) {
+            return Map.of();
+        }
+
+        BatchClassifyResponse response = requestClassifyBatch(items);
+
+        if(response == null || response.results() == null) {
+            log.warn("huggingface classify-batch 응답 본문 없음 - size: {}", items.size());
+            throw MODERATION_FAILED.exception();
+        }
+
+        return response.results().stream()
+                .collect(Collectors.toMap(
+                        BatchClassifyResultDto::chatId,
+                        toModerationResult(),
+                        (first, second) -> second
+                ));
+    }
+
+    private static Function<BatchClassifyResultDto, ModerationResult> toModerationResult() {
+        return r -> new ModerationResult(r.isHate(), r.hateLabels() != null ? r.hateLabels() : List.of());
+    }
+
+    private BatchClassifyResponse requestClassifyBatch(List<ModerationRequestItem> items) {
+        try{
+            var body = new BatchClassifyRequest(
+                    items.stream()
+                            .map(i -> new BatchClassifyRequestItem(i.chatId(), i.message()))
+                            .toList()
+            );
+
+            return huggingFaceRestClient.post()
+                    .uri("/classify-batch")
+                    .body(body)
+                    .retrieve()
+                    .body(BatchClassifyResponse.class);
+        }catch (RestClientResponseException e) {
+            log.warn("huggingface classify-batch 실패 - status={}, body={}, size={}", e.getStatusCode(), e.getResponseBodyAsString(), items.size());
+            throw MODERATION_FAILED.exception(e);
+        }catch (Exception e) {
+            log.warn("huggingface classify-batch 오류 - size: {}, cause: {}", items.size(), e.toString());
             throw MODERATION_FAILED.exception(e);
         }
     }
