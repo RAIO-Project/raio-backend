@@ -29,13 +29,25 @@ public record ChatModerationQueueProperties(
         int claimBatchSize,
 
         // 이 횟수를 넘겨도 판정에 실패하면 포기하고 ack.
-        int maxDeliveryCount
+        int maxDeliveryCount,
+
+        int batchSize,
+
+        Duration batchLinger,
+
+        int batchWorkerCount,
+
+        int batchQueueCapacity
 ) {
-    private static final int DEFAULT_WORKER_COUNT = 1;
+    private static final int DEFAULT_WORKER_COUNT = 2;
     private static final Duration DEFAULT_CLAIM_MIN_IDLE = Duration.ofSeconds(30);
     private static final Duration DEFAULT_CLAIM_INTERVAL = Duration.ofSeconds(15);
     private static final int DEFAULT_CLAIM_BATCH_SIZE = 50;
     private static final int DEFAULT_MAX_DELIVERY_COUNT = 5;
+    private static final int DEFAULT_BATCH_SIZE = 16;
+    private static final Duration DEFAULT_BATCH_LINGER = Duration.ofMillis(200);
+    private static final int DEFAULT_BATCH_WORKER_COUNT = 2;
+    private static final int DEFAULT_BATCH_QUEUE_CAPACITY = 10_000;
 
     public ChatModerationQueueProperties {
         workerCount = workerCount > 0 ? workerCount : DEFAULT_WORKER_COUNT;
@@ -43,5 +55,9 @@ public record ChatModerationQueueProperties(
         claimInterval = claimInterval != null ? claimInterval : DEFAULT_CLAIM_INTERVAL;
         claimBatchSize = claimBatchSize > 0 ? claimBatchSize : DEFAULT_CLAIM_BATCH_SIZE;
         maxDeliveryCount = maxDeliveryCount > 0 ? maxDeliveryCount : DEFAULT_MAX_DELIVERY_COUNT;
+        batchSize = batchSize > 0 ? batchSize : DEFAULT_BATCH_SIZE;
+        batchLinger = batchLinger != null ? batchLinger : DEFAULT_BATCH_LINGER;
+        batchWorkerCount = batchWorkerCount > 0 ? batchWorkerCount : DEFAULT_BATCH_WORKER_COUNT;
+        batchQueueCapacity =  batchQueueCapacity > 0 ? batchQueueCapacity : DEFAULT_BATCH_QUEUE_CAPACITY;
     }
 }
