@@ -19,7 +19,6 @@ import static raio.payment.exception.PaymentErrorCode.PAYMENT_ALREADY_PROCESSED;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_AMOUNT_MISMATCH;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_CONFIRM_FAILED;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_NOT_FOUND;
-import static raio.wallet.exception.WalletErrorCode.WALLET_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +60,8 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
      * 결제 확정 흐름 (트랜잭션 경계 분리):
      * [Tx 1] 비관적 락 → 검증 → APPROVING
      * 외부 PG 호출 (트랜잭션 없음)
-     * [Tx 2] APPROVED/FAILED 확정 + 지갑 충전
+     * [Tx 2] APPROVED/FAILED 확정
+     * APPROVED 시 지갑 충전 요청
      */
     @Override
     public Payment confirm(ConfirmCommand command) {
@@ -177,8 +177,8 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
             throw PAYMENT_CONFIRM_FAILED.exception();
         }
         
-        // [Tx 2] APPROVED 확정 + 지갑 충전
-        return paymentCommandRepositoryPort.transaction(() -> {
+        // [Tx 2] APPROVED 확정
+        var approvedPayment  = paymentCommandRepositoryPort.transaction(() -> {
             var approved = paymentCommandRepositoryPort
                     .updateStatus(
                             approving.getId(),
@@ -197,42 +197,31 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
                     result.externalTid()
             );
             
-            // 사용자 지갑 조회
-            log.debug(
-                    "[지갑 조회(WALLET_LOOKUP)] paymentId={}, userId={}",
-                    approved.getId(),
-                    approved.getUserId()
-            );
-            
-            var wallet = walletCommandPort.findWalletByUserId(approved.getUserId())
-                    .orElseThrow(WALLET_NOT_FOUND::exception);
-            
-            log.debug(
-                    "[지갑 조회 완료(WALLET_FOUND)] paymentId={}, walletId={}, userId={}, balance={}",
-                    approved.getId(),
-                    wallet.getId(),
-                    wallet.getUserId(),
-                    wallet.getBalance()
-            );
-            
-            // 지갑 포인트 충전
-            log.debug(
-                    "[포인트 충전 요청(POINT_CHARGE)] paymentId={}, walletId={}, amount={}",
-                    approved.getId(),
-                    wallet.getId(),
-                    approved.getAmount()
-            );
-            
-            walletCommandPort.increaseWalletBalance(approved.getUserId(), approved.getId(), approved.getAmount());
-            
-            log.info(
-                    "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, walletId={}, amount={}",
-                    approved.getId(),
-                    wallet.getId(),
-                    approved.getAmount()
-            );
-            
             return approved;
         });
+        
+        // 지갑 충전 요청 (트랜잭션 밖 — Toss 호출과 동일한 패턴)
+        if(approvedPayment.getStatus() != PaymentStatus.APPROVED) {
+            throw PAYMENT_CONFIRM_FAILED.exception();
+        }
+
+        log.debug(
+                "[포인트 충전 요청(POINT_CHARGE)] paymentId={}, userId={}, amount={}",
+                approvedPayment.getId(),
+                approvedPayment.getUserId(),
+                approvedPayment.getAmount()
+        );
+
+        // 지갑 포인트 충전
+        walletCommandPort.increaseWalletBalance(approvedPayment.getUserId(), approvedPayment.getId(), approvedPayment.getAmount());
+
+        log.info(
+                "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, userId={}, amount={}",
+                approvedPayment.getId(),
+                approvedPayment.getUserId(),
+                approvedPayment.getAmount()
+        );
+
+        return approvedPayment;
     }
 }
