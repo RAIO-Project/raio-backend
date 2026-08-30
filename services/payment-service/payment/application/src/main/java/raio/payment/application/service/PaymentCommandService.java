@@ -19,7 +19,6 @@ import static raio.payment.exception.PaymentErrorCode.PAYMENT_ALREADY_PROCESSED;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_AMOUNT_MISMATCH;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_CONFIRM_FAILED;
 import static raio.payment.exception.PaymentErrorCode.PAYMENT_NOT_FOUND;
-import static raio.wallet.exception.WalletErrorCode.WALLET_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -207,9 +206,9 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
         }
 
         log.debug(
-                "[포인트 충전 요청(POINT_CHARGE)] paymentId={}, walletId={}, amount={}",
+                "[포인트 충전 요청(POINT_CHARGE)] paymentId={}, userId={}, amount={}",
                 approvedPayment.getId(),
-                approvedPayment.getId(),
+                approvedPayment.getUserId(),
                 approvedPayment.getAmount()
         );
 
@@ -217,9 +216,9 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
         walletCommandPort.increaseWalletBalance(approvedPayment.getUserId(), approvedPayment.getId(), approvedPayment.getAmount());
 
         log.info(
-                "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, walletId={}, amount={}",
+                "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, userId={}, amount={}",
                 approvedPayment.getId(),
-                approvedPayment.getId(),
+                approvedPayment.getUserId(),
                 approvedPayment.getAmount()
         );
 
