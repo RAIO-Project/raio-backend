@@ -17,7 +17,7 @@ public record HuggingFaceProperties(
         Duration readTimeout
 ) {
     private static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(2);
-    private static final Duration DEFAULT_READ_TIMEOUT = Duration.ofSeconds(3);
+    private static final Duration DEFAULT_READ_TIMEOUT = Duration.ofSeconds(10);
 
     public HuggingFaceProperties {
         connectTimeout = connectTimeout != null ? connectTimeout : DEFAULT_CONNECT_TIMEOUT;

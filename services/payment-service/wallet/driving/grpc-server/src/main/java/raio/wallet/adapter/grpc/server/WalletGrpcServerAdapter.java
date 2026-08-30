@@ -55,7 +55,7 @@ public class WalletGrpcServerAdapter
             DonatePointRequest request,
             StreamObserver<DonatePointResponse> responseObserver
     ) {
-        var wallet = pointDonateUseCase.donate(request.getUserId(), request.getAmount());
+        var wallet = pointDonateUseCase.donate(request.getUserId(), request.getAmount(), request.getSourceId());
         
         var response = DonatePointResponse.newBuilder()
                 .setUserId(wallet.getUserId())
@@ -86,10 +86,12 @@ public class WalletGrpcServerAdapter
     public void chargePoints(ChargePointsRequest request,
                              StreamObserver<ChargePointsResponse> responseObserver
     ) {
-        var wallet = pointChargeUseCase.charge(request.getWalletId(), request.getSourceId(), request.getAmount());
+        var wallet = walletReadUseCase.getWallet(request.getUserId());
+        
+        pointChargeUseCase.charge(wallet.getId(), request.getSourceId(), request.getAmount());
         
         var response = ChargePointsResponse.newBuilder()
-                .setWalletId(wallet.getId())
+                .setUserId(wallet.getUserId())
                 .setBalance(wallet.getBalance())
                 .build();
         

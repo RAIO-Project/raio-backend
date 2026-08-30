@@ -53,9 +53,9 @@ public class PaymentWalletGrpcClientAdapter implements WalletCommandPort {
     }
     
     @Override
-    public void increaseWalletBalance(String walletId, String sourceId, Long amount) {
+    public void increaseWalletBalance(String userId, String sourceId, Long amount) {
         var request = ChargePointsRequest.newBuilder()
-                .setWalletId(walletId)
+                .setUserId(userId)
                 .setSourceId(sourceId)
                 .setAmount(amount)
                 .build();

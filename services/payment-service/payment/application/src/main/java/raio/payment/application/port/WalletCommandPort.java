@@ -8,5 +8,5 @@ public interface WalletCommandPort {
    
    Optional<Wallet> findWalletByUserId (String userId);
    
-   void increaseWalletBalance (String walletId, String sourceId, Long amount);
+   void increaseWalletBalance (String userId, String sourceId, Long amount);
 }

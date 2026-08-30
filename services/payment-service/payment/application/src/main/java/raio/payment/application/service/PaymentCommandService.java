@@ -223,7 +223,7 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
                     approved.getAmount()
             );
             
-            walletCommandPort.increaseWalletBalance(wallet.getId(), approved.getId(), approved.getAmount());
+            walletCommandPort.increaseWalletBalance(approved.getUserId(), approved.getId(), approved.getAmount());
             
             log.info(
                     "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, walletId={}, amount={}",

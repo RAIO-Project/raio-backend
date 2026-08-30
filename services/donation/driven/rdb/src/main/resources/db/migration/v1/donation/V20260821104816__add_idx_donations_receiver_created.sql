@@ -1,0 +1,25 @@
+-- 정산용 후원 조회 인덱스
+--
+-- DonationQueryAdapter -> DonationsJpaRepository.streamReceivedDonations 가
+-- 스트리머·정산기간 단위로 실행하는 쿼리:
+--   SELECT ... FROM donation.donations
+--    WHERE receiver_id = ? AND is_blocked = false AND is_refunded = false
+--      AND created_at BETWEEN ? AND ?
+--    ORDER BY created_at DESC
+--
+-- 이 테이블에는 PK 외 인덱스가 하나도 없었다.
+--
+-- 측정값 (로컬, 실데이터 58,651행)
+--   전체 기간        Seq Scan 27.8~29.7ms  ->  Index Scan 19.8ms   (-30%)
+--   기간 10분(45,529건) Seq Scan 23.2~24.0ms  ->  Index Scan 11.1ms   (-53%)
+--   인덱스 크기 1.5MB
+--
+-- 인덱스가 없을 때 더 큰 문제는 정렬이다. ORDER BY created_at DESC 를
+-- 메모리에서 처리하지 못해 매 호출마다 디스크로 넘긴다:
+--   Sort Method: external merge  Disk: 4728kB
+-- 인덱스를 쓰면 정렬 단계 자체가 사라진다.
+--
+-- 선두 컬럼을 receiver_id 로 두어 등호 조건을 처리하고, created_at DESC 를
+-- 뒤에 붙여 기간 범위와 정렬을 함께 만족시킨다.
+CREATE INDEX IF NOT EXISTS "idx_donations_receiver_created"
+    ON "donation"."donations" ("receiver_id", "created_at" DESC);
