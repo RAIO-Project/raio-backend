@@ -32,6 +32,7 @@ include(
     ":grpc:grpc-server",
     ":grpc:grpc-client",
     ":monitoring-core",
+    ":gateway",
 )
 
 project(":time-util").projectDir = core["time-util"]!!
@@ -61,3 +62,4 @@ project(":grpc").projectDir = core["grpc"]!!
 project(":grpc:grpc-client").projectDir = core["grpc-client"]!!
 project(":grpc:grpc-server").projectDir = core["grpc-server"]!!
 project(":monitoring-core").projectDir = core["monitoring-core"]!!
+project(":gateway").projectDir = core["gateway"]!!
