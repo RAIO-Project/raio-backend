@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: raio-gateway
+  main:
+    web-application-type: reactive   #  springdoc-webmvc를 전 모듈에 주입하므로 필수
+
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 3000        # ms — 인스턴스가 죽어 있을 때 빠르게 다음 시도로 넘어가게
+        response-timeout: 10s        # 다운스트림 응답 상한 (부하테스트 시 조정 대상)
+
+      routes:
+        # REST 전체 — main-runner 인스턴스들로 로드밸런싱
+        - id: main-service
+          uri: lb://main-service     # 해석은 프로파일이 결정 (local=정적 목록, 이후 eureka 프로파일=디스커버리)
+          predicates:
+            - Path=/**
+
+server:
+  port: 8000

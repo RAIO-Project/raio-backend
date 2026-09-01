@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    # lb://main-service 를 해석할 정적 인스턴스 목록 (SimpleDiscoveryClient).
+    discovery:
+      client:
+        simple:
+          instances:
+            main-service:
+              - uri: http://localhost:8080
+              - uri: http://localhost:8082
+
+    # 죽은 인스턴스를 목록에서 제외하려면 주석 해제 (main-runner에 actuator /health 필요)
+    loadbalancer:
+      configurations: health-check
+
+eureka:
+  client:
+    enabled: false
+
+logging:
+  level:
+    root: INFO
+    raio: DEBUG                                # RequestLoggingFilter 등 게이트웨이 코드
+    org.springframework.cloud.gateway: INFO    # 라우트 매칭이 이상하면 DEBUG로
+    org.springframework.cloud.loadbalancer: INFO
+
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId:-}]"
