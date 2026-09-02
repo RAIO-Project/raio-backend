@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import raio.payment.application.command.PaymentCommands.ConfirmCommand;
 import raio.payment.application.command.PaymentCommands.PrepareCommand;
+import raio.payment.application.event.PaymentEvent.PaymentApprovedEvent;
 import raio.payment.application.port.PaymentClientPort;
 import raio.payment.application.port.PaymentCommandRepositoryPort;
-import raio.payment.application.port.WalletCommandPort;
+import raio.payment.application.port.PaymentOutboxCommandRepositoryPort;
 import raio.payment.application.usecase.PaymentConfirmUseCase;
 import raio.payment.application.usecase.PaymentPrepareUseCase;
 import raio.payment.domain.Payment;
@@ -26,7 +27,7 @@ import static raio.payment.exception.PaymentErrorCode.PAYMENT_NOT_FOUND;
 public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConfirmUseCase {
     
     private final PaymentCommandRepositoryPort paymentCommandRepositoryPort;
-    private final WalletCommandPort walletCommandPort;
+    private final PaymentOutboxCommandRepositoryPort outboxCommandRepositoryPort;
     private final PaymentClientPort paymentClientPort;
     
     @Override
@@ -77,7 +78,6 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
         // [Tx 1] 비관적 락 → 검증 → APPROVING
         // PESSIMISTIC_WRITE로 결제를 잠근 뒤 검증하고 APPROVING 상태로 전이한다.
         var approving = paymentCommandRepositoryPort.transaction(() -> {
-            
             var payment = paymentCommandRepositoryPort.findByIdForUpdate(command.paymentId())
                     .orElseThrow(PAYMENT_NOT_FOUND::exception);
             
@@ -178,7 +178,7 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
         }
         
         // [Tx 2] APPROVED 확정
-        var approvedPayment  = paymentCommandRepositoryPort.transaction(() -> {
+        return paymentCommandRepositoryPort.transaction(() -> {
             var approved = paymentCommandRepositoryPort
                     .updateStatus(
                             approving.getId(),
@@ -197,31 +197,18 @@ public class PaymentCommandService implements PaymentPrepareUseCase, PaymentConf
                     result.externalTid()
             );
             
+            // 결제 승인 건 이벤트 저장
+            var event = outboxCommandRepositoryPort.save(PaymentApprovedEvent.from(approved));
+            
+            log.info(
+                    "[결제 승인 이벤트 저장(PENDING)] outboxId={}, paymentId={}, eventType={}, getPayload={}",
+                    event.getId(),
+                    event.getPaymentId(),
+                    event.getEventType(),
+                    event.getPayload()
+            );
+            
             return approved;
         });
-        
-        // 지갑 충전 요청 (트랜잭션 밖 — Toss 호출과 동일한 패턴)
-        if(approvedPayment.getStatus() != PaymentStatus.APPROVED) {
-            throw PAYMENT_CONFIRM_FAILED.exception();
-        }
-
-        log.debug(
-                "[포인트 충전 요청(POINT_CHARGE)] paymentId={}, userId={}, amount={}",
-                approvedPayment.getId(),
-                approvedPayment.getUserId(),
-                approvedPayment.getAmount()
-        );
-
-        // 지갑 포인트 충전
-        walletCommandPort.increaseWalletBalance(approvedPayment.getUserId(), approvedPayment.getId(), approvedPayment.getAmount());
-
-        log.info(
-                "[포인트 충전 완료(POINT_CHARGED)] paymentId={}, userId={}, amount={}",
-                approvedPayment.getId(),
-                approvedPayment.getUserId(),
-                approvedPayment.getAmount()
-        );
-
-        return approvedPayment;
     }
 }
