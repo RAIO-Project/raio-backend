@@ -25,32 +25,15 @@ public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_CANCEL_FAILED("결제 취소에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     PAYMENT_REFUND_FAILED("결제 환불에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     
+    // ===== 결제 이벤트 Outbox =====
+    PAYMENT_OUTBOX_INVALID_STATUS("유효하지 않은 Outbox 상태입니다.", HttpStatus.BAD_REQUEST),
+    PAYMENT_OUTBOX_INVALID_EVENT_TYPE("유효하지 않은 결제 이벤트 타입입니다.", HttpStatus.BAD_REQUEST),
+    PAYMENT_OUTBOX_SERIALIZE_FAILED("결제 이벤트 직렬화에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    
     // ===== 지갑 통신 =====
     WALLET_NOT_FOUND("지갑 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     WALLET_SERVICE_UNAVAILABLE("지갑 서비스에 연결할 수 없습니다.", HttpStatus.SERVICE_UNAVAILABLE),
     WALLET_SERVICE_TIMEOUT("지갑 서비스 응답 시간이 초과되었습니다.", HttpStatus.GATEWAY_TIMEOUT),
-    
-    // ===== 정산 =====
-    SETTLEMENT_NOT_FOUND("정산 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    SETTLEMENT_DETAIL_NOT_FOUND("정산 상세 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    SETTLEMENT_ALREADY_EXISTS("이미 생성된 정산입니다.", HttpStatus.CONFLICT),
-    SETTLEMENT_ALREADY_COMPLETED("이미 완료된 정산입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_INVALID_STATUS("유효하지 않은 정산 상태입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_INVALID_AMOUNT("유효하지 않은 정산 금액입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_AMOUNT_MISMATCH("정산 금액이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_TARGET_NOT_FOUND("정산 대상이 없습니다.", HttpStatus.NOT_FOUND),
-    SETTLEMENT_DUPLICATED_HISTORY("이미 정산에 포함된 포인트 이력입니다.", HttpStatus.CONFLICT),
-    SETTLEMENT_PERIOD_INVALID("유효하지 않은 정산 기간입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_BATCH_ALREADY_RUNNING("정산 배치가 이미 실행 중입니다.", HttpStatus.CONFLICT),
-    SETTLEMENT_BATCH_FAILED("정산 배치 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-    SETTLEMENT_BATCH_PARTIAL_FAILED("일부 정산 배치 처리에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-    SETTLEMENT_INVALID_CYCLE("유효하지 않은 정산 주기입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_INVALID_FEE_RATE("유효하지 않은 수수료율입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_ITEM_OUT_OF_PERIOD("정산 기간을 벗어난 후원 내역입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_ITEM_FEE_RATE_MISMATCH("정산 항목의 수수료율이 정산 기준과 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_DUPLICATED_DONATION("이미 정산에 포함된 후원 내역입니다.", HttpStatus.CONFLICT),
-    SETTLEMENT_CYCLE_CHANGE_INVALID("유효하지 않은 정산 주기 변경 요청입니다.", HttpStatus.BAD_REQUEST),
-    SETTLEMENT_SETTING_NOT_FOUND("정산 설정 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     
     // ===== 내부 =====
     INTERNAL_ERROR("서버 내부 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
