@@ -26,3 +26,7 @@ logging:
 
   pattern:
     level: "%5p [${spring.application.name},%X{traceId:-}]"
+
+# main-runner 의 local 기본값과 반드시 동일해야 한다. 서명 키가 다르면 전부 401 이 된다.
+jwt:
+  secret-key: ${JWT_SECRET_KEY:bmV0dGVlLWJsb2xldC1qd3Qtc2VjcmV0LWtleS1leHRlbmQ}

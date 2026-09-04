@@ -10,6 +10,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 import raio.jwt.JwtProvider;
+import raio.jwt.TokenType;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +48,7 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
             String authorization = accessor.getFirstNativeHeader("Authorization");
             if (authorization != null && authorization.startsWith(BEARER)) {
                 String token = authorization.substring(BEARER.length());
-                if (jwtProvider.validate(token)) {
+                if (jwtProvider.validate(token, TokenType.ACCESS)) {
                     String userId = jwtProvider.extractUserId(token);
                     String nickname = jwtProvider.extractNickName(token);
                     StompPrincipal principal = new StompPrincipal(userId, nickname);

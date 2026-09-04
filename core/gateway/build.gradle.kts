@@ -5,6 +5,8 @@ dependencies {
 
     // core
     api(project(":time-util"))
+    // 서블릿 스택(jwt-webmvc)을 끌어오면 안 되므로 jwt-core 를 쓴다.
+    api(project(":jwt-core"))
 }
 
 dependencyManagement {

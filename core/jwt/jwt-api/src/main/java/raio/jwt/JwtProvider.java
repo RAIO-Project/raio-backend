@@ -20,12 +20,17 @@ public interface JwtProvider {
     TokenPair generate(String userId, String nickName, Set<String> roles);
 
     /**
-     * 토큰의 서명과 만료 시간을 검증한다.
+     * 토큰의 서명·만료와 용도를 함께 검증한다.
      *
-     * @param token 검증할 JWT 문자열
-     * @return 유효하면 true, 서명 불일치·만료·형식 오류이면 false
+     * 용도를 인자로 받는 이유는 호출자가 반드시 기대 타입을 밝히도록 강제하기 위해서다.
+     * 인증 필터는 {@link TokenType#ACCESS} 만, 재발급은 {@link TokenType#REFRESH} 만 받아야 한다.
+     *
+     * @param token    검증할 JWT 문자열
+     * @param expected 기대하는 토큰 용도
+     * @return 서명·만료가 유효하고 {@code tokenType} 클레임이 {@code expected} 와 같으면 true.
+     *         서명 불일치·만료·형식 오류·용도 불일치·클레임 부재는 모두 false
      */
-    boolean validate(String token);
+    boolean validate(String token, TokenType expected);
 
     /**
      * 토큰의 subject 클레임에서 userId를 추출한다.

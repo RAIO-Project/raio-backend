@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import raio.jwt.JwtProvider;
+import raio.jwt.TokenType;
 import raio.jwt.principal.UserPrincipal;
 
 import java.io.IOException;
@@ -74,7 +75,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = extractBearerToken(request);
 
-        if (token != null && jwtProvider.validate(token)) {
+        // ACCESS 만 인증 헤더로 인정한다. RefreshToken 이 넘어오면 인증하지 않는다.
+        if (token != null && jwtProvider.validate(token, TokenType.ACCESS)) {
             String userId = jwtProvider.extractUserId(token);
             String nickName = jwtProvider.extractNickName(token);
             Set<String> roles = jwtProvider.extractRoles(token);

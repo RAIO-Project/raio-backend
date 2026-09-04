@@ -2,6 +2,7 @@ package raio.user.application.service;
 
 import org.springframework.stereotype.Service;
 import raio.jwt.JwtProvider;
+import raio.jwt.TokenType;
 import raio.jwt.TokenPair;
 import raio.user.application.usecase.RefreshUseCase;
 import raio.user.application.port.RefreshTokenRepository;
@@ -27,8 +28,8 @@ public class RefreshService implements RefreshUseCase {
 
     @Override
     public TokenPair refresh(String refreshToken) {
-        // 토큰 서명 및 만료 검증
-        if (!jwtProvider.validate(refreshToken)) {
+        // 서명·만료 + 용도 검증. AccessToken 으로는 재발급할 수 없다.
+        if (!jwtProvider.validate(refreshToken, TokenType.REFRESH)) {
             throw UserErrorCode.INVALID_TOKEN.exception();
         }
 
